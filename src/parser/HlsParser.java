@@ -64,6 +64,7 @@ public class HlsParser
 		if (adSet.representations.size() == 0) {
 			Representation singleVariantPlaylist = new Representation("single_variant", 1);
 			singleVariantPlaylist.manifestContent = manifestContent;
+			adSet.addRepresentation(singleVariantPlaylist);
 			
 		}
 		
