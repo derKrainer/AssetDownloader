@@ -1,5 +1,6 @@
 package ui;
 
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
@@ -57,6 +58,8 @@ public class DownloadSelector
 		
 		
 		frame.setVisible(true);
+		
+		frame.setSize(new Dimension(600, 400));
 	}
 	
 }
@@ -93,8 +96,7 @@ class RepresentationListModel implements ListModel<Representation> {
 	@Override
 	public void addListDataListener(ListDataListener l)
 	{
-		// TODO Auto-generated method stub
-		
+		// not needed
 	}
 
 	@Override
@@ -112,8 +114,7 @@ class RepresentationListModel implements ListModel<Representation> {
 	@Override
 	public void removeListDataListener(ListDataListener l)
 	{
-		// TODO Auto-generated method stub
-		
+		// not needed
 	}
 	
 }
