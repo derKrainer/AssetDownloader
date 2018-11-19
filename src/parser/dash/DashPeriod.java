@@ -7,6 +7,8 @@ import org.w3c.dom.Node;
 
 public class DashPeriod extends DashComponent
 {
+	private static int uniqueIdCounter = 0;
+	
 	public double duration = -1;
 	public DashManifest parent;
 	
@@ -44,9 +46,18 @@ public class DashPeriod extends DashComponent
 	@Override
 	protected void parseAttributes(List<Node> specialAttributesList)
 	{
-		// TODO Auto-generated method stub
-		
+		// TODO: start + duration
 	}
+	
+	@Override
+	protected void fillMissingValues()
+	{
+		if (this.id == null) {
+			this.id = Integer.toString(uniqueIdCounter++);
+		}
+	}
+	
+	
 	
 	public double getDuration() {
 		if (this.duration > -1) {

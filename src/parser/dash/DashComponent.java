@@ -25,6 +25,8 @@ public abstract class DashComponent
 		
 		List<Node> specialNodes = this.parseGeneralNodes();
 		this.parseSpecialNodes(specialNodes);
+		
+		this.fillMissingValues();
 	}
 	
 	/**
@@ -32,7 +34,15 @@ public abstract class DashComponent
 	 */
 	protected abstract void parseSpecialNodes(List<Node> specialNodes);
 	
+	/**
+	 * parse all non-general attributes 
+	 */
 	protected abstract void parseAttributes(List<Node> specialAttributesList);
+	
+	/**
+	 * assign default values to everything that is missing (eg.: ID)
+	 */
+	protected abstract void fillMissingValues();
 	
 	protected List<Node> parseGeneralAttributes() {
 		List<Node> specialNodes = new ArrayList<>();

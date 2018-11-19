@@ -104,5 +104,11 @@ public class DashManifest extends DashComponent
 
 		return retVal;
 	}
+	
+	@Override
+	protected void fillMissingValues()
+	{
+		// nothing as of yet
+	}
 
 }

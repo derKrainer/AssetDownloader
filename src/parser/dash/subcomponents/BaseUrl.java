@@ -29,5 +29,10 @@ public class BaseUrl extends DashComponent
 		// TODO Auto-generated method stub
 		
 	}
-
+	
+	@Override
+	protected void fillMissingValues()
+	{
+		// nothing to do here
+	}
 }

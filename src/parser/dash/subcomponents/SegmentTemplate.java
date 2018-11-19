@@ -59,14 +59,16 @@ public class SegmentTemplate extends DashComponent
 	public List<DownloadTarget> getTargetFiles(DashRepresentation rep) {
 		// TODO: calculate amount of segments and replace mediaUrl
 		List<DownloadTarget> allFiles = new ArrayList<>();
+		allFiles.add(new DownloadTarget(initUrl, getTargetFileForUrl(initUrl, rep)));
 		double segmentDuration = this.duration / this.timescale;
 		double streamDuration = rep.parent.parent.getDuration();
 		
 		double numberOfSegments = Math.ceil(streamDuration / segmentDuration);
 		
 		for (int i = this.startNumber; i < this.startNumber + numberOfSegments; i++) {
-			String dlUrl = replacePlaceholders(getUrlForIndex(i), i);
-			allFiles.add(new DownloadTarget(replacePlaceholders(dlUrl, i), getTargetFileForUrl(dlUrl)));
+			String dlUrl = replacePlaceholders(getUrlForIndex(i), i, rep);
+			allFiles.add(new DownloadTarget(replacePlaceholders(dlUrl, i, rep), 
+					getTargetFileForUrl(dlUrl, rep)));
 		}
 		
 		return allFiles;
@@ -76,13 +78,20 @@ public class SegmentTemplate extends DashComponent
 		return this.mediaUrl;
 	}
 	
-	private String replacePlaceholders(String url, int index) {
+	private String replacePlaceholders(String url, int index, DashRepresentation rep) {
 		return url
-				.replace("$Number$", Integer.toString(index));
+				.replace("$Number$", Integer.toString(index))
+				.replace("$RepresentationID$", rep.id);
 	}
 	
-	private String getTargetFileForUrl(String url) {
-		// TODO: period + adSet
-		return url.substring(url.lastIndexOf('/') + 1);
+	private String getTargetFileForUrl(String url, DashRepresentation rep) {
+		return rep.parent.parent.id + '/' + rep.parent.id + '/' + rep.id + '/'
+				+ url.substring(url.lastIndexOf('/') + 1);
+	}
+	
+	@Override
+	protected void fillMissingValues()
+	{
+		// nothing to do here
 	}
 }
