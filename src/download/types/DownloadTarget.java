@@ -9,4 +9,10 @@ public class DownloadTarget
 		this.downloadURL = url;
 		this.fileName = fileName;
 	}
+	
+	@Override
+	public String toString()
+	{
+		return "Download: " + this.downloadURL + " to: " + this.fileName;
+	}
 }

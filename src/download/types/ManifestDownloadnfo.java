@@ -13,4 +13,15 @@ public class ManifestDownloadnfo
 		this.baseURL = baseUrl;
 	}
 	
+	@Override
+	public String toString()
+	{
+		String periodString = "\n";
+		for(Period target : this.periods)
+		{
+			periodString += target.toString() + "\n";
+		}
+		
+		return periodString;
+	}
 }

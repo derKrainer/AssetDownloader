@@ -18,4 +18,15 @@ public class Period
 		toAdd.containingPeriod = this;
 	}
 	
+	@Override
+	public String toString()
+	{
+		String adString = "\n";
+		for(AdaptationSet target : this.adaptationSets)
+		{
+			adString += "  " + target.toString() + "\n";
+		}
+		
+		return this.periodId + adString;
+	}
 }

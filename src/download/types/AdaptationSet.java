@@ -17,4 +17,16 @@ public class AdaptationSet {
 		this.representations.add(toAdd);
 		toAdd.containingAdaptationSet = this;
 	}
+	
+	@Override
+	public String toString()
+	{
+		String repString = "\n";
+		for(Representation target : this.representations)
+		{
+			repString += "    " + target.toString() + "\n";
+		}
+		
+		return this.name + repString;
+	}
 }

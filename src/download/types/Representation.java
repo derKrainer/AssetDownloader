@@ -23,7 +23,13 @@ public class Representation {
 	@Override
 	public String toString()
 	{
-		return this.name + " @" + this.bandwidth;
+		String dlTargetString = "\n";
+		for(DownloadTarget target : this.filesToDownload)
+		{
+			dlTargetString += "      " + target.toString() + "\n";
+		}
+		
+		return this.name + " @" + this.bandwidth + dlTargetString;
 	}
 	
 }

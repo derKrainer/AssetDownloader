@@ -1,13 +1,70 @@
 package parser.dash;
 
-import org.w3c.dom.Node;
+import java.util.ArrayList;
+import java.util.List;
 
-public class DashComponent
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+public abstract class DashComponent
 {
 	public Node xmlContent;
+	
+	public String id = null;
 
 	public DashComponent(Node xmlNode)
 	{
 		this.xmlContent = xmlNode;
 	}
+	
+	public final void parse() {
+		List<Node> specialAttributes = this.parseGeneralAttributes();
+		
+		this.parseAttributes(specialAttributes);
+		
+		List<Node> specialNodes = this.parseGeneralNodes();
+		this.parseSpecialNodes(specialNodes);
+	}
+	
+	/**
+	 * parses all sub-nodes
+	 */
+	protected abstract void parseSpecialNodes(List<Node> specialNodes);
+	
+	protected abstract void parseAttributes(List<Node> specialAttributesList);
+	
+	protected List<Node> parseGeneralAttributes() {
+		List<Node> specialNodes = new ArrayList<>();
+		
+		NamedNodeMap attributes = this.xmlContent.getAttributes();
+		for (int i = 0; i < attributes.getLength(); i++) {
+			Node attr = attributes.item(i);
+			
+			if (attr.getNodeName().equals("id")) {
+				this.id = attr.getNodeValue();
+			}
+			// TODO: filter out all the general ones and parse info here
+			else {
+				specialNodes.add(attr);
+			}
+		}
+		
+		return specialNodes;
+	}
+	
+	protected List<Node> parseGeneralNodes() {
+		List<Node> unprocessed = new ArrayList<>();
+		NodeList children = this.xmlContent.getChildNodes();
+		
+		for(int i = 0; i < children.getLength(); i++) {
+			Node child = children.item(i);
+			
+			unprocessed.add(child);
+		}
+		
+		return unprocessed;
+	}
+	
+	
 }
