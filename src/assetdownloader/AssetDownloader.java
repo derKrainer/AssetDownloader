@@ -2,6 +2,7 @@ package assetdownloader;
 
 import download.DownloadHelper;
 import download.types.ManifestDownloadnfo;
+import parser.DashParser;
 import parser.HlsParser;
 
 enum ManifestType {
@@ -22,9 +23,9 @@ public class AssetDownloader
 	public AssetDownloader(String manifestURL, String targetFolder) {
 		this.manifestURL = manifestURL;
 		this.targetFolder = targetFolder;
-		
-		this.getTypeForManifest(manifestURL);
+
 		this.getManifest();
+		this.getTypeForManifest(manifestURL);
 		this.parseManifest();
 		
 		DownloadHelper.downloadForDownloadInfo(this.toDownload);;
@@ -36,18 +37,28 @@ public class AssetDownloader
 	}
 	
 	protected void getTypeForManifest(String manifestUrl) {
-		if (manifestURL.indexOf(".m3u8") > -1 ) {
+		if (manifestURL.contains(".m3u8")) {
 			this.manifestType = ManifestType.HLS;
 		}
-		else if (manifestURL.indexOf(".mpd") > -1) {
+		else if (manifestURL.contains(".mpd")) {
 			this.manifestType = ManifestType.DASH;
 		}
-		else if (manifestURL.indexOf("/manifest") > -1) {
+		else if (manifestURL.contains("/manifest")) {
 			this.manifestType = ManifestType.SMOOTH;
 		}
 		else {
-			// TODO: actually check the manifest content for <MPD / <Smooth / #EXT-INF
-			this.manifestType = ManifestType.UNKNOWN;
+			// try and extract information from the manifest content if we did not have any luck with the URL
+			if (this.manifestContent.contains("<MPD")) {
+				this.manifestType = ManifestType.DASH;
+			}
+			else if (this.manifestContent.contains("#EXT-INF")) {
+				this.manifestType = ManifestType.HLS;
+			}
+			else if (this.manifestContent.contains("<Smooth")) {
+				this.manifestType = ManifestType.SMOOTH;
+			} else {
+				this.manifestType = ManifestType.UNKNOWN;
+			}
 		}
 	}
 	
@@ -57,7 +68,9 @@ public class AssetDownloader
 		case HLS:
 			this.toDownload = new HlsParser(this.targetFolder).parseManifest(this.manifestContent, this.manifestURL);
 			break;
-
+		case DASH: 
+			this.toDownload = new DashParser(this.targetFolder).parseManifest(this.manifestContent, this.manifestURL);
+			break;
 		default:
 			throw new RuntimeException("not implemented yet");
 		}

@@ -12,7 +12,7 @@ import download.types.Period;
 import download.types.Representation;
 import files.FileHelper;
 
-public class HlsParser
+public class HlsParser implements IParser
 {
 	private String baseURL;
 	private ManifestDownloadnfo downloadInfo;
@@ -30,6 +30,10 @@ public class HlsParser
 		this.baseDirWithTargetFolder = this.baseDir + folderName;
 	}
 	
+	/* (non-Javadoc)
+	 * @see parser.IParser#parseManifest(java.lang.String, java.lang.String)
+	 */
+	@Override
 	public ManifestDownloadnfo parseManifest(String manifestContent, String manifestUrl) {
 		
 		// TODO: update all the URLs in the manfiest to relative urls and save the updated manifest(s) in the baseDir
@@ -56,7 +60,12 @@ public class HlsParser
 				Representation mediaRep = new Representation(keyValuePairs.get("TYPE"), 0);
 				mediaRep.attributes = keyValuePairs;
 				// TODO: handle non-variant files?
-				mediaRep.manifestContent = DownloadHelper.getContent(keyValuePairs.get("URI"));
+				String variantUrl = keyValuePairs.get("URI");
+				if (!variantUrl.startsWith("http")) {
+					String baseURL = manifestUrl.substring(0, manifestUrl.lastIndexOf('/') + 1);
+					variantUrl = baseURL + variantUrl;
+				}
+				mediaRep.manifestContent = DownloadHelper.getContent(variantUrl);
 				adSet.addRepresentation(mediaRep);
 			}
 		}
