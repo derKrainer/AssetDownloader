@@ -61,7 +61,12 @@ public class DashManifest extends DashComponent
 		{
 			if (attr.getNodeName().equals("mediaPresentationDuration"))
 			{
+				try {
 				this.duration = DashParser.parseDuration(attr.getNodeValue());
+				}
+				catch(Exception ex) {
+					throw new RuntimeException("Error parsing mpd duration", ex);
+				}
 			}
 			else
 			{
