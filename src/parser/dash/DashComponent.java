@@ -24,7 +24,8 @@ public abstract class DashComponent
     this.xmlContent = xmlNode;
   }
 
-  public final void parse() {
+  public final void parse()
+  {
     List<Node> specialAttributes = this.parseGeneralAttributes();
 
     this.parseAttributes(specialAttributes);
@@ -50,7 +51,8 @@ public abstract class DashComponent
    */
   protected abstract void fillMissingValues();
 
-  protected List<Node> parseGeneralAttributes() {
+  protected List<Node> parseGeneralAttributes()
+  {
     List<Node> specialNodes = new ArrayList<>();
 
     NamedNodeMap attributes = this.xmlContent.getAttributes();
@@ -61,8 +63,7 @@ public abstract class DashComponent
       if (attr.getNodeName().equals("id"))
       {
         this.id = attr.getNodeValue();
-      }
-      else
+      } else
       {
         specialNodes.add(attr);
       }
@@ -71,7 +72,8 @@ public abstract class DashComponent
     return specialNodes;
   }
 
-  protected List<Node> parseGeneralNodes() {
+  protected List<Node> parseGeneralNodes()
+  {
     List<Node> unprocessed = new ArrayList<>();
     NodeList children = this.xmlContent.getChildNodes();
 
@@ -79,17 +81,19 @@ public abstract class DashComponent
     {
       Node child = children.item(i);
 
-      if (child.getNodeName().equals("BaseURL")) {
+      if (child.getNodeName().equals("BaseURL"))
+      {
         this.baseUrl = new BaseUrl(child);
         this.baseUrl.parse();
-      }
-      else if (child.getNodeName().equals("#text")) {
+      } else if (child.getNodeName().equals("#text"))
+      {
         this.textContent = child.getNodeValue();
-        if (this.textContent != null) {
+        if (this.textContent != null)
+        {
           this.textContent = this.textContent.trim();
         }
-      }
-      else {
+      } else
+      {
         unprocessed.add(child);
       }
     }
@@ -97,13 +101,16 @@ public abstract class DashComponent
     return unprocessed;
   }
 
-  public boolean removeChild(DashComponent toRemove) {
+  public boolean removeChild(DashComponent toRemove)
+  {
     return this.xmlContent.removeChild(toRemove.xmlContent) != null;
   }
 
-  public void adjustUrlsToTarget(String targetFolder, String manifestBaseUrl) {
-    if (this.baseUrl != null) {
-      this.baseUrl.adjustUrlsToTarget(targetFolder, manifestBaseUrl);
+  public void adjustUrlsToTarget(String targetFolder, String manifestBaseUrl, DashRepresentation targetRepresentation)
+  {
+    if (this.baseUrl != null)
+    {
+      this.baseUrl.adjustUrlsToTarget(targetFolder, manifestBaseUrl, null);
     }
   }
 }

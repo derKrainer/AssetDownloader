@@ -23,7 +23,8 @@ public class DashPeriod extends DashComponent
   public String id;
 
   @Override
-  protected void parseSpecialNodes(List<Node> specialNodes) {
+  protected void parseSpecialNodes(List<Node> specialNodes)
+  {
     for (int i = 0; i < specialNodes.size(); i++)
     {
       Node childNode = specialNodes.get(i);
@@ -41,19 +42,22 @@ public class DashPeriod extends DashComponent
   }
 
   @Override
-  protected void parseAttributes(List<Node> specialAttributesList) {
+  protected void parseAttributes(List<Node> specialAttributesList)
+  {
     // TODO: start + duration
   }
 
   @Override
-  protected void fillMissingValues() {
+  protected void fillMissingValues()
+  {
     if (this.id == null)
     {
       this.id = Integer.toString(uniqueIdCounter++);
     }
   }
 
-  public double getDuration() {
+  public double getDuration()
+  {
     if (this.duration > -1)
     {
       return this.duration;
@@ -64,17 +68,18 @@ public class DashPeriod extends DashComponent
   }
 
   @Override
-  public boolean removeChild(DashComponent toRemove) {
+  public boolean removeChild(DashComponent toRemove)
+  {
     boolean success = super.removeChild(toRemove);
     this.adaptationSets.remove(toRemove);
     return success;
   }
 
   @Override
-  public void adjustUrlsToTarget(String targetFolder, String manifestBaseUrl) 
+  public void adjustUrlsToTarget(String targetFolder, String manifestBaseUrl, DashRepresentation targetRepresentation)
   {
-    super.adjustUrlsToTarget(targetFolder, manifestBaseUrl);
+    super.adjustUrlsToTarget(targetFolder, manifestBaseUrl, targetRepresentation);
 
-    this.adaptationSets.forEach((rep) -> rep.adjustUrlsToTarget(targetFolder, manifestBaseUrl));
+    this.adaptationSets.forEach((rep) -> rep.adjustUrlsToTarget(targetFolder, manifestBaseUrl, null));
   }
 }

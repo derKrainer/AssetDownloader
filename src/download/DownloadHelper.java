@@ -21,7 +21,8 @@ public class DownloadHelper
   {
   }
 
-  public static String getContent(String urlString) {
+  public static String getContent(String urlString)
+  {
 
     InputStreamReader reader = null;
     BufferedReader bufferdReader = null;
@@ -63,7 +64,8 @@ public class DownloadHelper
     }
   }
 
-  public static void downloadForDownloadInfo(ManifestDownloadnfo info, IParser manifestParser) {
+  public static void downloadForDownloadInfo(ManifestDownloadnfo info, IParser manifestParser)
+  {
 //		for (Period p : info.periods) {
 //			System.out.println("Handling period: " + p.periodId);
 //			for (AdaptationSet adSet : p.adaptationSets) {
@@ -77,7 +79,8 @@ public class DownloadHelper
     new DownloadSelector(info, manifestParser);
   }
 
-  public static void downloadRepresentations(Representation[] toDownload) {
+  public static void downloadRepresentations(Representation[] toDownload)
+  {
     for (Representation rep : toDownload)
     {
       System.out.println("Handling representation: " + rep.name + ", bandwidht: " + rep.bandwidth);
@@ -94,7 +97,8 @@ public class DownloadHelper
     }
   }
 
-  public static void downloadUrlContentToFile(String url, String fileName) {
+  public static void downloadUrlContentToFile(String url, String fileName)
+  {
     FileOutputStream fos = null;
     ReadableByteChannel rbc = null;
     try

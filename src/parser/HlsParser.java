@@ -37,7 +37,8 @@ public class HlsParser implements IParser
    * @see parser.IParser#parseManifest(java.lang.String, java.lang.String)
    */
   @Override
-  public ManifestDownloadnfo parseManifest(String manifestContent, String manifestUrl) {
+  public ManifestDownloadnfo parseManifest(String manifestContent, String manifestUrl)
+  {
 
     // TODO: update all the URLs in the manfiest to relative urls and save the
     // updated manifest(s) in the baseDir
@@ -91,12 +92,14 @@ public class HlsParser implements IParser
   }
 
   @Override
-  public String getUpdatedManifest(Representation[] selectedRepresentations) {
+  public String getUpdatedManifest(Representation[] selectedRepresentations)
+  {
     // TODO: filter out unwanted reps and rebuild the master playlist if available
     return null;
   }
 
-  private void processAllVariantPlaylists() {
+  private void processAllVariantPlaylists()
+  {
     for (int periodIndex = 0; periodIndex < this.downloadInfo.periods.size(); periodIndex++)
     {
       Period period = this.downloadInfo.periods.get(periodIndex);
@@ -123,7 +126,8 @@ public class HlsParser implements IParser
     }
   }
 
-  protected String processVariantPlaylist(Representation variantPlaylist) {
+  protected String processVariantPlaylist(Representation variantPlaylist)
+  {
     String[] allLines = variantPlaylist.manifestContent.split("\n");
     int lastDiscontinuityTagIndex = 0;
 
@@ -194,7 +198,8 @@ public class HlsParser implements IParser
     return updatedManifestContent.toString();
   }
 
-  private String getFileNameForUrl(Representation currentRep, String url) {
+  private String getFileNameForUrl(Representation currentRep, String url)
+  {
     StringBuilder sb = new StringBuilder(url.length());
     sb.append(this.baseDirWithTargetFolder);
     sb.append(currentRep.containingAdaptationSet.containingPeriod.periodId).append('/');
@@ -203,7 +208,8 @@ public class HlsParser implements IParser
     return sb.toString();
   }
 
-  protected Representation parseVariantPlaylist(String variantDesc, String variantUrl) {
+  protected Representation parseVariantPlaylist(String variantDesc, String variantUrl)
+  {
     Map<String, String> keyValuePairs = parseKeyValuePairs(variantDesc);
 
     int bandwidth = Integer.MAX_VALUE;
@@ -229,7 +235,8 @@ public class HlsParser implements IParser
     return retVal;
   }
 
-  protected Map<String, String> parseKeyValuePairs(String hlsLine) {
+  protected Map<String, String> parseKeyValuePairs(String hlsLine)
+  {
     String attributeStr = hlsLine.substring(hlsLine.indexOf(":") + 1);
     String[] attributePairs = attributeStr.split(",");
 

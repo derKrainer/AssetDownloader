@@ -14,12 +14,14 @@ public class Period
     this.periodId = id;
   }
 
-  public void addAdaptationSet(AdaptationSet toAdd) {
+  public void addAdaptationSet(AdaptationSet toAdd)
+  {
     this.adaptationSets.add(toAdd);
     toAdd.containingPeriod = this;
   }
 
-  public String toDebugString() {
+  public String toDebugString()
+  {
     String adString = "\n";
     for (AdaptationSet target : this.adaptationSets)
     {
@@ -29,7 +31,8 @@ public class Period
     return this.periodId + adString;
   }
 
-  public String toString() {
+  public String toString()
+  {
     return this.periodId;
   }
 }

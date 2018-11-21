@@ -23,14 +23,16 @@ public class DashRepresentation extends DashAdaptationSet
   }
 
   @Override
-  protected void parseSpecialNodes(List<Node> specialNodes) {
+  protected void parseSpecialNodes(List<Node> specialNodes)
+  {
     super.parseSpecialNodes(specialNodes);
 
     // are there any special children of representation which are of interest to us?
   }
 
   @Override
-  protected void parseAttributes(List<Node> specialAttributesList) {
+  protected void parseAttributes(List<Node> specialAttributesList)
+  {
     super.parseAttributes(specialAttributesList);
 
     for (Node attr : specialAttributesList)
@@ -51,7 +53,8 @@ public class DashRepresentation extends DashAdaptationSet
     }
   }
 
-  public SegmentTemplate getSegmentTemplate() {
+  public SegmentTemplate getSegmentTemplate()
+  {
     if (this.segmentTemplate != null)
     {
       return this.segmentTemplate;
@@ -62,7 +65,8 @@ public class DashRepresentation extends DashAdaptationSet
     return null;
   }
 
-  public List<DownloadTarget> getTargetFiles(String manifestLocation, String targetFolder) {
+  public List<DownloadTarget> getTargetFiles(String manifestLocation, String targetFolder)
+  {
     List<DownloadTarget> filesToDownload = new ArrayList<>();
 
     if (this.getSegmentTemplate() != null)
@@ -76,9 +80,21 @@ public class DashRepresentation extends DashAdaptationSet
     return filesToDownload;
   }
 
-  public String generateId() {
+  public String generateId()
+  {
     // generates an id matching the one from the download.Representation object
     return this.id + '_' + this.parent.id + '_' + this.parent.parent.id;
+  }
+
+  @Override
+  public void adjustUrlsToTarget(String targetFolder, String manifestBaseUrl, DashRepresentation targetRepresentation)
+  {
+    super.adjustUrlsToTarget(targetFolder, manifestBaseUrl, targetRepresentation);
+
+    if (this.segmentTemplate != null)
+    {
+      this.segmentTemplate.adjustUrlsToTarget(targetFolder, manifestBaseUrl, null);
+    }
   }
 
 }

@@ -30,15 +30,16 @@ public class AssetDownloader
     this.parseManifest();
 
     DownloadHelper.downloadForDownloadInfo(this.toDownload, this.manifestParser);
-    ;
   }
 
-  private void getManifest() {
+  private void getManifest()
+  {
     this.manifestContent = DownloadHelper.getContent(this.manifestURL);
     System.out.println(this.manifestContent);
   }
 
-  protected void getTypeForManifest(String manifestUrl) {
+  protected void getTypeForManifest(String manifestUrl)
+  {
     if (manifestURL.contains(".m3u8"))
     {
       this.manifestType = ManifestType.HLS;
@@ -68,7 +69,8 @@ public class AssetDownloader
     }
   }
 
-  private void parseManifest() {
+  private void parseManifest()
+  {
     switch (this.manifestType) {
     case HLS:
       this.manifestParser = new HlsParser(this.targetFolder);
@@ -82,7 +84,8 @@ public class AssetDownloader
     this.toDownload = this.manifestParser.parseManifest(this.manifestContent, this.manifestURL);
   }
 
-  public static void main(String[] args) {
+  public static void main(String[] args)
+  {
 //		String manifestUrl = "https://bitmovin-a.akamaihd.net/content/art-of-motion_drm/m3u8s/11331.m3u8";
     String manifestUrl = "https://bitmovin-a.akamaihd.net/content/MI201109210084_1/mpds/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.mpd";
     String targetFolder = "download/";

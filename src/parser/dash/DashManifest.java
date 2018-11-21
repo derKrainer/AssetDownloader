@@ -24,9 +24,10 @@ public class DashManifest extends DashComponent
   }
 
   @Override
-  protected void parseSpecialNodes(List<Node> specialNodes) {
+  protected void parseSpecialNodes(List<Node> specialNodes)
+  {
 
-    for (Node periodNode: specialNodes)
+    for (Node periodNode : specialNodes)
     {
       if (periodNode.getNodeName().equals("Period"))
       {
@@ -44,7 +45,8 @@ public class DashManifest extends DashComponent
   }
 
   @Override
-  protected void parseAttributes(List<Node> specialAttributesList) {
+  protected void parseAttributes(List<Node> specialAttributesList)
+  {
     // TODO: optional MPD values?
     for (Node attr : specialAttributesList)
     {
@@ -64,7 +66,8 @@ public class DashManifest extends DashComponent
     }
   }
 
-  public ManifestDownloadnfo generateDownloadInfo(String baseUrl, String targetFolder) {
+  public ManifestDownloadnfo generateDownloadInfo(String baseUrl, String targetFolder)
+  {
     ManifestDownloadnfo retVal = new ManifestDownloadnfo(baseUrl);
 
     for (DashPeriod p : this.periods)
@@ -95,16 +98,17 @@ public class DashManifest extends DashComponent
   }
 
   @Override
-  protected void fillMissingValues() {
+  protected void fillMissingValues()
+  {
     // nothing as of yet
-	}
-	
-	@Override
-	public void adjustUrlsToTarget(String targetFolder, String manifestBaseUrl)
-	{
-		super.adjustUrlsToTarget(targetFolder, manifestBaseUrl);
+  }
 
-		this.periods.forEach((period) -> period.adjustUrlsToTarget(targetFolder, manifestBaseUrl));
-	}
+  @Override
+  public void adjustUrlsToTarget(String targetFolder, String manifestBaseUrl, DashRepresentation targetRepresentation)
+  {
+    super.adjustUrlsToTarget(targetFolder, manifestBaseUrl, targetRepresentation);
+
+    this.periods.forEach((period) -> period.adjustUrlsToTarget(targetFolder, manifestBaseUrl, null));
+  }
 
 }

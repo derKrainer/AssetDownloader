@@ -21,7 +21,8 @@ public class Representation
     this.bandwidth = bandwidth;
   }
 
-  public String toDebugString() {
+  public String toDebugString()
+  {
     String dlTargetString = "\n";
     for (DownloadTarget target : this.filesToDownload)
     {
@@ -32,11 +33,13 @@ public class Representation
   }
 
   @Override
-  public String toString() {
+  public String toString()
+  {
     return this.name + " @" + this.bandwidth;
   }
 
-  public String generateId() {
+  public String generateId()
+  {
     return this.name + '_' + containingAdaptationSet.name + '_' + containingAdaptationSet.containingPeriod.periodId;
   }
 

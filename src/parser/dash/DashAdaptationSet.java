@@ -30,9 +30,10 @@ public class DashAdaptationSet extends DashComponent
   }
 
   @Override
-  protected void parseSpecialNodes(List<Node> specialNodes) {
+  protected void parseSpecialNodes(List<Node> specialNodes)
+  {
 
-    for (Node child: specialNodes)
+    for (Node child : specialNodes)
     {
       if (child.getNodeName().equals("Representation"))
       {
@@ -44,8 +45,7 @@ public class DashAdaptationSet extends DashComponent
       {
         this.segmentTemplate = new SegmentTemplate(child);
         this.segmentTemplate.parse();
-      }
-      else
+      } else
       {
         // TODO: parse AdaptationSet Child != representation
         System.out.println("Unknown Adaptation set node: " + child);
@@ -54,7 +54,8 @@ public class DashAdaptationSet extends DashComponent
   }
 
   @Override
-  protected void parseAttributes(List<Node> specialAttributesList) {
+  protected void parseAttributes(List<Node> specialAttributesList)
+  {
     for (int i = 0; i < specialAttributesList.size(); i++)
     {
       Node att = specialAttributesList.get(i);
@@ -103,12 +104,14 @@ public class DashAdaptationSet extends DashComponent
     }
   }
 
-  public SegmentTemplate getSegmentTemplate() {
+  public SegmentTemplate getSegmentTemplate()
+  {
     return this.segmentTemplate;
   }
 
   @Override
-  protected void fillMissingValues() {
+  protected void fillMissingValues()
+  {
     if (this.id == null)
     {
       this.id = Integer.toString(uniqueAdaptationSetID++);
@@ -116,10 +119,19 @@ public class DashAdaptationSet extends DashComponent
   }
 
   @Override
-  public boolean removeChild(DashComponent toRemove) {
+  public boolean removeChild(DashComponent toRemove)
+  {
     boolean success = super.removeChild(toRemove);
     this.representations.remove(toRemove);
     return success;
+  }
+
+  @Override
+  public void adjustUrlsToTarget(String targetFolder, String manifestBaseUrl, DashRepresentation targetRepresentation)
+  {
+    super.adjustUrlsToTarget(targetFolder, manifestBaseUrl, targetRepresentation);
+
+    this.representations.forEach((rep) -> rep.adjustUrlsToTarget(targetFolder, manifestBaseUrl, null));
   }
 }
 

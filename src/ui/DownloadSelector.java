@@ -34,7 +34,8 @@ public class DownloadSelector
     this.initUI();
   }
 
-  private void initUI() {
+  private void initUI()
+  {
 
     JFrame frame = new JFrame("Select all Qualities you want to download");
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -49,7 +50,8 @@ public class DownloadSelector
     {
 
       @Override
-      public void actionPerformed(ActionEvent e) {
+      public void actionPerformed(ActionEvent e)
+      {
         List<Representation> selection = repList.getSelectedValuesList();
         Representation[] selectedRepresentations = new Representation[selection.size()];
         selection.toArray(selectedRepresentations);
@@ -78,7 +80,8 @@ class RepresentationListModel implements ListModel<Representation>
     this.buildRepresentationList();
   }
 
-  public void buildRepresentationList() {
+  public void buildRepresentationList()
+  {
     Map<Integer, Representation> repsPerBandwidth = new HashMap<>();
 
     for (Period p : this.info.periods)
@@ -101,22 +104,26 @@ class RepresentationListModel implements ListModel<Representation>
   }
 
   @Override
-  public void addListDataListener(ListDataListener l) {
+  public void addListDataListener(ListDataListener l)
+  {
     // not needed
   }
 
   @Override
-  public Representation getElementAt(int index) {
+  public Representation getElementAt(int index)
+  {
     return this.combinedReps[index];
   }
 
   @Override
-  public int getSize() {
+  public int getSize()
+  {
     return this.combinedReps.length;
   }
 
   @Override
-  public void removeListDataListener(ListDataListener l) {
+  public void removeListDataListener(ListDataListener l)
+  {
     // not needed
   }
 

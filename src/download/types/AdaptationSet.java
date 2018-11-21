@@ -15,12 +15,14 @@ public class AdaptationSet
     this.name = name;
   }
 
-  public void addRepresentation(Representation toAdd) {
+  public void addRepresentation(Representation toAdd)
+  {
     this.representations.add(toAdd);
     toAdd.containingAdaptationSet = this;
   }
 
-  public String toDebugString() {
+  public String toDebugString()
+  {
     String repString = "\n";
     for (Representation target : this.representations)
     {
@@ -31,7 +33,8 @@ public class AdaptationSet
   }
 
   @Override
-  public String toString() {
+  public String toString()
+  {
     return this.name;
   }
 }

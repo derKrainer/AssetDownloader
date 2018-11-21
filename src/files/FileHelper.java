@@ -8,7 +8,8 @@ import java.nio.charset.Charset;
 public class FileHelper
 {
 
-  public static void writeContentToFile(String filePath, String content) {
+  public static void writeContentToFile(String filePath, String content)
+  {
 
     File f = new File(filePath);
 

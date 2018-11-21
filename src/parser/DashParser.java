@@ -25,7 +25,8 @@ public class DashParser implements IParser
   }
 
   @Override
-  public ManifestDownloadnfo parseManifest(String manifestContent, String manifestUrl) {
+  public ManifestDownloadnfo parseManifest(String manifestContent, String manifestUrl)
+  {
     this.manifestDocument = XMLUtils.parseXml(manifestContent);
 
     this.dashManifest = this.parseMPDInformation();
@@ -39,7 +40,8 @@ public class DashParser implements IParser
   }
 
   @Override
-  public String getUpdatedManifest(Representation[] selectedRepresentations) {
+  public String getUpdatedManifest(Representation[] selectedRepresentations)
+  {
     if (this.dashManifest == null)
     {
       throw new RuntimeException("Unable to generate updated manifest, because there is not parsed one yet");
@@ -81,7 +83,8 @@ public class DashParser implements IParser
     return null;
   }
 
-  private void removeUnwantedRepresentations(List<DashRepresentation> toRemove) {
+  private void removeUnwantedRepresentations(List<DashRepresentation> toRemove)
+  {
     for (DashRepresentation rep : toRemove)
     {
       DashAdaptationSet parent = rep.parent;
@@ -98,7 +101,8 @@ public class DashParser implements IParser
     }
   }
 
-  private boolean isSelectedRepresentation(Representation[] selectRepresentations, DashRepresentation dashRep) {
+  private boolean isSelectedRepresentation(Representation[] selectRepresentations, DashRepresentation dashRep)
+  {
     String currentId = dashRep.generateId();
 
     for (Representation selected : selectRepresentations)
@@ -112,7 +116,8 @@ public class DashParser implements IParser
     return false;
   }
 
-  private DashManifest parseMPDInformation() {
+  private DashManifest parseMPDInformation()
+  {
     DashManifest manifest = new DashManifest(manifestDocument);
 
     manifest.parse();
@@ -120,7 +125,8 @@ public class DashParser implements IParser
     return manifest;
   }
 
-  public static double parseDuration(String date) throws Exception {
+  public static double parseDuration(String date) throws Exception
+  {
     // parse something like P0Y0M0DT0H3M30.000S
     double duration = 0;
     char lastChar = '0';
@@ -199,7 +205,8 @@ public class DashParser implements IParser
     return duration;
   }
 
-  private static double parseDuration(StringBuffer sb) {
+  private static double parseDuration(StringBuffer sb)
+  {
     if (sb == null || sb.length() == 0)
     {
       return 0;

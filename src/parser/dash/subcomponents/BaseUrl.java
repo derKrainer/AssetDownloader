@@ -5,6 +5,7 @@ import java.util.List;
 import org.w3c.dom.Node;
 
 import parser.dash.DashComponent;
+import parser.dash.DashRepresentation;
 
 public class BaseUrl extends DashComponent
 {
@@ -18,23 +19,26 @@ public class BaseUrl extends DashComponent
   }
 
   @Override
-  protected void parseSpecialNodes(List<Node> specialNodes) {
+  protected void parseSpecialNodes(List<Node> specialNodes)
+  {
     this.baseUrl = this.textContent;
   }
 
   @Override
-  protected void parseAttributes(List<Node> specialAttributesList) {
+  protected void parseAttributes(List<Node> specialAttributesList)
+  {
   }
 
   @Override
-  protected void fillMissingValues() {
+  protected void fillMissingValues()
+  {
     // nothing to do here
   }
 
   @Override
-  public void adjustUrlsToTarget(String targetFolder, String manifestBaseUrl) 
+  public void adjustUrlsToTarget(String targetFolder, String manifestBaseUrl, DashRepresentation targetRepresentation)
   {
-    super.adjustUrlsToTarget(targetFolder, manifestBaseUrl);
+    super.adjustUrlsToTarget(targetFolder, manifestBaseUrl, targetRepresentation);
 
     this.baseUrl = manifestBaseUrl + targetFolder;
   }

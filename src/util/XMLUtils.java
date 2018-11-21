@@ -21,7 +21,8 @@ public class XMLUtils
   /**
    * https://stackoverflow.com/questions/5456680/xml-document-to-string
    */
-  public static String writeXmlToString(Node node) {
+  public static String writeXmlToString(Node node)
+  {
     try
     {
       TransformerFactory tf = TransformerFactory.newInstance();
@@ -37,7 +38,8 @@ public class XMLUtils
     }
   }
 
-  public static Document parseXml(String xmlContent) {
+  public static Document parseXml(String xmlContent)
+  {
     try
     {
       return DocumentBuilderFactory.newInstance().newDocumentBuilder()

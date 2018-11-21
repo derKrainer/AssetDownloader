@@ -15,7 +15,8 @@ public class ManifestDownloadnfo
   }
 
   @Override
-  public String toString() {
+  public String toString()
+  {
     String periodString = "\n";
     for (Period target : this.periods)
     {
@@ -25,7 +26,8 @@ public class ManifestDownloadnfo
     return periodString;
   }
 
-  public String toDebugString() {
+  public String toDebugString()
+  {
     String periodString = "\n";
     for (Period target : this.periods)
     {

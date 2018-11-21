@@ -12,7 +12,8 @@ public class DownloadTarget
   }
 
   @Override
-  public String toString() {
+  public String toString()
+  {
     return "Download: " + this.downloadURL + " to: " + this.fileName;
   }
 }
