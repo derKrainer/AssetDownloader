@@ -61,7 +61,8 @@ public class HlsParser implements IParser
         // variant playlist
         adSet.addRepresentation(parseVariantPlaylist(allLines[i], allLines[i + 1]));
         i++;
-      } else if (allLines[i].indexOf("#EXT-X-MEDIA") == 0 && allLines[i].indexOf("URI=\"") > -1)
+      }
+      else if (allLines[i].indexOf("#EXT-X-MEDIA") == 0 && allLines[i].indexOf("URI=\"") > -1)
       {
         Map<String, String> keyValuePairs = parseKeyValuePairs(allLines[i]);
         Representation mediaRep = new Representation(keyValuePairs.get("TYPE"), 0);
@@ -149,7 +150,8 @@ public class HlsParser implements IParser
         {
           // take existing next period -> adaptation set
           newAdaptationSet = this.downloadInfo.periods.get(nextPeriodNumber).adaptationSets.get(0);
-        } else
+        }
+        else
         {
           // this is the first representation to venture into a new period
           AdaptationSet oldAdSet = currentRepresentation.containingAdaptationSet;
@@ -172,7 +174,8 @@ public class HlsParser implements IParser
         currentRepresentation = new Representation(currentRepresentation.name, currentRepresentation.bandwidth);
         currentRepresentation.manifestContent = newContent;
         newAdaptationSet.addRepresentation(currentRepresentation);
-      } else if (line.indexOf("http") == 0)
+      }
+      else if (line.indexOf("http") == 0)
       {
         // absolute url
         String fileName = this.getFileNameForUrl(currentRepresentation, line);
@@ -182,7 +185,8 @@ public class HlsParser implements IParser
         // update the current url to the relative url, as the new url should not point
         // to the orginal content
         line = fileName.substring(this.baseDirWithTargetFolder.length());
-      } else if (line.trim().length() > 0 && !line.startsWith("#"))
+      }
+      else if (line.trim().length() > 0 && !line.startsWith("#"))
       {
         // relative url
         String fileName = this.getFileNameForUrl(currentRepresentation, '/' + line);

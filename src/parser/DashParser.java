@@ -67,7 +67,8 @@ public class DashParser implements IParser
           if (isSelectedRepresentation(selectedRepresentations, dashRep))
           {
             selectedManifesRepresentations.add(dashRep);
-          } else
+          }
+          else
           {
             representationsToRemove.add(dashRep);
           }
@@ -79,7 +80,8 @@ public class DashParser implements IParser
     this.removeUnwantedRepresentations(representationsToRemove);
 
     // replace all urls with updated relative urls
-    for(DashRepresentation keptRep : selectedManifesRepresentations) {
+    for (DashRepresentation keptRep : selectedManifesRepresentations)
+    {
       keptRep.adjustUrlsToTarget(this.targetFolder, this.baseUrl, keptRep);
     }
     // TODO: baseURL handling
@@ -160,7 +162,8 @@ public class DashParser implements IParser
         {
           // minutes
           multiplier = 60;
-        } else
+        }
+        else
         {
           // month
           // TODO: real month values if needed at some point?

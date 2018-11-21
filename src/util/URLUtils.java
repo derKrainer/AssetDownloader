@@ -26,11 +26,15 @@ public class URLUtils
       if (test.isAbsolute())
       {
         return url;
-      } else
+      }
+      else
       {
-        if (baseUrl.charAt(baseUrl.length() - 1) == '/' || url.charAt(0) == '/') {
+        if (baseUrl.charAt(baseUrl.length() - 1) == '/' || url.charAt(0) == '/')
+        {
           test = new URI(baseUrl + url);
-        } else {
+        }
+        else
+        {
           test = new URI(baseUrl + '/' + url);
         }
         return test.toString();

@@ -63,7 +63,8 @@ public abstract class DashComponent
       if (attr.getNodeName().equals("id"))
       {
         this.id = attr.getNodeValue();
-      } else
+      }
+      else
       {
         specialNodes.add(attr);
       }
@@ -85,14 +86,16 @@ public abstract class DashComponent
       {
         this.baseUrl = new BaseUrl(child);
         this.baseUrl.parse();
-      } else if (child.getNodeName().equals("#text"))
+      }
+      else if (child.getNodeName().equals("#text"))
       {
         this.textContent = child.getNodeValue();
         if (this.textContent != null)
         {
           this.textContent = this.textContent.trim();
         }
-      } else
+      }
+      else
       {
         unprocessed.add(child);
       }

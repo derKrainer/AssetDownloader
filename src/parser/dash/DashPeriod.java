@@ -34,7 +34,8 @@ public class DashPeriod extends DashComponent
         DashAdaptationSet currentSet = new DashAdaptationSet(childNode, this);
         currentSet.parse();
         this.adaptationSets.add(currentSet);
-      } else
+      }
+      else
       {
         System.out.println("Unexpected child of Period: " + childNode);
       }
@@ -61,7 +62,8 @@ public class DashPeriod extends DashComponent
     if (this.duration > -1)
     {
       return this.duration;
-    } else
+    }
+    else
     {
       return this.parent.duration;
     }

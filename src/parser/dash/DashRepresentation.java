@@ -40,13 +40,16 @@ public class DashRepresentation extends DashAdaptationSet
       if (attr.getNodeName().equals("bandwidth"))
       {
         this.bandwidth = Integer.parseInt(attr.getNodeValue());
-      } else if (attr.getNodeName().equals("width"))
+      }
+      else if (attr.getNodeName().equals("width"))
       {
         this.width = Integer.parseInt(attr.getNodeValue());
-      } else if (attr.getNodeName().equals("height"))
+      }
+      else if (attr.getNodeName().equals("height"))
       {
         this.height = Integer.parseInt(attr.getNodeValue());
-      } else
+      }
+      else
       {
         System.out.println("Unknown DashRepresentation attribute: " + attr.getNodeName());
       }
@@ -58,7 +61,8 @@ public class DashRepresentation extends DashAdaptationSet
     if (this.segmentTemplate != null)
     {
       return this.segmentTemplate;
-    } else if (parent.getSegmentTemplate() != null)
+    }
+    else if (parent.getSegmentTemplate() != null)
     {
       return parent.getSegmentTemplate();
     }
@@ -72,7 +76,8 @@ public class DashRepresentation extends DashAdaptationSet
     if (this.getSegmentTemplate() != null)
     {
       filesToDownload = this.getSegmentTemplate().getTargetFiles(this, manifestLocation, targetFolder);
-    } else
+    }
+    else
     {
       System.err.println("TODO: implement other representation types than segment template");
     }

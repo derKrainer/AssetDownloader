@@ -41,11 +41,13 @@ public class DashAdaptationSet extends DashComponent
         newChild.parent = this;
         newChild.parse();
         this.representations.add(newChild);
-      } else if (child.getNodeName().equals("SegmentTemplate"))
+      }
+      else if (child.getNodeName().equals("SegmentTemplate"))
       {
         this.segmentTemplate = new SegmentTemplate(child);
         this.segmentTemplate.parse();
-      } else
+      }
+      else
       {
         // TODO: parse AdaptationSet Child != representation
         System.out.println("Unknown Adaptation set node: " + child);
@@ -62,10 +64,12 @@ public class DashAdaptationSet extends DashComponent
       if (att.getNodeName().equals("codecs"))
       {
         this.codec = att.getNodeValue();
-      } else if (att.getNodeName().equals("mimeType"))
+      }
+      else if (att.getNodeName().equals("mimeType"))
       {
         this.mimeType = att.getNodeValue();
-      } else if (att.getNodeName().equals("contentType"))
+      }
+      else if (att.getNodeName().equals("contentType"))
       {
         String stringContentType = att.getNodeValue();
 
@@ -94,10 +98,12 @@ public class DashAdaptationSet extends DashComponent
       if (this.mimeType.startsWith("video"))
       {
         this.dataType = ContentType.Video;
-      } else if (this.mimeType.startsWith("audio"))
+      }
+      else if (this.mimeType.startsWith("audio"))
       {
         this.dataType = ContentType.Audio;
-      } else if (this.mimeType.startsWith("application"))
+      }
+      else if (this.mimeType.startsWith("application"))
       {
         this.dataType = ContentType.Application;
       }

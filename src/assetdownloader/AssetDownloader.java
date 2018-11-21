@@ -43,26 +43,33 @@ public class AssetDownloader
     if (manifestURL.contains(".m3u8"))
     {
       this.manifestType = ManifestType.HLS;
-    } else if (manifestURL.contains(".mpd"))
+    }
+    else if (manifestURL.contains(".mpd"))
     {
       this.manifestType = ManifestType.DASH;
-    } else if (manifestURL.contains("/manifest"))
-    {
-      this.manifestType = ManifestType.SMOOTH;
-    } else
+    }
+    // dont do that as smooth streams converted to dash will fail
+    // else if (manifestURL.contains("/manifest"))
+    // {
+    // this.manifestType = ManifestType.SMOOTH;
+    // }
+    else
     {
       // try and extract information from the manifest content if we did not have any
       // luck with the URL
       if (this.manifestContent.contains("<MPD"))
       {
         this.manifestType = ManifestType.DASH;
-      } else if (this.manifestContent.contains("#EXT-INF"))
+      }
+      else if (this.manifestContent.contains("#EXT-INF"))
       {
         this.manifestType = ManifestType.HLS;
-      } else if (this.manifestContent.contains("<Smooth"))
+      }
+      else if (this.manifestContent.contains("<Smooth"))
       {
         this.manifestType = ManifestType.SMOOTH;
-      } else
+      }
+      else
       {
         this.manifestType = ManifestType.UNKNOWN;
       }
@@ -87,7 +94,9 @@ public class AssetDownloader
   public static void main(String[] args)
   {
 //		String manifestUrl = "https://bitmovin-a.akamaihd.net/content/art-of-motion_drm/m3u8s/11331.m3u8";
-    String manifestUrl = "https://bitmovin-a.akamaihd.net/content/MI201109210084_1/mpds/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.mpd";
+    // String manifestUrl =
+    // "https://bitmovin-a.akamaihd.net/content/MI201109210084_1/mpds/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.mpd";
+    String manifestUrl = "http://samplescdn.origin.mediaservices.windows.net/e0e820ec-f6a2-4ea2-afe3-1eed4e06ab2c/AzureMediaServices_Overview.ism/manifest(format=mpd-time-csf)";
     String targetFolder = "download/";
     if (args.length > 0)
     {

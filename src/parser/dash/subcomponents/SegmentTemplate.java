@@ -19,6 +19,7 @@ public class SegmentTemplate extends DashComponent
   public int startNumber;
   public int duration;
   public int timescale;
+  public SegementTimeline segmentTimeline;
 
   public SegmentTemplate(Node xmlNode)
   {
@@ -30,7 +31,14 @@ public class SegmentTemplate extends DashComponent
   {
     for (Node childNode : specialNodes)
     {
-      System.out.println("Unhandled SegmentTemplateNode: " + childNode);
+      if (childNode.getNodeName().equals("SegmentTimeline"))
+      {
+        this.segmentTimeline = new SegementTimeline(childNode, this);
+      }
+      else
+      {
+        System.out.println("Unhandled SegmentTemplateNode: " + childNode);
+      }
     }
   }
 
@@ -43,37 +51,47 @@ public class SegmentTemplate extends DashComponent
       {
         this.mediaUrl = attr.getNodeValue();
         this.mediaUrlNode = attr;
-      } else if (attr.getNodeName().equals("initialization"))
+      }
+      else if (attr.getNodeName().equals("initialization"))
       {
         this.initUrl = attr.getNodeValue();
         this.initUrlNode = attr;
-      } else if (attr.getNodeName().equals("startNumber"))
+      }
+      else if (attr.getNodeName().equals("startNumber"))
       {
         this.startNumber = Integer.parseInt(attr.getNodeValue());
-      } else if (attr.getNodeName().equals("duration"))
+      }
+      else if (attr.getNodeName().equals("duration"))
       {
         this.duration = Integer.parseInt(attr.getNodeValue());
-      } else if (attr.getNodeName().equals("timescale"))
+      }
+      else if (attr.getNodeName().equals("timescale"))
       {
         this.timescale = Integer.parseInt(attr.getNodeValue());
-      } else
+      }
+      else
       {
         System.out.println("Unknown SegmentTemplate attribute: " + attr.getNodeName());
       }
     }
   }
 
+  @Override
+  protected void fillMissingValues()
+  {
+    // id might be overwritten by the representation if the $Bandwidth$ placeholder
+    // is present
+  }
+
   public List<DownloadTarget> getTargetFiles(DashRepresentation rep, String baseUrl, String targetFolder)
   {
+
     List<DownloadTarget> allFiles = new ArrayList<>();
-    allFiles.add(new DownloadTarget(convertToDownloadUrl(initUrl, 0, rep, baseUrl),
+    allFiles.add(new DownloadTarget(convertToDownloadUrl(initUrl, -1, rep, baseUrl),
         getTargetFileForUrl(initUrl, rep, targetFolder)));
-    double segmentDuration = (double) this.duration / this.timescale;
-    double streamDuration = rep.parent.parent.getDuration();
 
-    double numberOfSegments = Math.ceil(streamDuration / segmentDuration);
-
-    for (int i = this.startNumber; i < this.startNumber + numberOfSegments; i++)
+    int numberOfSegments = this.getNumberOfSegments(rep);
+    for (int i = 0; i < numberOfSegments; i++)
     {
       String dlUrl = convertToDownloadUrl(this.mediaUrl, i, rep, baseUrl);
       allFiles.add(new DownloadTarget(dlUrl, getTargetFileForUrl(dlUrl, rep, targetFolder)));
@@ -82,26 +100,21 @@ public class SegmentTemplate extends DashComponent
     return allFiles;
   }
 
+  protected int getNumberOfSegments(DashRepresentation rep)
+  {
+    double segmentDuration = (double) this.duration / this.timescale;
+    double streamDuration = rep.parent.parent.getDuration();
+
+    int numberOfSegments = (int) Math.ceil(streamDuration / segmentDuration);
+    return numberOfSegments;
+  }
+
   private String convertToDownloadUrl(String url, int index, DashRepresentation rep, String baseUrl)
   {
     return URLUtils.makeAbsoulte(replacePlaceholders(url, index, rep), baseUrl);
   }
 
-  // private String makeUrlAbsoute(String segmentUrl, String baseUrl) {
-  // if (segmentUrl.startsWith("http") || segmentUrl.startsWith("//")) {
-  // // already absolute
-  // return segmentUrl;
-  // }
-
-  // StringBuilder sb = new StringBuilder(baseUrl);
-  // if (sb.charAt(sb.length() -1) != '/') {
-  // sb.append('/');
-  // }
-  // sb.append(segmentUrl);
-  // return sb.toString();
-  // }
-
-  private String replacePlaceholders(String url, int index, DashRepresentation rep)
+  protected String replacePlaceholders(String url, int index, DashRepresentation rep)
   {
     return url.replace("$Number$", Integer.toString(index)).replace("$RepresentationID$", rep.id);
   }
@@ -122,12 +135,6 @@ public class SegmentTemplate extends DashComponent
   }
 
   @Override
-  protected void fillMissingValues()
-  {
-    // nothing to do here
-  }
-
-  @Override
   public void adjustUrlsToTarget(String targetFolder, String manifestBaseUrl, DashRepresentation targetRepresentation)
   {
     super.adjustUrlsToTarget(targetFolder, manifestBaseUrl, targetRepresentation);
@@ -139,7 +146,8 @@ public class SegmentTemplate extends DashComponent
     this.initUrlNode.setNodeValue(targetFile);
   }
 
-  private String adjustUrl(String url, String targetFolder, String manifestBaseUrl, DashRepresentation targetRepresentation) 
+  private String adjustUrl(String url, String targetFolder, String manifestBaseUrl,
+      DashRepresentation targetRepresentation)
   {
     StringBuffer sb = new StringBuffer("./");
 
@@ -147,30 +155,40 @@ public class SegmentTemplate extends DashComponent
 
     sb.append(targetRepresentation.parent.parent.id).append('/');
     sb.append(targetRepresentation.parent.id).append('/');
-    if (findPlaceHolderIndex(parts, "$RepresentationID$") > -1) {
+    if (findPlaceHolderIndex(parts, "$RepresentationID$") > -1)
+    {
       sb.append("$RepresentationID$").append('/');
-    } else {
+    }
+    else
+    {
       sb.append(targetRepresentation.id).append('/');
     }
 
     int segmentPlaceholderIndex = findPlaceHolderIndex(parts, "$Number$");
-    if (segmentPlaceholderIndex == -1) {
+    if (segmentPlaceholderIndex == -1)
+    {
       segmentPlaceholderIndex = findPlaceHolderIndex(parts, "$Time$");
     }
 
     // init segment won't have a placeholder
-    if (segmentPlaceholderIndex > 0) {
+    if (segmentPlaceholderIndex > 0)
+    {
       sb.append(parts[segmentPlaceholderIndex]);
-    } else {
+    }
+    else
+    {
       sb.append(parts[parts.length - 1]);
     }
 
     return sb.toString();
   }
 
-  private static int findPlaceHolderIndex(String[] heystack, String needle) {
-    for(int i = 0; i < heystack.length; i++) {
-      if (heystack[i].contains(needle)) {
+  private static int findPlaceHolderIndex(String[] heystack, String needle)
+  {
+    for (int i = 0; i < heystack.length; i++)
+    {
+      if (heystack[i].contains(needle))
+      {
         return i;
       }
     }

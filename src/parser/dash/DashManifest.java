@@ -37,7 +37,8 @@ public class DashManifest extends DashComponent
         currentPeriod.parse();
 
         this.periods.add(currentPeriod);
-      } else
+      }
+      else
       {
         System.out.println("Unexpected MPD Child: " + periodNode.getNodeName());
       }
@@ -59,7 +60,8 @@ public class DashManifest extends DashComponent
         {
           throw new RuntimeException("Error parsing mpd duration", ex);
         }
-      } else
+      }
+      else
       {
         System.out.println("Unhandled MPD attribute: " + attr.getNodeName());
       }
