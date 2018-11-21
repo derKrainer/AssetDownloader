@@ -56,9 +56,10 @@ public class SegmentTemplate extends DashComponent
     }
   }
 
-  public List<DownloadTarget> getTargetFiles(DashRepresentation rep, String baseUrl) {
+  public List<DownloadTarget> getTargetFiles(DashRepresentation rep, String baseUrl, String targetFolder) {
     List<DownloadTarget> allFiles = new ArrayList<>();
-    allFiles.add(new DownloadTarget(convertToDownloadUrl(initUrl, 0, rep, baseUrl), getTargetFileForUrl(initUrl, rep)));
+    allFiles.add(new DownloadTarget(convertToDownloadUrl(initUrl, 0, rep, baseUrl), 
+                                    getTargetFileForUrl(initUrl, rep, targetFolder)));
     double segmentDuration = this.duration / this.timescale;
     double streamDuration = rep.parent.parent.getDuration();
 
@@ -67,7 +68,7 @@ public class SegmentTemplate extends DashComponent
     for (int i = this.startNumber; i < this.startNumber + numberOfSegments; i++)
     {
       String dlUrl = convertToDownloadUrl(this.mediaUrl, i, rep, baseUrl);
-      allFiles.add(new DownloadTarget(dlUrl, getTargetFileForUrl(dlUrl, rep)));
+      allFiles.add(new DownloadTarget(dlUrl, getTargetFileForUrl(dlUrl, rep, targetFolder)));
     }
 
     return allFiles;
@@ -95,8 +96,17 @@ public class SegmentTemplate extends DashComponent
     return url.replace("$Number$", Integer.toString(index)).replace("$RepresentationID$", rep.id);
   }
 
-  private String getTargetFileForUrl(String url, DashRepresentation rep) {
-    return rep.parent.parent.id + '/' + rep.parent.id + '/' + rep.id + '/' + url.substring(url.lastIndexOf('/') + 1);
+  private String getTargetFileForUrl(String url, DashRepresentation rep, String targetFolder) {
+    StringBuilder sb = new StringBuilder(targetFolder);
+    if (sb.charAt(sb.length() - 1) != '/' || sb.charAt(sb.length() - 1) != '\\') {
+      sb.append('/');
+    }
+    sb.append(rep.parent.parent.id).append('/');
+    sb.append(rep.parent.id).append('/');
+    sb.append(rep.id).append('/');
+    sb.append(url.substring(url.lastIndexOf('/') + 1));
+
+    return sb.toString();
   }
 
   @Override

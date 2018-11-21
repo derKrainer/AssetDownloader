@@ -32,7 +32,7 @@ public class DashParser implements IParser
 
     String baseUrl = manifestUrl.substring(0, manifestUrl.lastIndexOf('/'));
 
-    ManifestDownloadnfo dlInfo = dashManifest.generateDownloadInfo(baseUrl);
+    ManifestDownloadnfo dlInfo = dashManifest.generateDownloadInfo(baseUrl, this.targetFolder);
     System.out.println(dlInfo.toDebugString());
 
     return dlInfo;

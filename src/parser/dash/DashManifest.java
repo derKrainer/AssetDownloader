@@ -72,7 +72,7 @@ public class DashManifest extends DashComponent
     }
   }
 
-  public ManifestDownloadnfo generateDownloadInfo(String baseUrl) {
+  public ManifestDownloadnfo generateDownloadInfo(String baseUrl, String targetFolder) {
     ManifestDownloadnfo retVal = new ManifestDownloadnfo(baseUrl);
 
     for (DashPeriod p : this.periods)
@@ -90,7 +90,7 @@ public class DashManifest extends DashComponent
           Representation dlRep = new Representation(rep.id, rep.bandwidth);
           dlSet.addRepresentation(dlRep);
 
-          List<DownloadTarget> targets = rep.getTargetFiles(baseUrl);
+          List<DownloadTarget> targets = rep.getTargetFiles(baseUrl, targetFolder);
           for (DownloadTarget dlTarget : targets)
           {
             dlRep.filesToDownload.add(dlTarget);
