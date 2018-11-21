@@ -15,100 +15,96 @@ import parser.DashParser;
 
 public class DashManifest extends DashComponent
 {
-	public List<DashPeriod> periods = new ArrayList<>();
+  public List<DashPeriod> periods = new ArrayList<>();
 
-	public double duration = -1;
+  public double duration = -1;
 
-	public DashManifest(Node xmlNode)
-	{
-		super(xmlNode.getFirstChild());
-	}
+  public DashManifest(Node xmlNode)
+  {
+    super(xmlNode.getFirstChild());
+  }
 
-	@Override
-	protected void parseSpecialNodes(List<Node> specialNodes)
-	{
-		NodeList list = this.xmlContent.getChildNodes();
+  @Override
+  protected void parseSpecialNodes(List<Node> specialNodes) {
+    NodeList list = this.xmlContent.getChildNodes();
 
-		if (list.getLength() == 0)
-		{
-			throw new RuntimeException("Manifest has no Periods (is empty)");
-		}
+    if (list.getLength() == 0)
+    {
+      throw new RuntimeException("Manifest has no Periods (is empty)");
+    }
 
-		for (int i = 0; i < list.getLength(); i++)
-		{
-			Node periodNode = list.item(i);
-			if (periodNode.getNodeName().equals("Period"))
-			{
-				DashPeriod currentPeriod = new DashPeriod(periodNode, this);
+    for (int i = 0; i < list.getLength(); i++)
+    {
+      Node periodNode = list.item(i);
+      if (periodNode.getNodeName().equals("Period"))
+      {
+        DashPeriod currentPeriod = new DashPeriod(periodNode, this);
 
-				System.out.println("processing Period: " + periodNode);
-				currentPeriod.parse();
+        System.out.println("processing Period: " + periodNode);
+        currentPeriod.parse();
 
-				this.periods.add(currentPeriod);
-			}
-			else
-			{
-				System.out.println("Unexpected MPD Child: " + periodNode.getNodeName());
-			}
-		}
-	}
+        this.periods.add(currentPeriod);
+      } else
+      {
+        System.out.println("Unexpected MPD Child: " + periodNode.getNodeName());
+      }
+    }
+  }
 
-	@Override
-	protected void parseAttributes(List<Node> specialAttributesList)
-	{
-		// TODO: optional MPD values?
-		for (Node attr : specialAttributesList)
-		{
-			if (attr.getNodeName().equals("mediaPresentationDuration"))
-			{
-				try {
-				this.duration = DashParser.parseDuration(attr.getNodeValue());
-				}
-				catch(Exception ex) {
-					throw new RuntimeException("Error parsing mpd duration", ex);
-				}
-			}
-			else
-			{
-				System.out.println("Unhandled MPD attribute: " + attr.getNodeName());
-			}
-		}
-	}
+  @Override
+  protected void parseAttributes(List<Node> specialAttributesList) {
+    // TODO: optional MPD values?
+    for (Node attr : specialAttributesList)
+    {
+      if (attr.getNodeName().equals("mediaPresentationDuration"))
+      {
+        try
+        {
+          this.duration = DashParser.parseDuration(attr.getNodeValue());
+        } catch (Exception ex)
+        {
+          throw new RuntimeException("Error parsing mpd duration", ex);
+        }
+      } else
+      {
+        System.out.println("Unhandled MPD attribute: " + attr.getNodeName());
+      }
+    }
+  }
 
-	public ManifestDownloadnfo generateDownloadInfo()
-	{
-		ManifestDownloadnfo retVal = new ManifestDownloadnfo(""); // TODO: baseUrl
+  public ManifestDownloadnfo generateDownloadInfo(String baseUrl) {
+    ManifestDownloadnfo retVal = new ManifestDownloadnfo(baseUrl);
 
-		for (DashPeriod p : this.periods)
-		{
-			Period currentPeriod = new Period(p.id);
-			retVal.periods.add(currentPeriod);
+    for (DashPeriod p : this.periods)
+    {
+      Period currentPeriod = new Period(p.id);
+      retVal.periods.add(currentPeriod);
 
-			for (DashAdaptationSet adSet : p.adaptationSets)
-			{
-				AdaptationSet dlSet = new AdaptationSet(adSet.id);
-				currentPeriod.addAdaptationSet(dlSet);
+      for (DashAdaptationSet adSet : p.adaptationSets)
+      {
+        AdaptationSet dlSet = new AdaptationSet(adSet.id);
+        currentPeriod.addAdaptationSet(dlSet);
 
-				for (DashRepresentation rep : adSet.representations)
-				{
-					Representation dlRep = new Representation(rep.id, Integer.parseInt(rep.bandwidth));
-					dlSet.addRepresentation(dlRep);
-					
-					List<DownloadTarget> targets = rep.getTargetFiles();
-					for (DownloadTarget dlTarget : targets) {
-						dlRep.filesToDownload.add(dlTarget);
-					}
-				}
-			}
-		}
+        for (DashRepresentation rep : adSet.representations)
+        {
+          Representation dlRep = new Representation(rep.id, rep.bandwidth);
+          dlSet.addRepresentation(dlRep);
 
-		return retVal;
-	}
-	
-	@Override
-	protected void fillMissingValues()
-	{
-		// nothing as of yet
-	}
+          List<DownloadTarget> targets = rep.getTargetFiles();
+          for (DownloadTarget dlTarget : targets)
+          {
+            dlRep.filesToDownload.add(dlTarget);
+          }
+        }
+      }
+    }
+
+    return retVal;
+  }
+
+  @Override
+  protected void fillMissingValues() {
+    // nothing as of yet
+  }
 
 }

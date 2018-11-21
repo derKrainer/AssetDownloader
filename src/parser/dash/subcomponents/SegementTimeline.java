@@ -9,29 +9,26 @@ import parser.dash.DashComponent;
 public class SegementTimeline extends DashComponent
 {
 
-	public SegementTimeline(Node xmlNode)
-	{
-		super(xmlNode);
-	}
+  public SegementTimeline(Node xmlNode)
+  {
+    super(xmlNode);
+  }
 
-	@Override
-	protected void parseSpecialNodes(List<Node> specialNodes)
-	{
-		// TODO Auto-generated method stub
-		
-	}
+  @Override
+  protected void parseSpecialNodes(List<Node> specialNodes) {
+    // TODO Auto-generated method stub
 
-	@Override
-	protected void parseAttributes(List<Node> specialAttributesList)
-	{
-		// TODO Auto-generated method stub
-		
-	}
-	
-	@Override
-	protected void fillMissingValues()
-	{
-		// nothing to do here
-	}
+  }
+
+  @Override
+  protected void parseAttributes(List<Node> specialAttributesList) {
+    // TODO Auto-generated method stub
+
+  }
+
+  @Override
+  protected void fillMissingValues() {
+    // nothing to do here
+  }
 
 }
