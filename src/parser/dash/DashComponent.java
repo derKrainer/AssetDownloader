@@ -7,11 +7,17 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import parser.dash.subcomponents.BaseUrl;
+
 public abstract class DashComponent
 {
   public Node xmlContent;
 
   public String id = null;
+
+  public BaseUrl baseUrl;
+
+  public String textContent;
 
   public DashComponent(Node xmlNode)
   {
@@ -56,7 +62,6 @@ public abstract class DashComponent
       {
         this.id = attr.getNodeValue();
       }
-      // TODO: filter out all the general ones and parse info here
       else
       {
         specialNodes.add(attr);
@@ -74,7 +79,19 @@ public abstract class DashComponent
     {
       Node child = children.item(i);
 
-      unprocessed.add(child);
+      if (child.getNodeName().equals("BaseURL")) {
+        this.baseUrl = new BaseUrl(child);
+        this.baseUrl.parse();
+      }
+      else if (child.getNodeName().equals("#text")) {
+        this.textContent = child.getNodeValue();
+        if (this.textContent != null) {
+          this.textContent = this.textContent.trim();
+        }
+      }
+      else {
+        unprocessed.add(child);
+      }
     }
 
     return unprocessed;
@@ -84,4 +101,9 @@ public abstract class DashComponent
     return this.xmlContent.removeChild(toRemove.xmlContent) != null;
   }
 
+  public void adjustUrlsToTarget(String targetFolder, String manifestBaseUrl) {
+    if (this.baseUrl != null) {
+      this.baseUrl.adjustUrlsToTarget(targetFolder, manifestBaseUrl);
+    }
+  }
 }

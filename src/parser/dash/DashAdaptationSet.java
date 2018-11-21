@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 import parser.dash.subcomponents.SegmentTemplate;
 
@@ -32,12 +31,9 @@ public class DashAdaptationSet extends DashComponent
 
   @Override
   protected void parseSpecialNodes(List<Node> specialNodes) {
-    NodeList childNodes = xmlContent.getChildNodes();
 
-    for (int i = 0; i < childNodes.getLength(); i++)
+    for (Node child: specialNodes)
     {
-      Node child = childNodes.item(i);
-
       if (child.getNodeName().equals("Representation"))
       {
         DashRepresentation newChild = new DashRepresentation(child, this);
@@ -49,7 +45,6 @@ public class DashAdaptationSet extends DashComponent
         this.segmentTemplate = new SegmentTemplate(child);
         this.segmentTemplate.parse();
       }
-      // TODO: detect general stuff
       else
       {
         // TODO: parse AdaptationSet Child != representation

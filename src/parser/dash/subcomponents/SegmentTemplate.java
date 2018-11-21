@@ -60,7 +60,7 @@ public class SegmentTemplate extends DashComponent
     List<DownloadTarget> allFiles = new ArrayList<>();
     allFiles.add(new DownloadTarget(convertToDownloadUrl(initUrl, 0, rep, baseUrl), 
                                     getTargetFileForUrl(initUrl, rep, targetFolder)));
-    double segmentDuration = this.duration / this.timescale;
+    double segmentDuration = (double)this.duration / this.timescale;
     double streamDuration = rep.parent.parent.getDuration();
 
     double numberOfSegments = Math.ceil(streamDuration / segmentDuration);

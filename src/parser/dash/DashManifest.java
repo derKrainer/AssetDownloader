@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 import download.types.AdaptationSet;
 import download.types.DownloadTarget;
@@ -26,16 +25,9 @@ public class DashManifest extends DashComponent
 
   @Override
   protected void parseSpecialNodes(List<Node> specialNodes) {
-    NodeList list = this.xmlContent.getChildNodes();
 
-    if (list.getLength() == 0)
+    for (Node periodNode: specialNodes)
     {
-      throw new RuntimeException("Manifest has no Periods (is empty)");
-    }
-
-    for (int i = 0; i < list.getLength(); i++)
-    {
-      Node periodNode = list.item(i);
       if (periodNode.getNodeName().equals("Period"))
       {
         DashPeriod currentPeriod = new DashPeriod(periodNode, this);
@@ -105,6 +97,14 @@ public class DashManifest extends DashComponent
   @Override
   protected void fillMissingValues() {
     // nothing as of yet
-  }
+	}
+	
+	@Override
+	public void adjustUrlsToTarget(String targetFolder, String manifestBaseUrl)
+	{
+		super.adjustUrlsToTarget(targetFolder, manifestBaseUrl);
+
+		this.periods.forEach((period) -> period.adjustUrlsToTarget(targetFolder, manifestBaseUrl));
+	}
 
 }

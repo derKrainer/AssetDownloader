@@ -26,7 +26,7 @@ public class DashRepresentation extends DashAdaptationSet
   protected void parseSpecialNodes(List<Node> specialNodes) {
     super.parseSpecialNodes(specialNodes);
 
-    // TODO Auto-generated method stub
+    // are there any special children of representation which are of interest to us?
   }
 
   @Override

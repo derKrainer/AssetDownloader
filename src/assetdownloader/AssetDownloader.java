@@ -84,7 +84,6 @@ public class AssetDownloader
 
   public static void main(String[] args) {
 //		String manifestUrl = "https://bitmovin-a.akamaihd.net/content/art-of-motion_drm/m3u8s/11331.m3u8";
-//		String manifestUrl = "http://ak-accuweather.akamaized.net/02fe7174-cbe9-4b85-9dc4-a47c42efd108/9sa3dqZzE6SjuE2-yuIku2kRhCyJhkmW.ism/Manifest(format=mpd-time-csf)";
     String manifestUrl = "https://bitmovin-a.akamaihd.net/content/MI201109210084_1/mpds/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.mpd";
     String targetFolder = "download/";
     if (args.length > 0)

@@ -69,4 +69,12 @@ public class DashPeriod extends DashComponent
     this.adaptationSets.remove(toRemove);
     return success;
   }
+
+  @Override
+  public void adjustUrlsToTarget(String targetFolder, String manifestBaseUrl) 
+  {
+    super.adjustUrlsToTarget(targetFolder, manifestBaseUrl);
+
+    this.adaptationSets.forEach((rep) -> rep.adjustUrlsToTarget(targetFolder, manifestBaseUrl));
+  }
 }
