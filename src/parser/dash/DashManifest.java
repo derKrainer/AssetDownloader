@@ -90,7 +90,7 @@ public class DashManifest extends DashComponent
           Representation dlRep = new Representation(rep.id, rep.bandwidth);
           dlSet.addRepresentation(dlRep);
 
-          List<DownloadTarget> targets = rep.getTargetFiles();
+          List<DownloadTarget> targets = rep.getTargetFiles(baseUrl);
           for (DownloadTarget dlTarget : targets)
           {
             dlRep.filesToDownload.add(dlTarget);

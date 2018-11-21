@@ -18,6 +18,9 @@ import org.xml.sax.SAXException;
 public class XMLUtils
 {
 
+  /**
+   * https://stackoverflow.com/questions/5456680/xml-document-to-string
+   */
   public static String writeXmlToString(Node node) {
     try
     {
@@ -26,7 +29,7 @@ public class XMLUtils
       transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
       StringWriter writer = new StringWriter();
       transformer.transform(new DOMSource(node), new StreamResult(writer));
-      String output = writer.getBuffer().toString().replaceAll("\n|\r", "");
+      String output = writer.getBuffer().toString();
       return output;
     } catch (Exception ex)
     {

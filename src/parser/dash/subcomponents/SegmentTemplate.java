@@ -24,7 +24,6 @@ public class SegmentTemplate extends DashComponent
 
   @Override
   protected void parseSpecialNodes(List<Node> specialNodes) {
-    // TODO Auto-generated method stub
     for (Node childNode : specialNodes)
     {
       System.out.println("Unhandled SegmentTemplateNode: " + childNode);
@@ -57,10 +56,9 @@ public class SegmentTemplate extends DashComponent
     }
   }
 
-  public List<DownloadTarget> getTargetFiles(DashRepresentation rep) {
-    // TODO: calculate amount of segments and replace mediaUrl
+  public List<DownloadTarget> getTargetFiles(DashRepresentation rep, String baseUrl) {
     List<DownloadTarget> allFiles = new ArrayList<>();
-    allFiles.add(new DownloadTarget(replacePlaceholders(initUrl, 0, rep), getTargetFileForUrl(initUrl, rep)));
+    allFiles.add(new DownloadTarget(convertToDownloadUrl(initUrl, 0, rep, baseUrl), getTargetFileForUrl(initUrl, rep)));
     double segmentDuration = this.duration / this.timescale;
     double streamDuration = rep.parent.parent.getDuration();
 
@@ -68,15 +66,29 @@ public class SegmentTemplate extends DashComponent
 
     for (int i = this.startNumber; i < this.startNumber + numberOfSegments; i++)
     {
-      String dlUrl = replacePlaceholders(getUrlForIndex(i), i, rep);
-      allFiles.add(new DownloadTarget(replacePlaceholders(dlUrl, i, rep), getTargetFileForUrl(dlUrl, rep)));
+      String dlUrl = convertToDownloadUrl(this.mediaUrl, i, rep, baseUrl);
+      allFiles.add(new DownloadTarget(dlUrl, getTargetFileForUrl(dlUrl, rep)));
     }
 
     return allFiles;
   }
 
-  private String getUrlForIndex(int index) {
-    return this.mediaUrl;
+  private String convertToDownloadUrl(String url, int index, DashRepresentation rep, String baseUrl) {
+    return makeUrlAbsoute(replacePlaceholders(url, index, rep), baseUrl);
+  }
+
+  private String makeUrlAbsoute(String segmentUrl, String baseUrl) {
+    if (segmentUrl.startsWith("http") || segmentUrl.startsWith("//")) {
+      // already absolute
+      return segmentUrl;
+    }
+    
+    StringBuilder sb = new StringBuilder(baseUrl);
+    if (sb.charAt(sb.length() -1) != '/') {
+      sb.append('/');
+    }
+    sb.append(segmentUrl);
+    return sb.toString();
   }
 
   private String replacePlaceholders(String url, int index, DashRepresentation rep) {

@@ -30,7 +30,9 @@ public class DashParser implements IParser
 
     this.dashManifest = this.parseMPDInformation();
 
-    ManifestDownloadnfo dlInfo = dashManifest.generateDownloadInfo(manifestUrl);
+    String baseUrl = manifestUrl.substring(0, manifestUrl.lastIndexOf('/'));
+
+    ManifestDownloadnfo dlInfo = dashManifest.generateDownloadInfo(baseUrl);
     System.out.println(dlInfo.toDebugString());
 
     return dlInfo;

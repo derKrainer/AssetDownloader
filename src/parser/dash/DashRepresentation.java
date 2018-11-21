@@ -62,12 +62,12 @@ public class DashRepresentation extends DashAdaptationSet
     return null;
   }
 
-  public List<DownloadTarget> getTargetFiles() {
+  public List<DownloadTarget> getTargetFiles(String manifestLocation) {
     List<DownloadTarget> filesToDownload = new ArrayList<>();
 
     if (this.getSegmentTemplate() != null)
     {
-      filesToDownload = this.getSegmentTemplate().getTargetFiles(this);
+      filesToDownload = this.getSegmentTemplate().getTargetFiles(this, manifestLocation);
     } else
     {
       System.err.println("TODO: implement other representation types than segment template");
