@@ -28,7 +28,11 @@ public class URLUtils
         return url;
       } else
       {
-        test = new URI(baseUrl + url);
+        if (baseUrl.charAt(baseUrl.length() - 1) == '/' || url.charAt(0) == '/') {
+          test = new URI(baseUrl + url);
+        } else {
+          test = new URI(baseUrl + '/' + url);
+        }
         return test.toString();
       }
     } catch (Exception ex)

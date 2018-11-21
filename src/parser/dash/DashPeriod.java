@@ -80,6 +80,6 @@ public class DashPeriod extends DashComponent
   {
     super.adjustUrlsToTarget(targetFolder, manifestBaseUrl, targetRepresentation);
 
-    this.adaptationSets.forEach((rep) -> rep.adjustUrlsToTarget(targetFolder, manifestBaseUrl, null));
+    this.adaptationSets.forEach((rep) -> rep.adjustUrlsToTarget(targetFolder, manifestBaseUrl, targetRepresentation));
   }
 }

@@ -7,6 +7,7 @@ import org.w3c.dom.Document;
 
 import download.types.ManifestDownloadnfo;
 import download.types.Representation;
+import files.FileHelper;
 import parser.dash.DashAdaptationSet;
 import parser.dash.DashManifest;
 import parser.dash.DashPeriod;
@@ -18,6 +19,7 @@ public class DashParser implements IParser
   private Document manifestDocument;
   private String targetFolder;
   private DashManifest dashManifest;
+  public String baseUrl;
 
   public DashParser(String targetFolder)
   {
@@ -31,10 +33,10 @@ public class DashParser implements IParser
 
     this.dashManifest = this.parseMPDInformation();
 
-    String baseUrl = manifestUrl.substring(0, manifestUrl.lastIndexOf('/'));
+    this.baseUrl = manifestUrl.substring(0, manifestUrl.lastIndexOf('/'));
 
-    ManifestDownloadnfo dlInfo = dashManifest.generateDownloadInfo(baseUrl, this.targetFolder);
-    System.out.println(dlInfo.toDebugString());
+    ManifestDownloadnfo dlInfo = dashManifest.generateDownloadInfo(this.baseUrl, this.targetFolder);
+    // System.out.println(dlInfo.toDebugString());
 
     return dlInfo;
   }
@@ -76,11 +78,18 @@ public class DashParser implements IParser
     // remove all unwanted representations from the manifest
     this.removeUnwantedRepresentations(representationsToRemove);
 
-    System.out.println(XMLUtils.writeXmlToString(this.dashManifest.xmlContent));
     // replace all urls with updated relative urls
-    // replace / add possible BaseURL
+    for(DashRepresentation keptRep : selectedManifesRepresentations) {
+      keptRep.adjustUrlsToTarget(this.targetFolder, this.baseUrl, keptRep);
+    }
+    // TODO: baseURL handling
 
-    return null;
+    // replace / add possible BaseURL
+    String updatedManifest = XMLUtils.writeXmlToString(this.dashManifest.xmlContent);
+    System.out.println(updatedManifest);
+    FileHelper.writeContentToFile(this.targetFolder + "manifest.mpd", updatedManifest);
+
+    return updatedManifest;
   }
 
   private void removeUnwantedRepresentations(List<DashRepresentation> toRemove)

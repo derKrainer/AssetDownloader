@@ -91,9 +91,9 @@ public class DashRepresentation extends DashAdaptationSet
   {
     super.adjustUrlsToTarget(targetFolder, manifestBaseUrl, targetRepresentation);
 
-    if (this.segmentTemplate != null)
+    if (this.getSegmentTemplate() != null)
     {
-      this.segmentTemplate.adjustUrlsToTarget(targetFolder, manifestBaseUrl, null);
+      this.getSegmentTemplate().adjustUrlsToTarget(targetFolder, manifestBaseUrl, targetRepresentation);
     }
   }
 

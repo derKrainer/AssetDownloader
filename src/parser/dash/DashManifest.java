@@ -108,7 +108,7 @@ public class DashManifest extends DashComponent
   {
     super.adjustUrlsToTarget(targetFolder, manifestBaseUrl, targetRepresentation);
 
-    this.periods.forEach((period) -> period.adjustUrlsToTarget(targetFolder, manifestBaseUrl, null));
+    this.periods.forEach((period) -> period.adjustUrlsToTarget(targetFolder, manifestBaseUrl, targetRepresentation));
   }
 
 }

@@ -110,7 +110,7 @@ public abstract class DashComponent
   {
     if (this.baseUrl != null)
     {
-      this.baseUrl.adjustUrlsToTarget(targetFolder, manifestBaseUrl, null);
+      this.baseUrl.adjustUrlsToTarget(targetFolder, manifestBaseUrl, targetRepresentation);
     }
   }
 }

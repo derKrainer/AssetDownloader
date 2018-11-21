@@ -131,7 +131,7 @@ public class DashAdaptationSet extends DashComponent
   {
     super.adjustUrlsToTarget(targetFolder, manifestBaseUrl, targetRepresentation);
 
-    this.representations.forEach((rep) -> rep.adjustUrlsToTarget(targetFolder, manifestBaseUrl, null));
+    this.representations.forEach((rep) -> rep.adjustUrlsToTarget(targetFolder, manifestBaseUrl, targetRepresentation));
   }
 }
 

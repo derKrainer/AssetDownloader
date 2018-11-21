@@ -132,5 +132,48 @@ public class SegmentTemplate extends DashComponent
   {
     super.adjustUrlsToTarget(targetFolder, manifestBaseUrl, targetRepresentation);
 
+    String targetFile = adjustUrl(this.mediaUrl, targetFolder, manifestBaseUrl, targetRepresentation);
+    this.mediaUrlNode.setNodeValue(targetFile);
+
+    targetFile = adjustUrl(this.initUrl, targetFolder, manifestBaseUrl, targetRepresentation);
+    this.initUrlNode.setNodeValue(targetFile);
+  }
+
+  private String adjustUrl(String url, String targetFolder, String manifestBaseUrl, DashRepresentation targetRepresentation) 
+  {
+    StringBuffer sb = new StringBuffer("./");
+
+    String[] parts = url.split("/");
+
+    sb.append(targetRepresentation.parent.parent.id).append('/');
+    sb.append(targetRepresentation.parent.id).append('/');
+    if (findPlaceHolderIndex(parts, "$RepresentationID$") > -1) {
+      sb.append("$RepresentationID$").append('/');
+    } else {
+      sb.append(targetRepresentation.id).append('/');
+    }
+
+    int segmentPlaceholderIndex = findPlaceHolderIndex(parts, "$Number$");
+    if (segmentPlaceholderIndex == -1) {
+      segmentPlaceholderIndex = findPlaceHolderIndex(parts, "$Time$");
+    }
+
+    // init segment won't have a placeholder
+    if (segmentPlaceholderIndex > 0) {
+      sb.append(parts[segmentPlaceholderIndex]);
+    } else {
+      sb.append(parts[parts.length - 1]);
+    }
+
+    return sb.toString();
+  }
+
+  private static int findPlaceHolderIndex(String[] heystack, String needle) {
+    for(int i = 0; i < heystack.length; i++) {
+      if (heystack[i].contains(needle)) {
+        return i;
+      }
+    }
+    return -1;
   }
 }
