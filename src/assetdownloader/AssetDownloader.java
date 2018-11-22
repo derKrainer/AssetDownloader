@@ -5,6 +5,7 @@ import download.types.ManifestDownloadnfo;
 import parser.DashParser;
 import parser.HlsParser;
 import parser.IParser;
+import ui.ManifestSelector;
 
 enum ManifestType
 {
@@ -91,26 +92,33 @@ public class AssetDownloader
     this.toDownload = this.manifestParser.parseManifest(this.manifestContent, this.manifestURL);
   }
 
+  public static AssetDownloader instance;
+
   public static void main(String[] args)
   {
 //		String manifestUrl = "https://bitmovin-a.akamaihd.net/content/art-of-motion_drm/m3u8s/11331.m3u8";
     // String manifestUrl =
     // "https://bitmovin-a.akamaihd.net/content/MI201109210084_1/mpds/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.mpd";
-    String manifestUrl = "http://samplescdn.origin.mediaservices.windows.net/e0e820ec-f6a2-4ea2-afe3-1eed4e06ab2c/AzureMediaServices_Overview.ism/manifest(format=mpd-time-csf)";
-    String targetFolder = "download/";
-    if (args.length > 0)
+    if (args.length == 0)
     {
+      // use UI to select URL
+      new ManifestSelector();
+    }
+    else
+    {
+      String manifestUrl = args[0];
+      String targetFolder = "download/";
       manifestUrl = args[0];
-    }
-    if (args.length > 1)
-    {
-      targetFolder = args[1];
-    }
-    if (targetFolder.charAt(targetFolder.length() - 1) != '/')
-    {
-      targetFolder += '/';
-    }
+      if (args.length > 1)
+      {
+        targetFolder = args[1];
+      }
+      if (targetFolder.charAt(targetFolder.length() - 1) != '/')
+      {
+        targetFolder += '/';
+      }
 
-    AssetDownloader dl = new AssetDownloader(manifestUrl, targetFolder);
+      instance = new AssetDownloader(manifestUrl, targetFolder);
+    }
   }
 }
