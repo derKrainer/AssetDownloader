@@ -14,34 +14,27 @@ import javax.swing.JTextField;
 
 import assetdownloader.AssetDownloader;
 
-public class ManifestSelector
+public class ManifestSelector extends AbstractUIComponent
 {
-  public JFrame frame;
-
   public ManifestSelector()
   {
-    this.initUI();
+    super("Enter the manifest URL and the folder to download into", new Dimension(900, 200));
   }
 
-  private void initUI()
+  @Override
+  protected void initComponents()
   {
-    this.frame = new JFrame("Enter the manifest URL and the folder to download into");
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-    frame.setLayout(null);
-
-    Dimension targetSize = new Dimension(870, 30);
-
+    Dimension textSize = new Dimension(870, 30);
     JLabel manifestInputLabel = new JLabel("Manifest URL");
     JTextField manifestUrlInput = new JTextField();
-    JPanel wrapper = wrapInputAndLabel(manifestInputLabel, manifestUrlInput, targetSize);
-    frame.add(wrapper);
+    JPanel wrapper = wrapInputAndLabel(manifestInputLabel, manifestUrlInput, textSize);
+    currentView.add(wrapper);
     wrapper.setLocation(5, 5);
 
     JLabel targetFolderLabel = new JLabel("Target Folder");
     JTextField targetFolderInput = new JTextField("./download");
-    wrapper = wrapInputAndLabel(targetFolderLabel, targetFolderInput, targetSize);
-    frame.add(wrapper);
+    wrapper = wrapInputAndLabel(targetFolderLabel, targetFolderInput, textSize);
+    currentView.add(wrapper);
     wrapper.setLocation(5, 40);
 
     JButton processButton = new JButton("Process Manifest");
@@ -57,32 +50,11 @@ public class ManifestSelector
         {
           targetFolder += '/';
         }
-        // TODO: check if url is valid
         AssetDownloader.instance = new AssetDownloader(manifestUrl, targetFolder);
-        frame.dispose();
+        destroy();
       }
     });
-    frame.add(processButton);
+    currentView.add(processButton);
     processButton.setBounds(400, 90, 150, 40);
-
-    frame.setVisible(true);
-
-    frame.setSize(new Dimension(900, 200));
   }
-
-  public JPanel wrapInputAndLabel(JLabel label, JComponent input, Dimension targetSize)
-  {
-    JPanel wrapper = new JPanel();
-    wrapper.setLayout(null);
-    wrapper.setSize(targetSize);
-
-    wrapper.add(label);
-    label.setBounds(0, 0, 130, targetSize.height);
-
-    wrapper.add(input);
-    input.setBounds(135, 0, targetSize.width - 140, targetSize.height);
-
-    return wrapper;
-  }
-
 }

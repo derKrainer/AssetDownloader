@@ -67,21 +67,6 @@ public class DownloadHelper
     }
   }
 
-  public static void downloadForDownloadInfo(ManifestDownloadnfo info, IParser manifestParser)
-  {
-//		for (Period p : info.periods) {
-//			System.out.println("Handling period: " + p.periodId);
-//			for (AdaptationSet adSet : p.adaptationSets) {
-//				System.out.println("Handling Adaptation Set: " + adSet.name);
-//				Representation[] arr = new Representation[adSet.representations.size()];
-//				adSet.representations.toArray(arr);
-//				downloadRepresentations(arr);
-//			}
-//		}
-
-    new DownloadSelector(info, manifestParser);
-  }
-
   public static void downloadRepresentations(Representation[] toDownload)
   {
     for (Representation rep : toDownload)

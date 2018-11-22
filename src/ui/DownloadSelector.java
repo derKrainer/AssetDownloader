@@ -21,7 +21,7 @@ import download.types.Period;
 import download.types.Representation;
 import parser.IParser;
 
-public class DownloadSelector
+public class DownloadSelector extends AbstractUIComponent
 {
   private ManifestDownloadnfo toDownload;
   private IParser parser;
@@ -29,22 +29,18 @@ public class DownloadSelector
 
   public DownloadSelector(ManifestDownloadnfo info, IParser manifestParser)
   {
+    super("Select all Qualities you want to download", new Dimension(600, 400));
     this.toDownload = info;
     this.parser = manifestParser;
-
-    this.initUI();
   }
 
-  private void initUI()
+  @Override
+  protected void initComponents()
   {
-
-    this.frame = new JFrame("Select all Qualities you want to download");
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-    frame.setLayout(new FlowLayout(FlowLayout.CENTER));
+    currentView.setLayout(new FlowLayout(FlowLayout.CENTER));
 
     JList<Representation> repList = new JList<Representation>(new RepresentationListModel(this.toDownload));
-    frame.add(repList);
+    currentView.add(repList);
 
     JButton dlButton = new JButton("Download");
     dlButton.addActionListener(new ActionListener()
@@ -60,11 +56,7 @@ public class DownloadSelector
         DownloadHelper.downloadRepresentations(selectedRepresentations);
       }
     });
-    frame.add(dlButton);
-
-    frame.setVisible(true);
-
-    frame.setSize(new Dimension(600, 400));
+    currentView.add(dlButton);
   }
 
 }

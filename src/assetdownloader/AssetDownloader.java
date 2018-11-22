@@ -5,6 +5,7 @@ import download.types.ManifestDownloadnfo;
 import parser.DashParser;
 import parser.HlsParser;
 import parser.IParser;
+import ui.DownloadSelector;
 import ui.ManifestSelector;
 
 enum ManifestType
@@ -20,6 +21,7 @@ public class AssetDownloader
   private ManifestDownloadnfo toDownload;
   private String targetFolder;
   private IParser manifestParser;
+  public DownloadSelector currentSelector;
 
   public AssetDownloader(String manifestURL, String targetFolder)
   {
@@ -30,7 +32,7 @@ public class AssetDownloader
     this.getTypeForManifest(manifestURL);
     this.parseManifest();
 
-    DownloadHelper.downloadForDownloadInfo(this.toDownload, this.manifestParser);
+    currentSelector = new DownloadSelector(this.toDownload, this.manifestParser);
   }
 
   private void getManifest()
