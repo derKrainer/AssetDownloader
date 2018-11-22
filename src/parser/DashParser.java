@@ -52,7 +52,7 @@ public class DashParser implements IParser
     String[] selectedIds = new String[selectedRepresentations.length];
     for (int i = 0; i < selectedRepresentations.length; i++)
     {
-      selectedIds[i] = selectedRepresentations[i].generateId();
+      selectedIds[i] = selectedRepresentations[i].generateId(true);
     }
 
     List<DashRepresentation> selectedManifesRepresentations = new ArrayList<>();
@@ -118,7 +118,7 @@ public class DashParser implements IParser
 
     for (Representation selected : selectRepresentations)
     {
-      if (selected.generateId().equals(currentId))
+      if (selected.generateId(true).equals(currentId))
       {
         return true;
       }

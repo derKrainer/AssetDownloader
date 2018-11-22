@@ -45,9 +45,16 @@ public class Representation
     return sb.toString();
   }
 
-  public String generateId()
+  public String generateId(boolean includePeriod)
   {
-    return this.name + '_' + containingAdaptationSet.name + '_' + containingAdaptationSet.containingPeriod.periodId;
+    StringBuffer sb = new StringBuffer();
+    if (includePeriod)
+    {
+      sb.append(containingAdaptationSet.containingPeriod.periodId).append('_');
+    }
+    sb.append(containingAdaptationSet.name).append('_');
+    sb.append(this.name);
+    return sb.toString();
   }
 
 }

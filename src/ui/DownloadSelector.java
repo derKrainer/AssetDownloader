@@ -83,7 +83,7 @@ class RepresentationListModel implements ListModel<Representation>
 
   public void buildRepresentationList()
   {
-    Map<Integer, Representation> repsPerBandwidth = new HashMap<>();
+    Map<String, Representation> repsPerBandwidth = new HashMap<>();
 
     for (Period p : this.info.periods)
     {
@@ -91,11 +91,12 @@ class RepresentationListModel implements ListModel<Representation>
       {
         for (Representation rep : adSet.representations)
         {
-          if (!repsPerBandwidth.containsKey(rep.bandwidth))
+          String key = rep.generateId(false);
+          if (!repsPerBandwidth.containsKey(key))
           {
-            repsPerBandwidth.put(rep.bandwidth, rep);
+            repsPerBandwidth.put(key, rep);
           }
-          repsPerBandwidth.get(rep.bandwidth).filesToDownload.addAll(rep.filesToDownload);
+          repsPerBandwidth.get(key).filesToDownload.addAll(rep.filesToDownload);
         }
       }
     }
