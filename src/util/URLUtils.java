@@ -56,4 +56,31 @@ public class URLUtils
     }
     return urlToAdjust;
   }
+
+  public static String resolveRelativeParts(String absoluteUrl)
+  {
+    if (!absoluteUrl.contains(".."))
+    {
+      return absoluteUrl;
+    }
+
+    StringBuffer newUrl = new StringBuffer(absoluteUrl.length());
+
+    String[] urlParts = absoluteUrl.split("/");
+
+    for(int i = 0; i < urlParts.length - 1; i++)
+    {
+      if (urlParts[i + 1].equals(".."))
+      {
+        i++;
+      }
+      else
+      {
+        newUrl.append(urlParts[i]).append('/');
+      }
+    }
+    newUrl.append(urlParts[urlParts.length - 1]);
+
+    return newUrl.toString();
+  }
 }

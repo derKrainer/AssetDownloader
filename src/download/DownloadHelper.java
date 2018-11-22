@@ -14,6 +14,7 @@ import download.types.ManifestDownloadnfo;
 import download.types.Representation;
 import parser.IParser;
 import ui.DownloadSelector;
+import util.URLUtils;
 
 public class DownloadHelper
 {
@@ -85,7 +86,7 @@ public class DownloadHelper
   {
     for (Representation rep : toDownload)
     {
-      System.out.println("Handling representation: " + rep.name + ", bandwidht: " + rep.bandwidth);
+      System.out.println("Handling representation: " + rep.name + ", bandwidth: " + rep.bandwidth);
       for (DownloadTarget target : rep.filesToDownload)
       {
         if (new File(target.fileName).exists())
@@ -105,8 +106,8 @@ public class DownloadHelper
     ReadableByteChannel rbc = null;
     try
     {
-      URL website = new URL(url);
-      rbc = Channels.newChannel(website.openStream());
+      URL dataChunk = new URL(URLUtils.resolveRelativeParts(url));
+      rbc = Channels.newChannel(dataChunk.openStream());
 
       try
       {
