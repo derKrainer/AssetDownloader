@@ -29,7 +29,9 @@ public class SegementTimeline extends DashComponent
       {
         latestEntry = new SegmentTimelineEntry(child, latestEntry);
         latestEntry.parse();
-        this.entries.addAll(this.expandRepeat(latestEntry));
+        List<SegmentTimelineEntry> expandedEntries = this.expandRepeat(latestEntry);
+        this.entries.addAll(expandedEntries);
+        latestEntry = expandedEntries.get(expandedEntries.size() - 1);
       }
       else {
         System.out.println("Unhandled SegmentTimeline Child: " + child.getNodeName());
@@ -55,7 +57,7 @@ public class SegementTimeline extends DashComponent
       collection.add(lastEntry);
       for(int i = 0; i < expandTo; i++)
       {
-        newEntry = new SegmentTimelineEntry(entry.xmlContent, lastEntry.preceedingEntry);
+        newEntry = new SegmentTimelineEntry(entry.xmlContent, lastEntry);
         newEntry.duration = entry.duration;
         newEntry.startTime = lastEntry.startTime + lastEntry.duration;
         newEntry.preceedingEntry = lastEntry;

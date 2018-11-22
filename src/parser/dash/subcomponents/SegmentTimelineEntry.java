@@ -8,10 +8,9 @@ import parser.dash.DashComponent;
 
 public class SegmentTimelineEntry extends DashComponent
 {
-  public int startTime;
+  public int startTime = -1;
   public int duration;
   public int repeat = 0;
-  public int endTime = -1;
   public SegmentTimelineEntry preceedingEntry;
 
   public SegmentTimelineEntry(Node xmlContent, SegmentTimelineEntry previousEntry)
