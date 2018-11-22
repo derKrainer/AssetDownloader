@@ -6,15 +6,20 @@ import java.util.List;
 import org.w3c.dom.Node;
 
 import download.types.DownloadTarget;
+import parser.dash.subcomponents.SegmentList;
 import parser.dash.subcomponents.SegmentTemplate;
 
 public class DashRepresentation extends DashAdaptationSet
 {
-  public int bandwidth;
+  private static int uniqueBandwidthCounter = 1;
+
+  public Integer bandwidth = null;
   public int width = -1;
   public int height = -1;
 
   public DashAdaptationSet parent;
+
+  public SegmentList segmentList = null;
 
   public DashRepresentation(Node xmlNode, DashAdaptationSet parent)
   {
@@ -27,7 +32,18 @@ public class DashRepresentation extends DashAdaptationSet
   {
     super.parseSpecialNodes(specialNodes);
 
-    // are there any special children of representation which are of interest to us?
+    for(Node child : specialNodes)
+    {
+      if (child.getNodeName().equals("SegmentList"))
+      {
+        this.segmentList = new SegmentList(child);
+        this.segmentList.parse();
+      }
+      else 
+      {
+        System.out.println("Unhandled Representation Child: " + child.getNodeName());
+      }
+    }
   }
 
   @Override
@@ -61,6 +77,10 @@ public class DashRepresentation extends DashAdaptationSet
   {
     super.fillMissingValues();
 
+    if (this.bandwidth == null)
+    {
+      this.bandwidth = uniqueBandwidthCounter++;
+    }
     if (this.getSegmentTemplate() != null)
     {
       SegmentTemplate template = this.getSegmentTemplate();
@@ -96,6 +116,10 @@ public class DashRepresentation extends DashAdaptationSet
     {
       filesToDownload = this.getSegmentTemplate().getTargetFiles(this, manifestLocation, targetFolder);
     }
+    else if (this.segmentList != null)
+    {
+      filesToDownload = this.segmentList.getTargetFiles(manifestLocation, targetFolder, this);
+    }
     else
     {
       System.err.println("TODO: implement other representation types than segment template");
@@ -119,6 +143,25 @@ public class DashRepresentation extends DashAdaptationSet
     {
       this.getSegmentTemplate().adjustUrlsToTarget(targetFolder, manifestBaseUrl, targetRepresentation);
     }
+    else if (this.segmentList != null)
+    {
+      this.segmentList.adjustUrlsToTarget(targetFolder, manifestBaseUrl, targetRepresentation);
+    }
+    else
+    {
+      throw new RuntimeException("Implement adjustUrlsToTarget for the current manifest type");
+    }
+  }
+
+  public String generateDirectoryPath(String downloadFolder)
+  {
+    StringBuffer sb = new StringBuffer(downloadFolder);
+
+    sb.append(this.parent.parent.id).append('/');
+    sb.append(this.parent.id).append('/');
+    sb.append(this.id);
+
+    return sb.toString();
   }
 
 }
