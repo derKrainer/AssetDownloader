@@ -89,10 +89,7 @@ public class DashManifest extends DashComponent
           dlSet.addRepresentation(dlRep);
 
           List<DownloadTarget> targets = rep.getTargetFiles(baseUrl, targetFolder);
-          for (DownloadTarget dlTarget : targets)
-          {
-            dlRep.filesToDownload.add(dlTarget);
-          }
+          dlRep.filesToDownload = targets;
         }
       }
     }

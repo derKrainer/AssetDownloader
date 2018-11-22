@@ -10,6 +10,7 @@ import parser.dash.subcomponents.BaseUrl;
 import parser.dash.subcomponents.SegmentBase;
 import parser.dash.subcomponents.SegmentList;
 import parser.dash.subcomponents.SegmentTemplate;
+import util.URLUtils;
 
 public class DashRepresentation extends DashAdaptationSet
 {
@@ -129,17 +130,35 @@ public class DashRepresentation extends DashAdaptationSet
   {
     List<DownloadTarget> filesToDownload = new ArrayList<>();
 
+    String baseUrl = manifestLocation;
+    if (this.getBaseUrl() != null)
+    {
+      baseUrl = this.getBaseUrl().baseUrl;
+    }
+
     if (this.getSegmentTemplate() != null)
     {
-      filesToDownload = this.getSegmentTemplate().getTargetFiles(this, manifestLocation, targetFolder);
+      filesToDownload = this.getSegmentTemplate().getTargetFiles(this, baseUrl, targetFolder);
     }
     else if (this.segmentList != null)
     {
-      filesToDownload = this.segmentList.getTargetFiles(manifestLocation, targetFolder, this);
+      filesToDownload = this.segmentList.getTargetFiles(baseUrl, targetFolder, this);
     }
     else if (this.segmentBase != null)
     {
-      filesToDownload = this.segmentBase.getTargetFiles(manifestLocation, targetFolder, this);
+      filesToDownload = this.segmentBase.getTargetFiles(baseUrl, targetFolder, this);
+    }
+    else if (this.baseUrl != null)
+    {
+      // single files might be in the representation with a baseURL
+      String possibleOtherBaseUrl = manifestLocation;
+      if (parent.getBaseUrl() != null)
+      {
+        possibleOtherBaseUrl = parent.getBaseUrl().baseUrl;
+      }
+      String serverUrl = URLUtils.makeAbsoulte(this.baseUrl.baseUrl, possibleOtherBaseUrl);
+      String localPath = this.generateDirectoryPath(targetFolder) + this.baseUrl.baseUrl.substring(this.baseUrl.baseUrl.lastIndexOf('/'));
+      filesToDownload.add(new DownloadTarget(serverUrl, localPath));
     }
     else
     {
@@ -171,6 +190,11 @@ public class DashRepresentation extends DashAdaptationSet
     else if (this.segmentBase != null)
     {
       this.segmentBase.adjustUrlsToTarget(targetFolder, manifestBaseUrl, targetRepresentation);
+    }
+    else if (this.baseUrl != null)
+    {
+      // single subtitle file might be like this
+      // BaseURL is already handled in super, so nothing to do here
     }
     else
     {

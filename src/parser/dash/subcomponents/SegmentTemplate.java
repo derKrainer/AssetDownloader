@@ -94,7 +94,7 @@ public class SegmentTemplate extends DashComponent
         getTargetFileForUrl(initUrl, rep, targetFolder)));
 
     int numberOfSegments = this.getNumberOfSegments(rep);
-    for (int i = 0; i < numberOfSegments; i++)
+    for (int i = this.startNumber; i < this.startNumber + numberOfSegments; i++)
     {
       String dlUrl = convertToDownloadUrl(this.mediaUrl, i, rep, baseUrl);
       allFiles.add(new DownloadTarget(dlUrl, getTargetFileForUrl(dlUrl, rep, targetFolder)));

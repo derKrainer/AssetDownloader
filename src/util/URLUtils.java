@@ -23,6 +23,15 @@ public class URLUtils
   {
     try
     {
+      if (url.startsWith("//"))
+      {
+        url = "http:" + url;
+      }
+      if (baseUrl.startsWith("//"))
+      {
+        baseUrl = "http:" + baseUrl;
+      }
+
       URI test = new URI(url);
       if (test.isAbsolute())
       {

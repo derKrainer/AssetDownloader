@@ -18,7 +18,7 @@ public class ManifestSelector extends AbstractUIComponent
 {
   public ManifestSelector()
   {
-    super("Enter the manifest URL and the folder to download into", new Dimension(900, 200));
+    super("Enter the manifest URL and the folder to download into", new Dimension(900, 200), true);
   }
 
   @Override

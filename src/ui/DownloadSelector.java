@@ -29,9 +29,12 @@ public class DownloadSelector extends AbstractUIComponent
 
   public DownloadSelector(ManifestDownloadnfo info, IParser manifestParser)
   {
-    super("Select all Qualities you want to download", new Dimension(600, 400));
+    super("Select all Qualities you want to download", new Dimension(600, 400), false);
     this.toDownload = info;
     this.parser = manifestParser;
+
+    this.initComponents();
+    this.show();
   }
 
   @Override
@@ -53,7 +56,9 @@ public class DownloadSelector extends AbstractUIComponent
         Representation[] selectedRepresentations = new Representation[selection.size()];
         selection.toArray(selectedRepresentations);
         parser.getUpdatedManifest(selectedRepresentations);
-        DownloadHelper.downloadRepresentations(selectedRepresentations);
+        ProgressView nextView = new ProgressView(selectedRepresentations);
+        destroy();
+        DownloadHelper.downloadRepresentations(selectedRepresentations, nextView);
       }
     });
     currentView.add(dlButton);
@@ -88,7 +93,10 @@ class RepresentationListModel implements ListModel<Representation>
           {
             repsPerBandwidth.put(key, rep);
           }
-          repsPerBandwidth.get(key).filesToDownload.addAll(rep.filesToDownload);
+          else
+          {
+            repsPerBandwidth.get(key).filesToDownload.addAll(rep.filesToDownload);
+          }
         }
       }
     }

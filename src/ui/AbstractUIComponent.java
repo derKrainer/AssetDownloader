@@ -14,15 +14,22 @@ public abstract class AbstractUIComponent
   public String title;
   public Dimension targetSize;
 
-  public AbstractUIComponent(String title, Dimension size)
+  public AbstractUIComponent(String title, Dimension size, boolean shouldInitComponents)
   {
     this.title = title;
     this.targetSize = size;
 
     this.initView();
-    this.initComponents();
+    if (shouldInitComponents)
+    {
+      this.initComponents();
+      this.show();
+    }
+  }
 
-    currentView.setSize(size);
+  protected void show()
+  {
+    currentView.setSize(this.targetSize);
     currentView.setVisible(true);
   }
 

@@ -14,6 +14,7 @@ import download.types.ManifestDownloadnfo;
 import download.types.Representation;
 import parser.IParser;
 import ui.DownloadSelector;
+import ui.ProgressView;
 import util.URLUtils;
 
 public class DownloadHelper
@@ -67,22 +68,9 @@ public class DownloadHelper
     }
   }
 
-  public static void downloadRepresentations(Representation[] toDownload)
+  public static void downloadRepresentations(Representation[] toDownload, ProgressView currentUI)
   {
-    for (Representation rep : toDownload)
-    {
-      System.out.println("Handling representation: " + rep.name + ", bandwidth: " + rep.bandwidth);
-      for (DownloadTarget target : rep.filesToDownload)
-      {
-        if (new File(target.fileName).exists())
-        {
-          continue;
-        }
-
-        System.out.println("downloading: " + target.downloadURL + " to: " + target.fileName);
-        downloadUrlContentToFile(target.downloadURL, target.fileName);
-      }
-    }
+    new ThreadedDownloader(toDownload, currentUI).run();
   }
 
   public static void downloadUrlContentToFile(String url, String fileName)
@@ -130,6 +118,56 @@ public class DownloadHelper
       {
         ex.printStackTrace();
       }
+    }
+  }
+}
+
+class ThreadedDownloader extends Thread
+{
+  private Representation[] toDownload;
+  private ProgressView currentUI;
+
+  public ThreadedDownloader(Representation[] toDownload, ProgressView currentUI)
+  {
+    this.toDownload = toDownload;
+    this.currentUI = currentUI;
+  }
+
+  @Override
+  public void run() {
+    super.run();
+
+    for (Representation rep : toDownload)
+    {
+      System.out.println("Handling representation: " + rep.name + ", bandwidth: " + rep.bandwidth);
+      for (DownloadTarget target : rep.filesToDownload)
+      {
+        if (new File(target.fileName).exists())
+        {
+          if (currentUI != null)
+          {
+            currentUI.onFileHandled(target);
+          }
+          continue;
+        }
+
+        System.out.println("downloading: " + target.downloadURL + " to: " + target.fileName);
+        DownloadHelper.downloadUrlContentToFile(target.downloadURL, target.fileName);
+
+        if (currentUI != null)
+        {
+          currentUI.onFileHandled(target);
+        }
+      }
+      
+      if (currentUI != null)
+      {
+        currentUI.onRepresentationDone(rep);
+      }
+    }
+    if (currentUI != null)
+    {
+      currentUI.onDone();
     }
   }
 }
