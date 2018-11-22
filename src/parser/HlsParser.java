@@ -10,7 +10,7 @@ import download.types.DownloadTarget;
 import download.types.ManifestDownloadnfo;
 import download.types.Period;
 import download.types.Representation;
-import files.FileHelper;
+import util.FileHelper;
 
 public class HlsParser implements IParser
 {

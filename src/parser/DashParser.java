@@ -7,11 +7,11 @@ import org.w3c.dom.Document;
 
 import download.types.ManifestDownloadnfo;
 import download.types.Representation;
-import files.FileHelper;
 import parser.dash.DashAdaptationSet;
 import parser.dash.DashManifest;
 import parser.dash.DashPeriod;
 import parser.dash.DashRepresentation;
+import util.FileHelper;
 import util.XMLUtils;
 
 public class DashParser implements IParser

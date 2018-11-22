@@ -1,4 +1,4 @@
-package files;
+package util;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -24,6 +24,9 @@ public class FileHelper
     {
       out = new FileOutputStream(f);
       out.write(content.getBytes(Charset.defaultCharset()));
+
+      out.flush();
+      out.close();
     } catch (IOException e)
     {
       e.printStackTrace();
