@@ -6,6 +6,8 @@ import java.util.List;
 import org.w3c.dom.Node;
 
 import download.types.DownloadTarget;
+import parser.dash.subcomponents.BaseUrl;
+import parser.dash.subcomponents.SegmentBase;
 import parser.dash.subcomponents.SegmentList;
 import parser.dash.subcomponents.SegmentTemplate;
 
@@ -20,6 +22,7 @@ public class DashRepresentation extends DashAdaptationSet
   public DashAdaptationSet parent;
 
   public SegmentList segmentList = null;
+  public SegmentBase segmentBase = null;
 
   public DashRepresentation(Node xmlNode, DashAdaptationSet parent)
   {
@@ -38,6 +41,11 @@ public class DashRepresentation extends DashAdaptationSet
       {
         this.segmentList = new SegmentList(child);
         this.segmentList.parse();
+      }
+      else if(child.getNodeName().equals("SegmentBase"))
+      {
+        this.segmentBase = new SegmentBase(child);
+        this.segmentBase.parse();
       }
       else 
       {
@@ -108,6 +116,15 @@ public class DashRepresentation extends DashAdaptationSet
     return retVal;
   }
 
+  public BaseUrl getBaseUrl()
+  {
+    if (this.baseUrl != null)
+    {
+      return this.baseUrl;
+    }
+    return parent.getBaseUrl();
+  }
+
   public List<DownloadTarget> getTargetFiles(String manifestLocation, String targetFolder)
   {
     List<DownloadTarget> filesToDownload = new ArrayList<>();
@@ -120,9 +137,13 @@ public class DashRepresentation extends DashAdaptationSet
     {
       filesToDownload = this.segmentList.getTargetFiles(manifestLocation, targetFolder, this);
     }
+    else if (this.segmentBase != null)
+    {
+      filesToDownload = this.segmentBase.getTargetFiles(manifestLocation, targetFolder, this);
+    }
     else
     {
-      System.err.println("TODO: implement other representation types than segment template");
+      System.err.println("implement current representation type");
     }
 
     return filesToDownload;
@@ -146,6 +167,10 @@ public class DashRepresentation extends DashAdaptationSet
     else if (this.segmentList != null)
     {
       this.segmentList.adjustUrlsToTarget(targetFolder, manifestBaseUrl, targetRepresentation);
+    }
+    else if (this.segmentBase != null)
+    {
+      this.segmentBase.adjustUrlsToTarget(targetFolder, manifestBaseUrl, targetRepresentation);
     }
     else
     {

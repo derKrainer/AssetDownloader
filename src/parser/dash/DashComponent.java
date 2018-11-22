@@ -18,6 +18,7 @@ public abstract class DashComponent
   public BaseUrl baseUrl;
 
   public String textContent;
+  public Node textContentNode;
 
   public DashComponent(Node xmlNode)
   {
@@ -94,6 +95,7 @@ public abstract class DashComponent
         {
           this.textContent = this.textContent.trim();
         }
+        this.textContentNode = child;
       }
       else
       {

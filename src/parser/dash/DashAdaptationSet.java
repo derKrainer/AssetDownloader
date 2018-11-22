@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.w3c.dom.Node;
 
+import parser.dash.subcomponents.BaseUrl;
 import parser.dash.subcomponents.SegmentTemplate;
 
 public class DashAdaptationSet extends DashComponent
@@ -138,6 +139,17 @@ public class DashAdaptationSet extends DashComponent
     super.adjustUrlsToTarget(targetFolder, manifestBaseUrl, targetRepresentation);
 
     this.representations.forEach((rep) -> rep.adjustUrlsToTarget(targetFolder, manifestBaseUrl, targetRepresentation));
+  }
+
+  public BaseUrl getBaseUrl()
+  {
+    if (this.baseUrl != null)
+    {
+      return this.baseUrl;
+    }
+    else {
+      return this.parent.baseUrl;
+    }
   }
 }
 

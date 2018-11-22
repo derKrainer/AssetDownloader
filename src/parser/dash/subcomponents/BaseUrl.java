@@ -14,8 +14,6 @@ public class BaseUrl extends DashComponent
   public BaseUrl(Node xmlContent)
   {
     super(xmlContent);
-
-    throw new RuntimeException("Properly implement BaseURL handling (especially writing the text node)");
   }
 
   @Override
@@ -40,7 +38,13 @@ public class BaseUrl extends DashComponent
   {
     super.adjustUrlsToTarget(targetFolder, manifestBaseUrl, targetRepresentation);
 
-    this.baseUrl = manifestBaseUrl + targetFolder;
+    String newBaseUrl = targetRepresentation.generateDirectoryPath(targetFolder);
+    if (this.baseUrl.charAt(this.baseUrl.length() - 1) != '/')
+    {
+      newBaseUrl += this.baseUrl.substring(this.baseUrl.lastIndexOf('/') - 1);
+    }
+
+    this.textContentNode.setNodeValue(newBaseUrl);
   }
 
 }
