@@ -131,7 +131,7 @@ public class DashRepresentation extends DashAdaptationSet
   public String generateId()
   {
     // generates an id matching the one from the download.Representation object
-    return this.id + '_' + this.parent.id + '_' + this.parent.parent.id;
+    return this.parent.parent.id + '_' + this.parent.id + '_' + this.id;
   }
 
   @Override
