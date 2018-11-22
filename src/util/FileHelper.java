@@ -27,7 +27,8 @@ public class FileHelper
 
       out.flush();
       out.close();
-    } catch (IOException e)
+    }
+    catch (IOException e)
     {
       e.printStackTrace();
 
@@ -37,7 +38,8 @@ public class FileHelper
         {
           out.flush();
           out.close();
-        } catch (Exception ignore)
+        }
+        catch (Exception ignore)
         {
           // nevermind :/
         }

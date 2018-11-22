@@ -120,9 +120,9 @@ public class SegmentTemplate extends DashComponent
   protected String replacePlaceholders(String url, int index, DashRepresentation rep)
   {
     return url // keep
-      .replace("$Number$", Integer.toString(index)) // this
-      .replace("$RepresentationID$", rep.id) // formatting
-      .replace("$Bandwidth$", Integer.toString(rep.bandwidth));
+        .replace("$Number$", Integer.toString(index)) // this
+        .replace("$RepresentationID$", rep.id) // formatting
+        .replace("$Bandwidth$", Integer.toString(rep.bandwidth));
   }
 
   protected String getTargetFileForUrl(String url, DashRepresentation rep, String targetFolder)

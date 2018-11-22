@@ -20,7 +20,8 @@ public class SegmentTimelineEntry extends DashComponent
   }
 
   @Override
-  protected void parseSpecialNodes(List<Node> specialNodes) {
+  protected void parseSpecialNodes(List<Node> specialNodes)
+  {
     // should always be emtpy
     for (Node n : specialNodes)
     {
@@ -37,7 +38,8 @@ public class SegmentTimelineEntry extends DashComponent
       {
         this.startTime = this.preceedingEntry.startTime + this.preceedingEntry.duration;
       }
-      else {
+      else
+      {
         this.startTime = 0;
       }
     }
@@ -48,25 +50,25 @@ public class SegmentTimelineEntry extends DashComponent
   {
     for (Node attr : specialAttributesList)
     {
-      switch (attr.getNodeName()) 
-      {
-        case "D":
-        case "d":
-          this.duration = Integer.parseInt(attr.getNodeValue());
-          break;
-        case "R":
-        case "r":
-          this.repeat = Integer.parseInt(attr.getNodeValue());
-          break;
+      switch (attr.getNodeName()) {
+      case "D":
+      case "d":
+        this.duration = Integer.parseInt(attr.getNodeValue());
+        break;
+      case "R":
+      case "r":
+        this.repeat = Integer.parseInt(attr.getNodeValue());
+        break;
 
-        case "T":
-        case "t":
-          this.startTime = Integer.parseInt(attr.getNodeValue());
-        
-        default: {
-          System.out.println("Unknown SegmentTimelineEntry attribute: " + attr.getNodeName());
-        }
+      case "T":
+      case "t":
+        this.startTime = Integer.parseInt(attr.getNodeValue());
+
+      default:
+      {
+        System.out.println("Unknown SegmentTimelineEntry attribute: " + attr.getNodeName());
       }
-    }  
+      }
+    }
   }
 }

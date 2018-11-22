@@ -41,7 +41,8 @@ public class DownloadHelper
         line = bufferdReader.readLine();
       }
       return content.toString();
-    } catch (Exception e)
+    }
+    catch (Exception e)
     {
       e.printStackTrace();
       return null;
@@ -57,7 +58,8 @@ public class DownloadHelper
         {
           bufferdReader.close();
         }
-      } catch (Exception e)
+      }
+      catch (Exception e)
       {
         // all is lost, ignore
       }
@@ -115,11 +117,13 @@ public class DownloadHelper
         }
         fos = new FileOutputStream(target);
         fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
-      } catch (Exception writeException)
+      }
+      catch (Exception writeException)
       {
         System.err.println("could not write to file: " + fileName + ", reason: " + writeException.getMessage());
       }
-    } catch (Exception e)
+    }
+    catch (Exception e)
     {
       System.err.println("Could not open connection to " + url + ", reason: " + e.getMessage() + " --> skipping file.");
     } finally
@@ -135,7 +139,8 @@ public class DownloadHelper
         {
           rbc.close();
         }
-      } catch (Exception ex)
+      }
+      catch (Exception ex)
       {
         ex.printStackTrace();
       }

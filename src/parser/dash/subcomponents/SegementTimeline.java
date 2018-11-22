@@ -24,8 +24,9 @@ public class SegementTimeline extends DashComponent
   protected void parseSpecialNodes(List<Node> specialNodes)
   {
     SegmentTimelineEntry latestEntry = null;
-    for(Node child : specialNodes) {
-      if (child.getNodeName().equals("S")) 
+    for (Node child : specialNodes)
+    {
+      if (child.getNodeName().equals("S"))
       {
         latestEntry = new SegmentTimelineEntry(child, latestEntry);
         latestEntry.parse();
@@ -33,14 +34,16 @@ public class SegementTimeline extends DashComponent
         this.entries.addAll(expandedEntries);
         latestEntry = expandedEntries.get(expandedEntries.size() - 1);
       }
-      else {
+      else
+      {
         System.out.println("Unhandled SegmentTimeline Child: " + child.getNodeName());
       }
     }
   }
 
   @Override
-  protected void fillMissingValues() {
+  protected void fillMissingValues()
+  {
     // nothing
   }
 
@@ -48,14 +51,14 @@ public class SegementTimeline extends DashComponent
   {
     List<SegmentTimelineEntry> collection = new ArrayList<>();
 
-    if(entry.repeat > 0) 
+    if (entry.repeat > 0)
     {
       int expandTo = entry.repeat;
       SegmentTimelineEntry lastEntry = entry;
       SegmentTimelineEntry newEntry = null;
       lastEntry.repeat = 0;
       collection.add(lastEntry);
-      for(int i = 0; i < expandTo; i++)
+      for (int i = 0; i < expandTo; i++)
       {
         newEntry = new SegmentTimelineEntry(entry.xmlContent, lastEntry);
         newEntry.duration = entry.duration;
@@ -65,7 +68,8 @@ public class SegementTimeline extends DashComponent
         lastEntry = newEntry;
       }
     }
-    else {
+    else
+    {
       collection.add(entry);
     }
 
@@ -102,8 +106,8 @@ public class SegementTimeline extends DashComponent
     return this.replacePlaceholders(parent.convertToDownloadUrl(url, index, rep, baseUrl), index, rep);
   }
 
-  protected String replacePlaceholders(String url, int index, DashRepresentation rep) {
-    return url
-      .replace("$Time$", Integer.toString(this.entries.get(index).startTime));
+  protected String replacePlaceholders(String url, int index, DashRepresentation rep)
+  {
+    return url.replace("$Time$", Integer.toString(this.entries.get(index).startTime));
   }
 }

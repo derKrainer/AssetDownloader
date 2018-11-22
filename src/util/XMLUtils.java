@@ -32,7 +32,8 @@ public class XMLUtils
       transformer.transform(new DOMSource(node), new StreamResult(writer));
       String output = writer.getBuffer().toString();
       return output;
-    } catch (Exception ex)
+    }
+    catch (Exception ex)
     {
       throw new RuntimeException("Error during writing xml file", ex);
     }
@@ -44,10 +45,12 @@ public class XMLUtils
     {
       return DocumentBuilderFactory.newInstance().newDocumentBuilder()
           .parse(new InputSource(new StringReader(xmlContent)));
-    } catch (SAXException e)
+    }
+    catch (SAXException e)
     {
       throw new RuntimeException("Invalid XML encountered", e);
-    } catch (Exception e)
+    }
+    catch (Exception e)
     {
       throw new RuntimeException("Unexpected error during xml parsing", e);
     }

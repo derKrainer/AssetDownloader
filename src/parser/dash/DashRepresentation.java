@@ -57,15 +57,16 @@ public class DashRepresentation extends DashAdaptationSet
   }
 
   @Override
-  protected void fillMissingValues() {
+  protected void fillMissingValues()
+  {
     super.fillMissingValues();
 
     if (this.getSegmentTemplate() != null)
     {
       SegmentTemplate template = this.getSegmentTemplate();
 
-      if((template.initUrl != null && template.initUrl.contains("$Bandwidth$")) || 
-         (template.mediaUrl != null && template.mediaUrl.contains("$Bandwidth$")))
+      if ((template.initUrl != null && template.initUrl.contains("$Bandwidth$"))
+          || (template.mediaUrl != null && template.mediaUrl.contains("$Bandwidth$")))
       {
         this.id = Integer.toString(this.bandwidth);
       }

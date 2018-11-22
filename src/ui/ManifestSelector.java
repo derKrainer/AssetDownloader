@@ -52,7 +52,7 @@ public class ManifestSelector
       {
         String manifestUrl = manifestUrlInput.getText();
         String targetFolder = targetFolderInput.getText();
-        char lastTargetFolderChar = targetFolder.charAt(targetFolder.length() - 1 );
+        char lastTargetFolderChar = targetFolder.charAt(targetFolder.length() - 1);
         if (lastTargetFolderChar != '/' && lastTargetFolderChar != '\\')
         {
           targetFolder += '/';

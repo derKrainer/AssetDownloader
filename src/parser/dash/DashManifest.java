@@ -56,7 +56,8 @@ public class DashManifest extends DashComponent
         try
         {
           this.duration = DashParser.parseDuration(attr.getNodeValue());
-        } catch (Exception ex)
+        }
+        catch (Exception ex)
         {
           throw new RuntimeException("Error parsing mpd duration", ex);
         }

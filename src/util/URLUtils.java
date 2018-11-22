@@ -11,7 +11,8 @@ public class URLUtils
     {
       URI test = new URI(url);
       return test.isAbsolute();
-    } catch (Exception ex)
+    }
+    catch (Exception ex)
     {
       ex.printStackTrace(); // TODO: remove once we know that relative urls work
       return false;
@@ -39,7 +40,8 @@ public class URLUtils
         }
         return test.toString();
       }
-    } catch (Exception ex)
+    }
+    catch (Exception ex)
     {
       ex.printStackTrace();
       return baseUrl + url;
