@@ -4,12 +4,7 @@ import java.util.List;
 
 import org.w3c.dom.Node;
 
-import download.types.DownloadTarget;
-import parser.dash.DashComponent;
-import parser.dash.DashRepresentation;
-import util.URLUtils;
-
-public class Initialization extends DashComponent
+public class Initialization extends AbstractSegmentListComponent
 {
   public String url;
   public Node sourceUrlNode;
@@ -37,26 +32,12 @@ public class Initialization extends DashComponent
   }
 
   @Override
-  protected void parseSpecialNodes(List<Node> specialNodes)
-  {
-    for (Node n : specialNodes)
-    {
-      System.out.println("Unexpeted child of Initialization: " + n.getNodeName());
-    }
+  protected String getUrl() {
+    return this.url;
   }
 
   @Override
-  protected void fillMissingValues() {
-    // nothing
-  }
-
-  public DownloadTarget toDownloadTarget(String manifestLocation, String targetFolder, DashRepresentation rep)
-  {
-    String serverURL = URLUtils.makeAbsoulte(this.url, manifestLocation);
-    String localPath = rep.generateDirectoryPath(targetFolder);
-
-    localPath += this.url.substring(this.url.lastIndexOf('/'));
-
-    return new DownloadTarget(serverURL, localPath);
+  protected Node getUrlNode() {
+    return this.sourceUrlNode;
   }
 }

@@ -71,9 +71,9 @@ public class SegmentList extends DashComponent
       System.out.println("No init url in SegmentList");
     }
 
-    for(SegmentUrl url : this.segmentUrls)
+    for(SegmentUrl segmentUrl : this.segmentUrls)
     {
-      targets.add(url.toDownloadTarget(manifestLocation, targetFolder, rep));
+      targets.add(segmentUrl.toDownloadTarget(manifestLocation, targetFolder, rep));
     }
 
     return targets;
@@ -81,6 +81,18 @@ public class SegmentList extends DashComponent
 
   public void adjustUrlsToTarget(String targetFolder, String manifestBaseUrl, DashRepresentation targetRepresentation)
   {
-    // TODO: adjust all segment list urls
+    if (this.initNode != null)
+    {
+      this.initNode.adjustUrlsToTarget(targetFolder, manifestBaseUrl, targetRepresentation);
+    }
+    else
+    {
+      System.out.println("No init url in SegmentList");
+    }
+
+    for(SegmentUrl segmentUrl : this.segmentUrls)
+    {
+      segmentUrl.adjustUrlsToTarget(targetFolder, manifestBaseUrl, targetRepresentation);
+    }
   }
 }
