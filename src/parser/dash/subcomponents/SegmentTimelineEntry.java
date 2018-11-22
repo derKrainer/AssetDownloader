@@ -10,7 +10,7 @@ public class SegmentTimelineEntry extends DashComponent
 {
   public int startTime;
   public int duration;
-  public int repeat = 1;
+  public int repeat = 0;
   public int endTime = -1;
   public SegmentTimelineEntry preceedingEntry;
 

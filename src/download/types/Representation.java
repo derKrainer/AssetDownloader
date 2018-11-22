@@ -35,7 +35,14 @@ public class Representation
   @Override
   public String toString()
   {
-    return this.name + " @" + this.bandwidth;
+    StringBuffer sb = new StringBuffer();
+    if (this.containingAdaptationSet != null)
+    {
+      sb.append(this.containingAdaptationSet.toString()).append("; ");
+    }
+    sb.append("Rep: ").append(this.name);
+    sb.append(" @").append(this.bandwidth);
+    return sb.toString();
   }
 
   public String generateId()

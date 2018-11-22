@@ -35,6 +35,12 @@ public class AdaptationSet
   @Override
   public String toString()
   {
-    return this.name;
+    StringBuffer sb = new StringBuffer();
+    if (this.containingPeriod != null)
+    {
+      sb.append(this.containingPeriod.toString()).append("; ");
+    }
+    sb.append("AdSet: ").append(this.name);
+    return sb.toString();
   }
 }

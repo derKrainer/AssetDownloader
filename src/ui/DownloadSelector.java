@@ -25,6 +25,7 @@ public class DownloadSelector
 {
   private ManifestDownloadnfo toDownload;
   private IParser parser;
+  public JFrame frame;
 
   public DownloadSelector(ManifestDownloadnfo info, IParser manifestParser)
   {
@@ -37,7 +38,7 @@ public class DownloadSelector
   private void initUI()
   {
 
-    JFrame frame = new JFrame("Select all Qualities you want to download");
+    this.frame = new JFrame("Select all Qualities you want to download");
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
     frame.setLayout(new FlowLayout(FlowLayout.CENTER));

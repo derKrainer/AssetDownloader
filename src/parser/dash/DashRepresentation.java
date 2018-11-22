@@ -56,17 +56,35 @@ public class DashRepresentation extends DashAdaptationSet
     }
   }
 
+  @Override
+  protected void fillMissingValues() {
+    super.fillMissingValues();
+
+    if (this.getSegmentTemplate() != null)
+    {
+      SegmentTemplate template = this.getSegmentTemplate();
+
+      if((template.initUrl != null && template.initUrl.contains("$Bandwidth$")) || 
+         (template.mediaUrl != null && template.mediaUrl.contains("$Bandwidth$")))
+      {
+        this.id = Integer.toString(this.bandwidth);
+      }
+    }
+  }
+
   public SegmentTemplate getSegmentTemplate()
   {
+    SegmentTemplate retVal = null;
     if (this.segmentTemplate != null)
     {
-      return this.segmentTemplate;
+      retVal = this.segmentTemplate;
     }
     else if (parent.getSegmentTemplate() != null)
     {
-      return parent.getSegmentTemplate();
+      retVal = parent.getSegmentTemplate();
     }
-    return null;
+
+    return retVal;
   }
 
   public List<DownloadTarget> getTargetFiles(String manifestLocation, String targetFolder)

@@ -5,9 +5,11 @@ import java.util.List;
 
 import org.w3c.dom.Node;
 
+import download.types.DownloadTarget;
+import parser.dash.DashComponent;
 import parser.dash.DashRepresentation;
 
-public class SegementTimeline extends SegmentTemplate
+public class SegementTimeline extends DashComponent
 {
   public SegmentTemplate parent;
   public List<SegmentTimelineEntry> entries = new ArrayList<>();
@@ -26,12 +28,62 @@ public class SegementTimeline extends SegmentTemplate
       if (child.getNodeName().equals("S")) 
       {
         latestEntry = new SegmentTimelineEntry(child, latestEntry);
-        this.entries.add(latestEntry);
+        latestEntry.parse();
+        this.entries.addAll(this.expandRepeat(latestEntry));
       }
       else {
         System.out.println("Unhandled SegmentTimeline Child: " + child.getNodeName());
       }
     }
+  }
+
+  @Override
+  protected void fillMissingValues() {
+    // nothing
+  }
+
+  protected List<SegmentTimelineEntry> expandRepeat(SegmentTimelineEntry entry)
+  {
+    List<SegmentTimelineEntry> collection = new ArrayList<>();
+
+    if(entry.repeat > 0) 
+    {
+      int expandTo = entry.repeat;
+      SegmentTimelineEntry lastEntry = entry;
+      SegmentTimelineEntry newEntry = null;
+      lastEntry.repeat = 0;
+      collection.add(lastEntry);
+      for(int i = 0; i < expandTo; i++)
+      {
+        newEntry = new SegmentTimelineEntry(entry.xmlContent, lastEntry.preceedingEntry);
+        newEntry.duration = entry.duration;
+        newEntry.startTime = lastEntry.startTime + lastEntry.duration;
+        newEntry.preceedingEntry = lastEntry;
+        collection.add(newEntry);
+        lastEntry = newEntry;
+      }
+    }
+    else {
+      collection.add(entry);
+    }
+
+    return collection;
+  }
+
+  public List<DownloadTarget> getTargetFiles(DashRepresentation rep, String baseUrl, String targetFolder)
+  {
+    List<DownloadTarget> allFiles = new ArrayList<>();
+    allFiles.add(new DownloadTarget(parent.convertToDownloadUrl(this.parent.initUrl, -1, rep, baseUrl),
+        parent.getTargetFileForUrl(parent.initUrl, rep, targetFolder)));
+
+    int numberOfSegments = this.entries.size();
+    for (int i = 0; i < numberOfSegments; i++)
+    {
+      String dlUrl = this.convertToDownloadUrl(parent.mediaUrl, i, rep, baseUrl);
+      allFiles.add(new DownloadTarget(dlUrl, parent.getTargetFileForUrl(dlUrl, rep, targetFolder)));
+    }
+
+    return allFiles;
   }
 
   @Override
@@ -43,23 +95,13 @@ public class SegementTimeline extends SegmentTemplate
     }
   }
 
-  @Override
-  protected void fillMissingValues()
+  protected String convertToDownloadUrl(String url, int index, DashRepresentation rep, String baseUrl)
   {
-    // assure that the start number is 0
-    this.startNumber = 0;
+    return this.replacePlaceholders(parent.convertToDownloadUrl(url, index, rep, baseUrl), index, rep);
   }
 
-  @Override
-  protected int getNumberOfSegments(DashRepresentation rep) {
-    return this.entries.size();
-  }
-
-  @Override
   protected String replacePlaceholders(String url, int index, DashRepresentation rep) {
-    String generalReplacements = super.replacePlaceholders(url, index, rep);
-
-    return generalReplacements
+    return url
       .replace("$Time$", Integer.toString(this.entries.get(index).startTime));
   }
 }

@@ -34,6 +34,7 @@ public class SegmentTemplate extends DashComponent
       if (childNode.getNodeName().equals("SegmentTimeline"))
       {
         this.segmentTimeline = new SegementTimeline(childNode, this);
+        this.segmentTimeline.parse();
       }
       else
       {
@@ -79,12 +80,14 @@ public class SegmentTemplate extends DashComponent
   @Override
   protected void fillMissingValues()
   {
-    // id might be overwritten by the representation if the $Bandwidth$ placeholder
-    // is present
   }
 
   public List<DownloadTarget> getTargetFiles(DashRepresentation rep, String baseUrl, String targetFolder)
   {
+    if (this.segmentTimeline != null)
+    {
+      return this.segmentTimeline.getTargetFiles(rep, baseUrl, targetFolder);
+    }
 
     List<DownloadTarget> allFiles = new ArrayList<>();
     allFiles.add(new DownloadTarget(convertToDownloadUrl(initUrl, -1, rep, baseUrl),
@@ -109,17 +112,20 @@ public class SegmentTemplate extends DashComponent
     return numberOfSegments;
   }
 
-  private String convertToDownloadUrl(String url, int index, DashRepresentation rep, String baseUrl)
+  protected String convertToDownloadUrl(String url, int index, DashRepresentation rep, String baseUrl)
   {
     return URLUtils.makeAbsoulte(replacePlaceholders(url, index, rep), baseUrl);
   }
 
   protected String replacePlaceholders(String url, int index, DashRepresentation rep)
   {
-    return url.replace("$Number$", Integer.toString(index)).replace("$RepresentationID$", rep.id);
+    return url // keep
+      .replace("$Number$", Integer.toString(index)) // this
+      .replace("$RepresentationID$", rep.id) // formatting
+      .replace("$Bandwidth$", Integer.toString(rep.bandwidth));
   }
 
-  private String getTargetFileForUrl(String url, DashRepresentation rep, String targetFolder)
+  protected String getTargetFileForUrl(String url, DashRepresentation rep, String targetFolder)
   {
     StringBuilder sb = new StringBuilder(targetFolder);
     if (sb.charAt(sb.length() - 1) != '/' || sb.charAt(sb.length() - 1) != '\\')
@@ -146,7 +152,7 @@ public class SegmentTemplate extends DashComponent
     this.initUrlNode.setNodeValue(targetFile);
   }
 
-  private String adjustUrl(String url, String targetFolder, String manifestBaseUrl,
+  protected String adjustUrl(String url, String targetFolder, String manifestBaseUrl,
       DashRepresentation targetRepresentation)
   {
     StringBuffer sb = new StringBuffer("./");

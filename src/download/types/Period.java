@@ -33,6 +33,6 @@ public class Period
 
   public String toString()
   {
-    return this.periodId;
+    return "Period:" + this.periodId;
   }
 }
