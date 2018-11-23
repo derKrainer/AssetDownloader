@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Representation implements Comparable
+public class Representation implements Comparable<Representation>
 {
   public List<DownloadTarget> filesToDownload = new ArrayList<>();
   public Map<String, String> attributes = new HashMap<>();
@@ -58,7 +58,7 @@ public class Representation implements Comparable
   }
 
   @Override
-  public int compareTo(Object o) {
+  public int compareTo(Representation o) {
     return this.toString().compareTo(o.toString());
   }
 }
