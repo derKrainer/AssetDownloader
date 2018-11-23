@@ -14,8 +14,6 @@ import util.URLUtils;
 
 public class DashRepresentation extends DashAdaptationSet
 {
-  private static int uniqueBandwidthCounter = 1;
-
   public Integer bandwidth = null;
   public int width = -1;
   public int height = -1;
@@ -86,7 +84,7 @@ public class DashRepresentation extends DashAdaptationSet
   {
     if (this.bandwidth == null)
     {
-      this.bandwidth = uniqueBandwidthCounter++;
+      this.bandwidth = FallbackCounters.Bandwidth++;
     }
     if (this.getSegmentTemplate() != null)
     {
@@ -163,7 +161,7 @@ public class DashRepresentation extends DashAdaptationSet
         possibleOtherBaseUrl = parent.getBaseUrl().baseUrl;
       }
       String serverUrl = URLUtils.makeAbsoulte(this.baseUrl.baseUrl, possibleOtherBaseUrl);
-      String localPath = this.generateRelativeLocalPath(targetFolder)
+      String localPath = this.generateDirectoryPath(targetFolder)
           + this.baseUrl.baseUrl.substring(this.baseUrl.baseUrl.lastIndexOf('/'));
       filesToDownload.add(new DownloadTarget(serverUrl, localPath));
     }
