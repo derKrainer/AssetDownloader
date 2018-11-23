@@ -47,7 +47,7 @@ public class BaseUrl extends DashComponent
 
     if (this.baseUrl.charAt(this.baseUrl.length() - 1) != '/')
     {
-      newBaseUrl += this.baseUrl.substring(this.baseUrl.lastIndexOf('/') - 1);
+      newBaseUrl += this.baseUrl.substring(this.baseUrl.lastIndexOf('/'));
     }
 
     BaseUrl possibleParentBaseUrl = null;
