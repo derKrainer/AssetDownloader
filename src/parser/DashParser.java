@@ -81,7 +81,7 @@ public class DashParser implements IParser
 
     for (DashRepresentation keptRep : selectedManifesRepresentations)
     {
-      keptRep.adjustUrlsToTarget("./", this.baseUrl, keptRep);
+      keptRep.adjustUrlsToTarget("", this.baseUrl, keptRep);
     }
 
     // replace / add possible BaseURL
