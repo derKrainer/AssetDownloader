@@ -155,7 +155,7 @@ public class SegmentTemplate extends DashComponent
   protected String adjustUrl(String url, String targetFolder, String manifestBaseUrl,
       DashRepresentation targetRepresentation)
   {
-    StringBuffer sb = new StringBuffer("./");
+    StringBuffer sb = new StringBuffer();
 
     String[] parts = url.split("/");
 
