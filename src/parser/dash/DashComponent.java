@@ -63,7 +63,7 @@ public abstract class DashComponent
 
       if (attr.getNodeName().equals("id"))
       {
-        this.id = attr.getNodeValue();
+        this.id = attr.getNodeValue().replaceAll(" ", "_");
       }
       else
       {
@@ -85,7 +85,7 @@ public abstract class DashComponent
 
       if (child.getNodeName().equals("BaseURL"))
       {
-        this.baseUrl = new BaseUrl(child);
+        this.baseUrl = new BaseUrl(child, this);
         this.baseUrl.parse();
       }
       else if (child.getNodeName().equals("#text"))

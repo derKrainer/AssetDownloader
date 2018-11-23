@@ -36,7 +36,7 @@ public class DashParser implements IParser
     this.baseUrl = manifestUrl.substring(0, manifestUrl.lastIndexOf('/'));
 
     ManifestDownloadnfo dlInfo = dashManifest.generateDownloadInfo(this.baseUrl, this.targetFolder);
-    System.out.println(dlInfo.toDebugString());
+    // System.out.println(dlInfo.toDebugString());
 
     return dlInfo;
   }
@@ -79,12 +79,10 @@ public class DashParser implements IParser
     // remove all unwanted representations from the manifest
     this.removeUnwantedRepresentations(representationsToRemove);
 
-    // replace all urls with updated relative urls
     for (DashRepresentation keptRep : selectedManifesRepresentations)
     {
-      keptRep.adjustUrlsToTarget(this.targetFolder, this.baseUrl, keptRep);
+      keptRep.adjustUrlsToTarget("./", this.baseUrl, keptRep);
     }
-    // TODO: baseURL handling
 
     // replace / add possible BaseURL
     String updatedManifest = XMLUtils.writeXmlToString(this.dashManifest.xmlContent);
@@ -136,8 +134,21 @@ public class DashParser implements IParser
     return manifest;
   }
 
-  public static double parseDuration(String date) throws Exception
+  public static double parseDuration(String date)
   {
+    // maybe it's already a number?
+    if (date.charAt(0) != 'P')
+    {
+      try
+      {
+        return Double.parseDouble(date);
+      }
+      catch(Exception ex)
+      {
+        // ignore, just try parsing manually
+      }
+    }
+
     // parse something like P0Y0M0DT0H3M30.000S
     double duration = 0;
     char lastChar = '0';

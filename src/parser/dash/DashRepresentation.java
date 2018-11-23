@@ -84,8 +84,6 @@ public class DashRepresentation extends DashAdaptationSet
   @Override
   protected void fillMissingValues()
   {
-    super.fillMissingValues();
-
     if (this.bandwidth == null)
     {
       this.bandwidth = uniqueBandwidthCounter++;
@@ -100,6 +98,14 @@ public class DashRepresentation extends DashAdaptationSet
         this.id = Integer.toString(this.bandwidth);
       }
     }
+    if (this.id == null)
+    {
+      // this seems like a stream issue
+      System.err.println("Warning, representation without ID found");
+      this.id = Integer.toString(FallbackCounters.RepresentationId++);
+    }
+
+    super.fillMissingValues();
   }
 
   public SegmentTemplate getSegmentTemplate()
@@ -157,7 +163,7 @@ public class DashRepresentation extends DashAdaptationSet
         possibleOtherBaseUrl = parent.getBaseUrl().baseUrl;
       }
       String serverUrl = URLUtils.makeAbsoulte(this.baseUrl.baseUrl, possibleOtherBaseUrl);
-      String localPath = this.generateDirectoryPath(targetFolder)
+      String localPath = this.generateRelativeLocalPath(targetFolder)
           + this.baseUrl.baseUrl.substring(this.baseUrl.baseUrl.lastIndexOf('/'));
       filesToDownload.add(new DownloadTarget(serverUrl, localPath));
     }
@@ -178,6 +184,7 @@ public class DashRepresentation extends DashAdaptationSet
   @Override
   public void adjustUrlsToTarget(String targetFolder, String manifestBaseUrl, DashRepresentation targetRepresentation)
   {
+    this.parent.adjustUrlsToTarget(targetFolder, manifestBaseUrl, targetRepresentation);
     super.adjustUrlsToTarget(targetFolder, manifestBaseUrl, targetRepresentation);
 
     if (this.getSegmentTemplate() != null)
@@ -205,13 +212,15 @@ public class DashRepresentation extends DashAdaptationSet
 
   public String generateDirectoryPath(String downloadFolder)
   {
-    StringBuffer sb = new StringBuffer(downloadFolder);
-
-    sb.append(this.parent.parent.id).append('/');
-    sb.append(this.parent.id).append('/');
-    sb.append(this.id);
-
-    return sb.toString();
+    return this.parent.generateDirectoryPath(downloadFolder) + '/' + this.id;
   }
 
+  public String generateRelativeLocalPath(String downloadFolder)
+  {
+    if (this.baseUrl != null)
+    {
+      return this.baseUrl.baseUrl;
+    }
+    return this.parent.generateRelativeLocalPath(downloadFolder) + '/' + this.id;
+  }
 }

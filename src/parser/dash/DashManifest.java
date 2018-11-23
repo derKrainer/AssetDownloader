@@ -48,19 +48,12 @@ public class DashManifest extends DashComponent
   @Override
   protected void parseAttributes(List<Node> specialAttributesList)
   {
-    // TODO: optional MPD values?
+    // TODO: live attributes
     for (Node attr : specialAttributesList)
     {
       if (attr.getNodeName().equals("mediaPresentationDuration"))
       {
-        try
-        {
-          this.duration = DashParser.parseDuration(attr.getNodeValue());
-        }
-        catch (Exception ex)
-        {
-          throw new RuntimeException("Error parsing mpd duration", ex);
-        }
+        this.duration = DashParser.parseDuration(attr.getNodeValue());
       }
       else
       {

@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -103,6 +104,7 @@ class RepresentationListModel implements ListModel<Representation>
 
     this.combinedReps = new Representation[repsPerBandwidth.values().size()];
     repsPerBandwidth.values().toArray(this.combinedReps);
+    Arrays.sort(this.combinedReps);
   }
 
   @Override

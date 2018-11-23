@@ -12,6 +12,7 @@ import javax.swing.JProgressBar;
 
 import download.types.DownloadTarget;
 import download.types.Representation;
+import parser.dash.FallbackCounters;
 
 public class ProgressView extends AbstractUIComponent
 {
@@ -65,6 +66,7 @@ public class ProgressView extends AbstractUIComponent
       @Override
       public void actionPerformed(ActionEvent e)
       {
+        FallbackCounters.reset();
         new ManifestSelector();
         destroy();
       }

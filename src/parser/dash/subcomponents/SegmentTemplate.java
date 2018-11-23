@@ -159,8 +159,19 @@ public class SegmentTemplate extends DashComponent
 
     String[] parts = url.split("/");
 
-    sb.append(targetRepresentation.parent.parent.id).append('/');
-    sb.append(targetRepresentation.parent.id).append('/');
+    if (targetRepresentation.parent.baseUrl != null)
+    {
+      // nothing
+    }
+    else if (targetRepresentation.parent.parent.baseUrl != null)
+    {
+      sb.append(targetRepresentation.parent.id).append('/');
+    }
+    else
+    {
+      sb.append(targetRepresentation.parent.generateRelativeLocalPath(targetFolder)).append('/');
+    }
+
     if (findPlaceHolderIndex(parts, "$RepresentationID$") > -1)
     {
       sb.append("$RepresentationID$").append('/');

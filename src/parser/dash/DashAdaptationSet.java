@@ -10,8 +10,6 @@ import parser.dash.subcomponents.SegmentTemplate;
 
 public class DashAdaptationSet extends DashComponent
 {
-  private static int uniqueAdaptationSetID = 0;
-
   public ContentType dataType = ContentType.Other;
 
   public SegmentTemplate segmentTemplate = null;
@@ -50,7 +48,6 @@ public class DashAdaptationSet extends DashComponent
       }
       else
       {
-        // TODO: parse AdaptationSet Child != representation
         System.out.println("Unknown Adaptation set node: " + child);
       }
     }
@@ -121,7 +118,7 @@ public class DashAdaptationSet extends DashComponent
   {
     if (this.id == null)
     {
-      this.id = Integer.toString(uniqueAdaptationSetID++);
+      this.id = Integer.toString(FallbackCounters.AdaptationSetId++);
     }
   }
 
@@ -136,9 +133,10 @@ public class DashAdaptationSet extends DashComponent
   @Override
   public void adjustUrlsToTarget(String targetFolder, String manifestBaseUrl, DashRepresentation targetRepresentation)
   {
+    this.parent.adjustUrlsToTarget(targetFolder, manifestBaseUrl, targetRepresentation);
     super.adjustUrlsToTarget(targetFolder, manifestBaseUrl, targetRepresentation);
 
-    this.representations.forEach((rep) -> rep.adjustUrlsToTarget(targetFolder, manifestBaseUrl, targetRepresentation));
+    // it's easier to do the adjustment bottom up, so don't propagate to children
   }
 
   public BaseUrl getBaseUrl()
@@ -151,6 +149,20 @@ public class DashAdaptationSet extends DashComponent
     {
       return this.parent.baseUrl;
     }
+  }
+
+  public String generateDirectoryPath(String downloadFolder)
+  {
+    return this.parent.generateDirectoryPath(downloadFolder) + '/' + this.id;
+  }
+
+  public String generateRelativeLocalPath(String downloadFolder)
+  {
+    if (this.baseUrl != null)
+    {
+      return this.baseUrl.baseUrl;
+    }
+    return this.parent.generateRelativeLocalPath(downloadFolder) + '/' + this.id;
   }
 }
 

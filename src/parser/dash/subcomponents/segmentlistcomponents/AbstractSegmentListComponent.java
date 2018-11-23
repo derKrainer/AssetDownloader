@@ -43,7 +43,7 @@ public abstract class AbstractSegmentListComponent extends DashComponent
 
   public void adjustUrlsToTarget(String targetFolder, String manifestBaseUrl, DashRepresentation rep)
   {
-    String localPath = rep.generateDirectoryPath(targetFolder);
+    String localPath = rep.generateRelativeLocalPath(targetFolder);
     String serverPath = this.getUrl();
     localPath += serverPath.substring(serverPath.lastIndexOf('/'));
     this.getUrlNode().setNodeValue(localPath);
