@@ -36,19 +36,19 @@ public class DashRepresentation extends DashAdaptationSet
   {
     super.parseSpecialNodes(specialNodes);
 
-    for(Node child : specialNodes)
+    for (Node child : specialNodes)
     {
       if (child.getNodeName().equals("SegmentList"))
       {
         this.segmentList = new SegmentList(child);
         this.segmentList.parse();
       }
-      else if(child.getNodeName().equals("SegmentBase"))
+      else if (child.getNodeName().equals("SegmentBase"))
       {
         this.segmentBase = new SegmentBase(child);
         this.segmentBase.parse();
       }
-      else 
+      else
       {
         System.out.println("Unhandled Representation Child: " + child.getNodeName());
       }
@@ -157,7 +157,8 @@ public class DashRepresentation extends DashAdaptationSet
         possibleOtherBaseUrl = parent.getBaseUrl().baseUrl;
       }
       String serverUrl = URLUtils.makeAbsoulte(this.baseUrl.baseUrl, possibleOtherBaseUrl);
-      String localPath = this.generateDirectoryPath(targetFolder) + this.baseUrl.baseUrl.substring(this.baseUrl.baseUrl.lastIndexOf('/'));
+      String localPath = this.generateDirectoryPath(targetFolder)
+          + this.baseUrl.baseUrl.substring(this.baseUrl.baseUrl.lastIndexOf('/'));
       filesToDownload.add(new DownloadTarget(serverUrl, localPath));
     }
     else

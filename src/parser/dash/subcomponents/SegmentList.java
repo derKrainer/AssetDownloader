@@ -22,16 +22,16 @@ public class SegmentList extends DashComponent
   }
 
   @Override
-  protected void parseAttributes(List<Node> specialAttributesList) 
+  protected void parseAttributes(List<Node> specialAttributesList)
   {
-    for (Node attribute: specialAttributesList)
+    for (Node attribute : specialAttributesList)
     {
       System.out.println("Unknown SegmentList attribute: " + attribute.getNodeName());
-    }    
+    }
   }
 
   @Override
-  protected void parseSpecialNodes(List<Node> specialNodes) 
+  protected void parseSpecialNodes(List<Node> specialNodes)
   {
     for (Node childNode : specialNodes)
     {
@@ -43,18 +43,20 @@ public class SegmentList extends DashComponent
       else if (childNode.getNodeName().equals("SegmentURL"))
       {
         SegmentUrl newSegmentUrl = new SegmentUrl(childNode);
-        newSegmentUrl.parse();;
+        newSegmentUrl.parse();
+        ;
         this.segmentUrls.add(newSegmentUrl);
       }
       else
       {
-        System.out.println("Unknown SegmentList child: " + childNode.getNodeName());    
+        System.out.println("Unknown SegmentList child: " + childNode.getNodeName());
       }
-    }  
+    }
   }
 
   @Override
-  protected void fillMissingValues() {
+  protected void fillMissingValues()
+  {
     // nothing as of yet
   }
 
@@ -71,7 +73,7 @@ public class SegmentList extends DashComponent
       System.out.println("No init url in SegmentList");
     }
 
-    for(SegmentUrl segmentUrl : this.segmentUrls)
+    for (SegmentUrl segmentUrl : this.segmentUrls)
     {
       targets.add(segmentUrl.toDownloadTarget(manifestLocation, targetFolder, rep));
     }
@@ -90,7 +92,7 @@ public class SegmentList extends DashComponent
       System.out.println("No init url in SegmentList");
     }
 
-    for(SegmentUrl segmentUrl : this.segmentUrls)
+    for (SegmentUrl segmentUrl : this.segmentUrls)
     {
       segmentUrl.adjustUrlsToTarget(targetFolder, manifestBaseUrl, targetRepresentation);
     }

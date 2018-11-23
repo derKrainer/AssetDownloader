@@ -23,7 +23,8 @@ public class ProgressView extends AbstractUIComponent
   {
     super("Downloading", new Dimension(500, 300), false);
     List<DownloadTarget> allItems = new ArrayList<>();
-    for (Representation dlRep : toDownload) {
+    for (Representation dlRep : toDownload)
+    {
       allItems.addAll(dlRep.filesToDownload);
     }
     this.downloadItems = new DownloadTarget[allItems.size()];
@@ -34,7 +35,8 @@ public class ProgressView extends AbstractUIComponent
   }
 
   @Override
-  protected void initComponents() {
+  protected void initComponents()
+  {
     this.progress = new JProgressBar(0, this.downloadItems.length);
     this.progress.setBounds(5, 5, 450, 25);
     this.progress.setValue(0);
@@ -58,9 +60,11 @@ public class ProgressView extends AbstractUIComponent
     this.currentView.add(again);
     again.setBounds(125, 100, 300, 50);
 
-    again.addActionListener(new ActionListener(){
+    again.addActionListener(new ActionListener()
+    {
       @Override
-      public void actionPerformed(ActionEvent e) {
+      public void actionPerformed(ActionEvent e)
+      {
         new ManifestSelector();
         destroy();
       }

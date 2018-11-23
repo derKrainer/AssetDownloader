@@ -17,7 +17,8 @@ public abstract class AbstractSegmentListComponent extends DashComponent
   }
 
   @Override
-  protected void fillMissingValues() {
+  protected void fillMissingValues()
+  {
     // nothing
   }
 
@@ -26,7 +27,7 @@ public abstract class AbstractSegmentListComponent extends DashComponent
   {
     for (Node n : specialNodes)
     {
-      System.out.println("Unexpeted child of " + this.getClass().getName() +  ": " + n.getNodeName());
+      System.out.println("Unexpeted child of " + this.getClass().getName() + ": " + n.getNodeName());
     }
   }
 

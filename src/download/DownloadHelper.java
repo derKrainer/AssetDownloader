@@ -10,22 +10,14 @@ import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 
 import download.types.DownloadTarget;
-import download.types.ManifestDownloadnfo;
 import download.types.Representation;
-import parser.IParser;
-import ui.DownloadSelector;
 import ui.ProgressView;
 import util.URLUtils;
 
 public class DownloadHelper
 {
-  private DownloadHelper()
-  {
-  }
-
   public static String getContent(String urlString)
   {
-
     InputStreamReader reader = null;
     BufferedReader bufferdReader = null;
     try
@@ -134,7 +126,8 @@ class ThreadedDownloader extends Thread
   }
 
   @Override
-  public void run() {
+  public void run()
+  {
     super.run();
 
     for (Representation rep : toDownload)
@@ -159,7 +152,7 @@ class ThreadedDownloader extends Thread
           currentUI.onFileHandled(target);
         }
       }
-      
+
       if (currentUI != null)
       {
         currentUI.onRepresentationDone(rep);

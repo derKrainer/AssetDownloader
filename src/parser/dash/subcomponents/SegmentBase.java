@@ -18,17 +18,20 @@ public class SegmentBase extends DashComponent
   }
 
   @Override
-  protected void fillMissingValues() {
+  protected void fillMissingValues()
+  {
     // nah
   }
 
   @Override
-  protected void parseAttributes(List<Node> specialAttributesList) {
+  protected void parseAttributes(List<Node> specialAttributesList)
+  {
     // nah
   }
 
   @Override
-  protected void parseSpecialNodes(List<Node> specialNodes) {
+  protected void parseSpecialNodes(List<Node> specialNodes)
+  {
     // nah
   }
 
@@ -41,7 +44,8 @@ public class SegmentBase extends DashComponent
       throw new RuntimeException("Missing base URL in SegmentBase");
     }
     String serverUrl = URLUtils.makeAbsoulte(baseUrl.baseUrl, manifestLocation);
-    String localPath = rep.generateDirectoryPath(targetFolder) + baseUrl.baseUrl.substring(baseUrl.baseUrl.lastIndexOf('/'));
+    String localPath = rep.generateDirectoryPath(targetFolder)
+        + baseUrl.baseUrl.substring(baseUrl.baseUrl.lastIndexOf('/'));
     singleFile.add(new DownloadTarget(serverUrl, localPath));
 
     return singleFile;

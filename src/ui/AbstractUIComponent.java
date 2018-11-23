@@ -7,7 +7,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-public abstract class AbstractUIComponent 
+public abstract class AbstractUIComponent
 {
   public JFrame currentView;
 

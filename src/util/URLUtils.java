@@ -77,7 +77,7 @@ public class URLUtils
 
     String[] urlParts = absoluteUrl.split("/");
 
-    for(int i = 0; i < urlParts.length - 1; i++)
+    for (int i = 0; i < urlParts.length - 1; i++)
     {
       if (urlParts[i + 1].equals(".."))
       {

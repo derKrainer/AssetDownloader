@@ -28,7 +28,7 @@ public class SegmentUrl extends AbstractSegmentListComponent
       {
         System.out.println("Unknown Initialization attribute: " + attr.getNodeName());
       }
-    }  
+    }
   }
 
   @Override
@@ -38,7 +38,8 @@ public class SegmentUrl extends AbstractSegmentListComponent
   }
 
   @Override
-  protected Node getUrlNode() {
+  protected Node getUrlNode()
+  {
     return this.sourceUrlNode;
   }
 }

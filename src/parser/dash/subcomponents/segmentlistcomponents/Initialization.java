@@ -28,16 +28,18 @@ public class Initialization extends AbstractSegmentListComponent
       {
         System.out.println("Unknown Initialization attribute: " + attr.getNodeName());
       }
-    }  
+    }
   }
 
   @Override
-  protected String getUrl() {
+  protected String getUrl()
+  {
     return this.url;
   }
 
   @Override
-  protected Node getUrlNode() {
+  protected Node getUrlNode()
+  {
     return this.sourceUrlNode;
   }
 }

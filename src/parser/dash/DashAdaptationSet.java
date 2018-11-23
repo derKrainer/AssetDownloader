@@ -147,7 +147,8 @@ public class DashAdaptationSet extends DashComponent
     {
       return this.baseUrl;
     }
-    else {
+    else
+    {
       return this.parent.baseUrl;
     }
   }
