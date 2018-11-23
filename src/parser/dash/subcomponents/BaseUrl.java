@@ -15,6 +15,8 @@ public class BaseUrl extends DashComponent
 
   public DashComponent parent;
 
+  private boolean hasBeenAdjusted = false;
+
   public BaseUrl(Node xmlContent, DashComponent parent)
   {
     super(xmlContent);
@@ -41,6 +43,12 @@ public class BaseUrl extends DashComponent
   @Override
   public void adjustUrlsToTarget(String targetFolder, String manifestBaseUrl, DashRepresentation targetRepresentation)
   {
+    if (this.hasBeenAdjusted)
+    {
+      return;
+    }
+    this.hasBeenAdjusted = true;
+
     super.adjustUrlsToTarget(targetFolder, manifestBaseUrl, targetRepresentation);
 
     String newBaseUrl = targetRepresentation.generateDirectoryPath(targetFolder);
@@ -78,6 +86,9 @@ public class BaseUrl extends DashComponent
         newBaseUrl = '.' + newBaseUrl.substring(parentPath.length());
       }
     }
+
+    // removes all ./
+    newBaseUrl = newBaseUrl.replaceAll("\\./", "");
 
     this.baseUrl = newBaseUrl;
     this.textContentNode.setNodeValue(newBaseUrl);
