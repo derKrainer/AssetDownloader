@@ -91,13 +91,13 @@ public class SegmentTemplate extends DashComponent
 
     List<DownloadTarget> allFiles = new ArrayList<>();
     allFiles.add(new DownloadTarget(convertToDownloadUrl(initUrl, -1, rep, baseUrl),
-        getTargetFileForUrl(initUrl, rep, targetFolder)));
+        getTargetFileForUrl(this.replacePlaceholders(initUrl, -1, rep), rep, targetFolder, initUrl)));
 
     int numberOfSegments = this.getNumberOfSegments(rep);
     for (int i = this.startNumber; i < this.startNumber + numberOfSegments; i++)
     {
       String dlUrl = convertToDownloadUrl(this.mediaUrl, i, rep, baseUrl);
-      allFiles.add(new DownloadTarget(dlUrl, getTargetFileForUrl(dlUrl, rep, targetFolder)));
+      allFiles.add(new DownloadTarget(dlUrl, getTargetFileForUrl(dlUrl, rep, targetFolder, mediaUrl)));
     }
 
     return allFiles;
@@ -125,7 +125,7 @@ public class SegmentTemplate extends DashComponent
         .replace("$Bandwidth$", Integer.toString(rep.bandwidth));
   }
 
-  protected String getTargetFileForUrl(String url, DashRepresentation rep, String targetFolder)
+  protected String getTargetFileForUrl(String url, DashRepresentation rep, String targetFolder, String templateUrl)
   {
     StringBuilder sb = new StringBuilder(targetFolder);
     if (sb.charAt(sb.length() - 1) != '/' || sb.charAt(sb.length() - 1) != '\\')
@@ -135,6 +135,11 @@ public class SegmentTemplate extends DashComponent
     sb.append(rep.parent.parent.id).append('/');
     sb.append(rep.parent.id).append('/');
     sb.append(rep.id).append('/');
+    if (templateUrl.contains("$Bandwidth$"))
+    {
+      sb.append(rep.bandwidth).append('/');
+    }
+    
     sb.append(url.substring(url.lastIndexOf('/') + 1));
 
     return sb.toString();
@@ -179,6 +184,11 @@ public class SegmentTemplate extends DashComponent
     else
     {
       sb.append(targetRepresentation.id).append('/');
+    }
+    
+    if (findPlaceHolderIndex(parts, "$Bandwidth$") > -1)
+    {
+      sb.append("$Bandwidth$").append('/');
     }
 
     int segmentPlaceholderIndex = findPlaceHolderIndex(parts, "$Number$");

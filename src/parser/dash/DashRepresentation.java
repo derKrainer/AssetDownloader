@@ -86,17 +86,6 @@ public class DashRepresentation extends DashAdaptationSet
     {
       this.bandwidth = FallbackCounters.Bandwidth++;
     }
-    // TODO: repId + bandwidth placeholders?
-    if (this.getSegmentTemplate() != null)
-    {
-      SegmentTemplate template = this.getSegmentTemplate();
-
-      if ((template.initUrl != null && template.initUrl.contains("$Bandwidth$"))
-          || (template.mediaUrl != null && template.mediaUrl.contains("$Bandwidth$")))
-      {
-        this.id = Integer.toString(this.bandwidth);
-      }
-    }
     if (this.id == null)
     {
       // this seems like a stream issue
