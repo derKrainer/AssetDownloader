@@ -30,7 +30,7 @@ public class DownloadSelector extends AbstractUIComponent
 
   public DownloadSelector(ManifestDownloadnfo info, IParser manifestParser)
   {
-    super("Select all Qualities you want to download", new Dimension(600, 450), false);
+    super("Select all Qualities you want to download", new Dimension(650, 550), false);
     this.toDownload = info;
     this.parser = manifestParser;
 
@@ -42,10 +42,10 @@ public class DownloadSelector extends AbstractUIComponent
   protected void initComponents()
   {
     JLabel repListLabel = new JLabel("Chose Representations to download: ");
-    repListLabel.setBounds(5, 0, 600, 25);
+    repListLabel.setBounds(5, 0, 590, 25);
     currentView.add(repListLabel);
     JList<Representation> repList = new JList<Representation>(new RepresentationListModel(this.toDownload));
-    repList.setBounds(5, 30, 590, 370);
+    repList.setBounds(5, 30, 590, 400);
     currentView.add(repList);
 
     JButton dlButton = new JButton("Download");
@@ -65,7 +65,7 @@ public class DownloadSelector extends AbstractUIComponent
       }
     });
     currentView.add(dlButton);
-    dlButton.setBounds(250, 620, 200, 45);
+    dlButton.setBounds(5, 440, 200, 45);
   }
 
 }

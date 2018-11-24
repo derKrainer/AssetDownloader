@@ -86,6 +86,7 @@ public class DashRepresentation extends DashAdaptationSet
     {
       this.bandwidth = FallbackCounters.Bandwidth++;
     }
+    // TODO: repId + bandwidth placeholders?
     if (this.getSegmentTemplate() != null)
     {
       SegmentTemplate template = this.getSegmentTemplate();
