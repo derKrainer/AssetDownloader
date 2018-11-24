@@ -3,8 +3,10 @@ package download;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
@@ -16,7 +18,7 @@ import util.URLUtils;
 
 public class DownloadHelper
 {
-  public static String getContent(String urlString)
+  public static String getContent(String urlString) throws MalformedURLException, IOException
   {
     InputStreamReader reader = null;
     BufferedReader bufferdReader = null;
@@ -36,11 +38,7 @@ public class DownloadHelper
       }
       return content.toString();
     }
-    catch (Exception e)
-    {
-      e.printStackTrace();
-      return null;
-    } finally
+    finally
     {
       try
       {

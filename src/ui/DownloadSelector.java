@@ -1,7 +1,6 @@
 package ui;
 
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
@@ -11,6 +10,7 @@ import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.ListModel;
 import javax.swing.event.ListDataListener;
@@ -30,7 +30,7 @@ public class DownloadSelector extends AbstractUIComponent
 
   public DownloadSelector(ManifestDownloadnfo info, IParser manifestParser)
   {
-    super("Select all Qualities you want to download", new Dimension(600, 400), false);
+    super("Select all Qualities you want to download", new Dimension(600, 450), false);
     this.toDownload = info;
     this.parser = manifestParser;
 
@@ -41,9 +41,11 @@ public class DownloadSelector extends AbstractUIComponent
   @Override
   protected void initComponents()
   {
-    currentView.setLayout(new FlowLayout(FlowLayout.CENTER));
-
+    JLabel repListLabel = new JLabel("Chose Representations to download: ");
+    repListLabel.setBounds(5, 0, 600, 25);
+    currentView.add(repListLabel);
     JList<Representation> repList = new JList<Representation>(new RepresentationListModel(this.toDownload));
+    repList.setBounds(5, 30, 590, 370);
     currentView.add(repList);
 
     JButton dlButton = new JButton("Download");
@@ -63,6 +65,7 @@ public class DownloadSelector extends AbstractUIComponent
       }
     });
     currentView.add(dlButton);
+    dlButton.setBounds(250, 620, 200, 45);
   }
 
 }

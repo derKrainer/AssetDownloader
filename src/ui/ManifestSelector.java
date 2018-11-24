@@ -1,8 +1,11 @@
 package ui;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.MalformedURLException;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -13,6 +16,8 @@ import assetdownloader.AssetDownloader;
 
 public class ManifestSelector extends AbstractUIComponent
 {
+  JLabel errorLabel;
+  
   public ManifestSelector()
   {
     super("Enter the manifest URL and the folder to download into", new Dimension(900, 200), true);
@@ -40,6 +45,12 @@ public class ManifestSelector extends AbstractUIComponent
       @Override
       public void actionPerformed(ActionEvent e)
       {
+        if (errorLabel != null)
+        {
+          currentView.remove(errorLabel);
+          errorLabel = null;
+        }
+        
         String manifestUrl = manifestUrlInput.getText();
         String targetFolder = targetFolderInput.getText();
         char lastTargetFolderChar = targetFolder.charAt(targetFolder.length() - 1);
@@ -48,7 +59,29 @@ public class ManifestSelector extends AbstractUIComponent
           targetFolder += '/';
         }
         AssetDownloader.instance = new AssetDownloader(manifestUrl, targetFolder);
-        destroy();
+        try
+        {
+          AssetDownloader.instance.processManifest();
+          AssetDownloader.instance.openDownloadSelectorView();
+          destroy();
+        } 
+        catch (MalformedURLException ex)
+        {
+          errorLabel = new JLabel("Invalid URL: " + ex.getMessage());
+          ex.printStackTrace();
+        }
+        catch(IOException ex)
+        {
+          errorLabel = new JLabel("Download Error: " + ex.getMessage());
+          ex.printStackTrace();
+        }
+        if (errorLabel != null)
+        {
+          errorLabel.setBounds(5, 60, 1500, 40);
+          errorLabel.setForeground(Color.RED);
+          currentView.add(errorLabel);
+          currentView.repaint();
+        }
       }
     });
     currentView.add(processButton);

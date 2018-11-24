@@ -1,5 +1,8 @@
 package assetdownloader;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+
 import download.DownloadHelper;
 import download.types.ManifestDownloadnfo;
 import parser.DashParser;
@@ -27,15 +30,21 @@ public class AssetDownloader
   {
     this.manifestURL = manifestURL;
     this.targetFolder = targetFolder;
-
+  }
+  
+  public void processManifest() throws MalformedURLException, IOException
+  {
     this.getManifest();
     this.getTypeForManifest(manifestURL);
     this.parseManifest();
-
-    currentSelector = new DownloadSelector(this.toDownload, this.manifestParser);
+  }
+  
+  public void openDownloadSelectorView()
+  {
+	  this.currentSelector = new DownloadSelector(this.toDownload, this.manifestParser);
   }
 
-  private void getManifest()
+  private void getManifest() throws MalformedURLException, IOException
   {
     this.manifestContent = DownloadHelper.getContent(this.manifestURL);
     System.out.println(this.manifestContent);
@@ -79,7 +88,7 @@ public class AssetDownloader
     }
   }
 
-  private void parseManifest()
+  private void parseManifest() throws MalformedURLException, IOException
   {
     switch (this.manifestType) {
     case HLS:
