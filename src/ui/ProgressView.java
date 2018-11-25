@@ -10,6 +10,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JProgressBar;
 
+import download.DownloadHelper;
 import download.types.DownloadTarget;
 import download.types.Representation;
 import parser.dash.FallbackCounters;
@@ -19,6 +20,7 @@ public class ProgressView extends AbstractUIComponent
   private DownloadTarget[] downloadItems;
 
   private JProgressBar progress;
+  private JButton cancel;
 
   public ProgressView(Representation[] toDownload)
   {
@@ -33,6 +35,9 @@ public class ProgressView extends AbstractUIComponent
 
     this.initComponents();
     this.show();
+    this.repaint();
+    
+    DownloadHelper.downloadRepresentations(toDownload, this);
   }
 
   @Override
@@ -42,12 +47,30 @@ public class ProgressView extends AbstractUIComponent
     this.progress.setBounds(5, 5, 450, 25);
     this.progress.setValue(0);
     this.currentView.add(this.progress);
+    
+    this.cancel = new JButton("Cancel");
+    this.cancel.setBounds(30, 30, 300, 50);
+    this.cancel.addActionListener(new ActionListener() 
+    {
+      @Override
+      public void actionPerformed(ActionEvent e)
+      {
+        DownloadHelper.cancelDownloading();
+      }
+    });
+    this.currentView.add(this.cancel);
   }
 
   public void onFileHandled(DownloadTarget doneTarget)
   {
     this.progress.setValue(this.progress.getValue() + 1);
     this.progress.paint(this.progress.getGraphics());
+    this.repaint();
+  }
+  
+  private void repaint()
+  {
+    this.currentView.paint(this.currentView.getGraphics());
   }
 
   public void onDone()
@@ -56,10 +79,11 @@ public class ProgressView extends AbstractUIComponent
     JLabel hooray = new JLabel("!!!DONE!!!");
     hooray.setBounds(30, 30, 300, 50);
     this.currentView.add(hooray);
+    this.currentView.remove(this.cancel);
 
     JButton again = new JButton("Another asset");
     this.currentView.add(again);
-    again.setBounds(125, 100, 300, 50);
+    again.setBounds(125, 100, 280, 50);
 
     again.addActionListener(new ActionListener()
     {
@@ -71,6 +95,8 @@ public class ProgressView extends AbstractUIComponent
         destroy();
       }
     });
+    
+    this.repaint();
   }
 
   public void onRepresentationDone(Representation rep)

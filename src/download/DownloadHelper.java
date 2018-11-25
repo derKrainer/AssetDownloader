@@ -18,6 +18,8 @@ import util.URLUtils;
 
 public class DownloadHelper
 {
+  public static ThreadedDownloader downloaderThread;
+  
   public static String getContent(String urlString) throws MalformedURLException, IOException
   {
     InputStreamReader reader = null;
@@ -60,7 +62,16 @@ public class DownloadHelper
 
   public static void downloadRepresentations(Representation[] toDownload, ProgressView currentUI)
   {
-    new ThreadedDownloader(toDownload, currentUI).run();
+    downloaderThread = new ThreadedDownloader(toDownload, currentUI);
+    downloaderThread.start();
+  }
+  
+  public static void cancelDownloading()
+  {
+    if (downloaderThread != null)
+    {
+      downloaderThread.cancel();
+    }
   }
 
   public static void downloadUrlContentToFile(String url, String fileName)
@@ -116,11 +127,18 @@ class ThreadedDownloader extends Thread
 {
   private Representation[] toDownload;
   private ProgressView currentUI;
+  private boolean canceled;
 
   public ThreadedDownloader(Representation[] toDownload, ProgressView currentUI)
   {
     this.toDownload = toDownload;
     this.currentUI = currentUI;
+    this.canceled = false;
+  }
+  
+  public void cancel()
+  {
+    this.canceled = true;
   }
 
   @Override
@@ -133,6 +151,12 @@ class ThreadedDownloader extends Thread
       System.out.println("Handling representation: " + rep.name + ", bandwidth: " + rep.bandwidth);
       for (DownloadTarget target : rep.filesToDownload)
       {
+        if (this.canceled)
+        {
+          done();
+          return;
+        }
+        
         if (new File(target.fileName).exists())
         {
           if (currentUI != null)
@@ -156,9 +180,15 @@ class ThreadedDownloader extends Thread
         currentUI.onRepresentationDone(rep);
       }
     }
+    done();
+  }
+  
+  public void done()
+  {
     if (currentUI != null)
     {
       currentUI.onDone();
     }
+    DownloadHelper.downloaderThread = null;
   }
 }
