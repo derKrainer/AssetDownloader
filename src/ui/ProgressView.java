@@ -64,8 +64,6 @@ public class ProgressView extends AbstractUIComponent
   public void onFileHandled(DownloadTarget doneTarget)
   {
     this.progress.setValue(this.progress.getValue() + 1);
-    this.progress.paint(this.progress.getGraphics());
-    this.repaint();
   }
   
   private void repaint()
