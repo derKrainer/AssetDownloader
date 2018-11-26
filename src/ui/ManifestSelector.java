@@ -17,7 +17,7 @@ import assetdownloader.AssetDownloader;
 public class ManifestSelector extends AbstractUIComponent
 {
   JLabel errorLabel;
-  
+
   public ManifestSelector()
   {
     super("Enter the manifest URL and the folder to download into", new Dimension(900, 200), true);
@@ -50,7 +50,7 @@ public class ManifestSelector extends AbstractUIComponent
           currentView.remove(errorLabel);
           errorLabel = null;
         }
-        
+
         String manifestUrl = manifestUrlInput.getText();
         String targetFolder = targetFolderInput.getText();
         char lastTargetFolderChar = targetFolder.charAt(targetFolder.length() - 1);
@@ -64,13 +64,13 @@ public class ManifestSelector extends AbstractUIComponent
           AssetDownloader.instance.processManifest();
           AssetDownloader.instance.openDownloadSelectorView();
           destroy();
-        } 
+        }
         catch (MalformedURLException ex)
         {
           errorLabel = new JLabel("Invalid URL: " + ex.getMessage());
           ex.printStackTrace();
         }
-        catch(IOException ex)
+        catch (IOException ex)
         {
           errorLabel = new JLabel("Download Error: " + ex.getMessage());
           ex.printStackTrace();

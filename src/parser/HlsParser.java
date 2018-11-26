@@ -39,7 +39,8 @@ public class HlsParser implements IParser
    * @see parser.IParser#parseManifest(java.lang.String, java.lang.String)
    */
   @Override
-  public ManifestDownloadnfo parseManifest(String manifestContent, String manifestUrl) throws MalformedURLException, IOException
+  public ManifestDownloadnfo parseManifest(String manifestContent, String manifestUrl)
+      throws MalformedURLException, IOException
   {
 
     // TODO: update all the URLs in the manfiest to relative urls and save the
@@ -240,7 +241,7 @@ public class HlsParser implements IParser
     {
       retVal.manifestContent = DownloadHelper.getContent(variantUrl);
     }
-    catch(Exception ex)
+    catch (Exception ex)
     {
       ex.printStackTrace();
       throw new RuntimeException("Error downloading variant playlist", ex);

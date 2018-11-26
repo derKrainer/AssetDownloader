@@ -23,7 +23,7 @@ public class DashPeriod extends DashComponent
   @Override
   protected void parseSpecialNodes(List<Node> specialNodes)
   {
-    for (Node childNode: specialNodes)
+    for (Node childNode : specialNodes)
     {
       if (childNode.getNodeName().equals("AdaptationSet"))
       {
@@ -42,7 +42,7 @@ public class DashPeriod extends DashComponent
   @Override
   protected void parseAttributes(List<Node> specialAttributesList)
   {
-    for (Node attr: specialAttributesList)
+    for (Node attr : specialAttributesList)
     {
       if (attr.getNodeName().equals("duration"))
       {

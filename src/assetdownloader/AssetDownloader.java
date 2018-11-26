@@ -31,17 +31,17 @@ public class AssetDownloader
     this.manifestURL = manifestURL;
     this.targetFolder = targetFolder;
   }
-  
+
   public void processManifest() throws MalformedURLException, IOException
   {
     this.getManifest();
     this.getTypeForManifest(manifestURL);
     this.parseManifest();
   }
-  
+
   public void openDownloadSelectorView()
   {
-	  this.currentSelector = new DownloadSelector(this.toDownload, this.manifestParser);
+    this.currentSelector = new DownloadSelector(this.toDownload, this.manifestParser);
   }
 
   private void getManifest() throws MalformedURLException, IOException

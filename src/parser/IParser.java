@@ -9,7 +9,8 @@ import download.types.Representation;
 public interface IParser
 {
 
-  ManifestDownloadnfo parseManifest(String manifestContent, String manifestUrl) throws MalformedURLException, IOException;
+  ManifestDownloadnfo parseManifest(String manifestContent, String manifestUrl)
+      throws MalformedURLException, IOException;
 
   String getUpdatedManifest(Representation[] selectedRepresentations);
 }

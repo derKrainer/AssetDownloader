@@ -36,7 +36,7 @@ public class ProgressView extends AbstractUIComponent
     this.initComponents();
     this.show();
     this.repaint();
-    
+
     DownloadHelper.downloadRepresentations(toDownload, this);
   }
 
@@ -47,10 +47,10 @@ public class ProgressView extends AbstractUIComponent
     this.progress.setBounds(5, 5, 450, 25);
     this.progress.setValue(0);
     this.currentView.add(this.progress);
-    
+
     this.cancel = new JButton("Cancel");
     this.cancel.setBounds(30, 30, 300, 50);
-    this.cancel.addActionListener(new ActionListener() 
+    this.cancel.addActionListener(new ActionListener()
     {
       @Override
       public void actionPerformed(ActionEvent e)
@@ -65,7 +65,7 @@ public class ProgressView extends AbstractUIComponent
   {
     this.progress.setValue(this.progress.getValue() + 1);
   }
-  
+
   private void repaint()
   {
     this.currentView.paint(this.currentView.getGraphics());
@@ -93,7 +93,7 @@ public class ProgressView extends AbstractUIComponent
         destroy();
       }
     });
-    
+
     this.repaint();
   }
 

@@ -19,7 +19,7 @@ import util.URLUtils;
 public class DownloadHelper
 {
   public static ThreadedDownloader downloaderThread;
-  
+
   public static String getContent(String urlString) throws MalformedURLException, IOException
   {
     InputStreamReader reader = null;
@@ -65,7 +65,7 @@ public class DownloadHelper
     downloaderThread = new ThreadedDownloader(toDownload, currentUI);
     downloaderThread.start();
   }
-  
+
   public static void cancelDownloading()
   {
     if (downloaderThread != null)
@@ -135,7 +135,7 @@ class ThreadedDownloader extends Thread
     this.currentUI = currentUI;
     this.canceled = false;
   }
-  
+
   public void cancel()
   {
     this.canceled = true;
@@ -156,7 +156,7 @@ class ThreadedDownloader extends Thread
           done();
           return;
         }
-        
+
         if (new File(target.fileName).exists())
         {
           if (currentUI != null)
@@ -182,7 +182,7 @@ class ThreadedDownloader extends Thread
     }
     done();
   }
-  
+
   public void done()
   {
     if (currentUI != null)

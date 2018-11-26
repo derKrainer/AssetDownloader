@@ -143,7 +143,7 @@ public class DashParser implements IParser
       {
         return Double.parseDouble(date);
       }
-      catch(Exception ex)
+      catch (Exception ex)
       {
         // ignore, just try parsing manually
       }

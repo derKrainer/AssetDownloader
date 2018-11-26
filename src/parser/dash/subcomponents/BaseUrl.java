@@ -61,18 +61,18 @@ public class BaseUrl extends DashComponent
     BaseUrl possibleParentBaseUrl = null;
     if (this.parent instanceof DashRepresentation)
     {
-      DashRepresentation repParent = (DashRepresentation)this.parent;
+      DashRepresentation repParent = (DashRepresentation) this.parent;
       possibleParentBaseUrl = repParent.parent.getBaseUrl();
     }
     else if (this.parent instanceof DashAdaptationSet)
     {
-      DashAdaptationSet adSetParent = (DashAdaptationSet)parent;
+      DashAdaptationSet adSetParent = (DashAdaptationSet) parent;
       newBaseUrl = adSetParent.generateDirectoryPath(targetFolder);
       possibleParentBaseUrl = adSetParent.parent.baseUrl;
     }
     else if (this.parent instanceof DashPeriod)
     {
-      DashPeriod periodParent = (DashPeriod)parent;
+      DashPeriod periodParent = (DashPeriod) parent;
       newBaseUrl = targetFolder + periodParent.id;
     }
 

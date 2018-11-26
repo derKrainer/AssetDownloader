@@ -139,7 +139,7 @@ public class SegmentTemplate extends DashComponent
     {
       sb.append(rep.bandwidth).append('/');
     }
-    
+
     sb.append(url.substring(url.lastIndexOf('/') + 1));
 
     return sb.toString();
@@ -185,7 +185,7 @@ public class SegmentTemplate extends DashComponent
     {
       sb.append(targetRepresentation.id).append('/');
     }
-    
+
     if (findPlaceHolderIndex(parts, "$Bandwidth$") > -1)
     {
       sb.append("$Bandwidth$").append('/');

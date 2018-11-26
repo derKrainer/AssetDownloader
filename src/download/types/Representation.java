@@ -58,7 +58,8 @@ public class Representation implements Comparable<Representation>
   }
 
   @Override
-  public int compareTo(Representation o) {
+  public int compareTo(Representation o)
+  {
     return this.toString().compareTo(o.toString());
   }
 }
