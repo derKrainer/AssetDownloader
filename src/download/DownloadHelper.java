@@ -126,8 +126,10 @@ public class DownloadHelper
 class ThreadedDownloader extends Thread
 {
   private Representation[] toDownload;
-  private ProgressView currentUI;
-  private boolean canceled;
+  public ProgressView currentUI;
+  public boolean canceled;
+  public RepresentationDownloadThread[] startedDownloaders;
+  protected int numberOfFinishedDownloaders = 0;
 
   public ThreadedDownloader(Representation[] toDownload, ProgressView currentUI)
   {
@@ -146,41 +148,14 @@ class ThreadedDownloader extends Thread
   {
     super.run();
 
+    this.startedDownloaders = new RepresentationDownloadThread[this.toDownload.length];
+    int idx = 0;
     for (Representation rep : toDownload)
     {
-      System.out.println("Handling representation: " + rep.name + ", bandwidth: " + rep.bandwidth);
-      for (DownloadTarget target : rep.filesToDownload)
-      {
-        if (this.canceled)
-        {
-          done();
-          return;
-        }
-
-        if (new File(target.fileName).exists())
-        {
-          if (currentUI != null)
-          {
-            currentUI.onFileHandled(target);
-          }
-          continue;
-        }
-
-        System.out.println("downloading: " + target.downloadURL + " to: " + target.fileName);
-        DownloadHelper.downloadUrlContentToFile(target.downloadURL, target.fileName);
-
-        if (currentUI != null)
-        {
-          currentUI.onFileHandled(target);
-        }
-      }
-
-      if (currentUI != null)
-      {
-        currentUI.onRepresentationDone(rep);
-      }
+      startedDownloaders[idx] = new RepresentationDownloadThread(rep, this);
+      startedDownloaders[idx].start();
+      idx++;
     }
-    done();
   }
 
   public void done()
@@ -190,5 +165,64 @@ class ThreadedDownloader extends Thread
       currentUI.onDone();
     }
     DownloadHelper.downloaderThread = null;
+  }
+  
+  protected void onRepresentationDone()
+  {
+    this.numberOfFinishedDownloaders++;
+    if (this.numberOfFinishedDownloaders >= this.startedDownloaders.length)
+    {
+      this.done();
+    }
+  }
+}
+
+class RepresentationDownloadThread extends Thread
+{
+  private final Representation toDownload;
+  private final ThreadedDownloader parent;
+  
+  public RepresentationDownloadThread(Representation toDownload, ThreadedDownloader mainDownloader)
+  {
+    this.toDownload = toDownload;
+    this.parent = mainDownloader;
+  }
+  
+  @Override
+  public void run()
+  {
+    super.run();
+    
+    System.out.println("Handling representation: " + this.toDownload.name + ", bandwidth: " + this.toDownload.bandwidth);
+    for (DownloadTarget target : this.toDownload.filesToDownload)
+    {
+      if (this.parent.canceled)
+      {
+        this.parent.done();
+        return;
+      }
+
+      if (new File(target.fileName).exists())
+      {
+        if (parent.currentUI != null)
+        {
+          parent.currentUI.onFileHandled(target);
+        }
+        continue;
+      }
+
+      System.out.println("downloading: " + target.downloadURL + " to: " + target.fileName);
+      DownloadHelper.downloadUrlContentToFile(target.downloadURL, target.fileName);
+
+      if (parent.currentUI != null)
+      {
+        parent.currentUI.onFileHandled(target);
+      }
+    }
+
+    if (parent.currentUI != null)
+    {
+      parent.onRepresentationDone();
+    }
   }
 }

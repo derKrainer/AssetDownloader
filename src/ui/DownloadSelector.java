@@ -15,7 +15,6 @@ import javax.swing.JList;
 import javax.swing.ListModel;
 import javax.swing.event.ListDataListener;
 
-import download.DownloadHelper;
 import download.types.AdaptationSet;
 import download.types.ManifestDownloadnfo;
 import download.types.Period;
