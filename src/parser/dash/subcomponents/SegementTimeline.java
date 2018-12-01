@@ -108,6 +108,6 @@ public class SegementTimeline extends DashComponent
 
   protected String replacePlaceholders(String url, int index, DashRepresentation rep)
   {
-    return url.replace("$Time$", Integer.toString(this.entries.get(index).startTime));
+    return url.replace("$Time$", Long.toString(this.entries.get(index).startTime));
   }
 }

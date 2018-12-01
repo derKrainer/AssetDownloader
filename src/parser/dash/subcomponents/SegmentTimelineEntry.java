@@ -8,8 +8,8 @@ import parser.dash.DashComponent;
 
 public class SegmentTimelineEntry extends DashComponent
 {
-  public int startTime = -1;
-  public int duration;
+  public long startTime = -1;
+  public long duration;
   public int repeat = 0;
   public SegmentTimelineEntry preceedingEntry;
 
@@ -53,7 +53,7 @@ public class SegmentTimelineEntry extends DashComponent
       switch (attr.getNodeName()) {
       case "D":
       case "d":
-        this.duration = Integer.parseInt(attr.getNodeValue());
+        this.duration = Long.parseLong(attr.getNodeValue());
         break;
       case "R":
       case "r":
@@ -62,7 +62,8 @@ public class SegmentTimelineEntry extends DashComponent
 
       case "T":
       case "t":
-        this.startTime = Integer.parseInt(attr.getNodeValue());
+        this.startTime = Long.parseLong(attr.getNodeValue());
+        break;
 
       default:
       {
