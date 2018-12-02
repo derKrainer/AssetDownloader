@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MPD xmlns="urn:mpeg:dash:schema:mpd:2011" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	profiles="urn:mpeg:dash:profile:isoff-live:2011" type="static"
+	mediaPresentationDuration="PT20.410S" minBufferTime="PT6S">
+	<Period>
+		<AdaptationSet id="1" group="5" profiles="ccff"
+			bitstreamSwitching="false" segmentAlignment="true" contentType="audio"
+			mimeType="audio/mp4" codecs="mp4a.40.2" lang="en">
+			<SegmentTemplate timescale="10000000"
+				media="QualityLevels($Bandwidth$)/Fragments(aac_eng_2_127_2_1=$Time$,format=mpd-time-csf)"
+				initialization="QualityLevels($Bandwidth$)/Fragments(aac_eng_2_127_2_1=i,format=mpd-time-csf)">
+				<SegmentTimeline>
+					<S d="50155102" r="3" />
+					<S d="3482993" />
+				</SegmentTimeline>
+			</SegmentTemplate>
+			<Representation id="5_A_aac_eng_2_127_2_1_1"
+				bandwidth="127000" audioSamplingRate="44100" />
+		</AdaptationSet>
+		<AdaptationSet id="2" group="1" profiles="ccff"
+			bitstreamSwitching="false" segmentAlignment="true" contentType="video"
+			mimeType="video/mp4" codecs="avc1.64001E" maxWidth="720" maxHeight="408"
+			startWithSAP="1">
+			<SegmentTemplate timescale="10000000"
+				media="QualityLevels($Bandwidth$)/Fragments(video=$Time$,format=mpd-time-csf)"
+				initialization="QualityLevels($Bandwidth$)/Fragments(video=i,format=mpd-time-csf)">
+				<SegmentTimeline>
+					<S d="50050000" r="3" />
+					<S d="2669333" />
+				</SegmentTimeline>
+			</SegmentTemplate>
+			<Representation id="1_V_video_1" bandwidth="508000"
+				codecs="avc1.640015" width="480" height="272" />
+			<Representation id="1_V_video_2" bandwidth="803000"
+				width="720" height="408" />
+			<Representation id="1_V_video_3" bandwidth="1152000"
+				width="720" height="408" />
+			<Representation id="1_V_video_4" bandwidth="1810000"
+				width="720" height="408" />
+		</AdaptationSet>
+	</Period>
+</MPD>
