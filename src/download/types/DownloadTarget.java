@@ -16,4 +16,15 @@ public class DownloadTarget
   {
     return "Download: " + this.downloadURL + " to: " + this.fileName;
   }
+
+  @Override
+  public boolean equals(Object obj) 
+  {
+    if (!(obj instanceof DownloadTarget))
+    {
+      return false;
+    }
+    DownloadTarget other = (DownloadTarget)obj;
+    return this.downloadURL.equals(other.downloadURL) && this.fileName.equals(other.fileName);
+  }
 }

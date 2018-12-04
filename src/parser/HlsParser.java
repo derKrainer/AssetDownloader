@@ -121,7 +121,7 @@ public class HlsParser implements IParser
           // everything after the 0th one is just internal
           if (periodIndex == 0)
           {
-            String manifestFileName = this.baseDirWithTargetFolder + adSet.representations.get(repIndex).name + ".m3u8";
+            String manifestFileName = this.baseDirWithTargetFolder + adSet.representations.get(repIndex).id + ".m3u8";
 
             FileHelper.writeContentToFile(manifestFileName, newFileContent);
           }
@@ -159,7 +159,7 @@ public class HlsParser implements IParser
           // this is the first representation to venture into a new period
           AdaptationSet oldAdSet = currentRepresentation.containingAdaptationSet;
           Period newPeriod = new Period(PERIOD_ID_PREFIX + this.periodCounter++);
-          newAdaptationSet = new AdaptationSet(oldAdSet.name);
+          newAdaptationSet = new AdaptationSet(oldAdSet.id);
           this.downloadInfo.periods.add(newPeriod);
           newPeriod.addAdaptationSet(newAdaptationSet);
         }
@@ -174,7 +174,7 @@ public class HlsParser implements IParser
         currentRepresentation.manifestContent = oldContent;
         String newContent = manifestContent.substring(lastDiscontinuityTagIndex);
 
-        currentRepresentation = new Representation(currentRepresentation.name, currentRepresentation.bandwidth);
+        currentRepresentation = new Representation(currentRepresentation.id, currentRepresentation.bandwidth);
         currentRepresentation.manifestContent = newContent;
         newAdaptationSet.addRepresentation(currentRepresentation);
       }
@@ -210,7 +210,7 @@ public class HlsParser implements IParser
     StringBuilder sb = new StringBuilder(url.length());
     sb.append(this.baseDirWithTargetFolder);
     sb.append(currentRep.containingAdaptationSet.containingPeriod.periodId).append('/');
-    sb.append(currentRep.name);
+    sb.append(currentRep.id);
     sb.append(url.substring(url.lastIndexOf('/')));
     return sb.toString();
   }

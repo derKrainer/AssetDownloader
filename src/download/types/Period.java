@@ -35,4 +35,35 @@ public class Period
   {
     return "Period:" + this.periodId;
   }
+
+  public void compareToOldPeriod(Period oldInfo, ComparisonResult container)
+  {
+    ListComparison<AdaptationSet> changes = new ListComparison<>(oldInfo.adaptationSets, this.adaptationSets);
+    container.adaptationSetChangesInPeriod.put(this.periodId, changes);
+
+    for (AdaptationSet same : changes.sameItems)
+    {
+      AdaptationSet oldSet = oldInfo.getAdaptationSetForID(same.id);
+      AdaptationSet newSet = this.getAdaptationSetForID(same.id);
+      newSet.compareToOldAdaptationSet(oldSet, container);
+    }
+  }
+
+  public AdaptationSet getAdaptationSetForID(String adaptationSetID)
+  {
+    for (AdaptationSet adSet : this.adaptationSets)
+    {
+      if (adSet.id.equals(adaptationSetID))
+      {
+        return adSet;
+      }
+    }
+    return null;
+  }
+
+  @Override
+  public boolean equals(Object other)
+  {
+    return (other instanceof Period) && this.periodId.equals(((Period)other).periodId);
+  }
 }

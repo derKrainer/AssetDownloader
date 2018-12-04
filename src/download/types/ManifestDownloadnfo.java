@@ -2,12 +2,15 @@ package download.types;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.OptionalDouble;
 
 public class ManifestDownloadnfo
 {
   public List<Period> periods = new ArrayList<>();
 
   public final String baseURL;
+
+  public boolean isLive = false;
 
   public ManifestDownloadnfo(String baseUrl)
   {
@@ -35,5 +38,33 @@ public class ManifestDownloadnfo
     }
 
     return periodString;
+  }
+
+  public ComparisonResult compareToOldManifest(ManifestDownloadnfo oldInfo)
+  {
+    ComparisonResult result = new ComparisonResult();
+
+    result.periodChanges = new ListComparison<>(oldInfo.periods, this.periods);
+
+    for (Period stayingPeriod : result.periodChanges.sameItems)
+    {
+      Period newPeriod = this.getPeriodForId(stayingPeriod.periodId);
+      Period oldPeriod = this.getPeriodForId(stayingPeriod.periodId);
+      newPeriod.compareToOldPeriod(oldPeriod, result);
+    }
+
+    return result;
+  }
+
+  public Period getPeriodForId(String periodId)
+  {
+    for (Period p : this.periods)
+    {
+      if (p.periodId.equals(periodId))
+      {
+        return p;
+      }
+    }
+    return null;
   }
 }

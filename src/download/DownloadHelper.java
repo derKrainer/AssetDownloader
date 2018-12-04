@@ -193,7 +193,7 @@ class RepresentationDownloadThread extends Thread
   {
     super.run();
     
-    System.out.println("Handling representation: " + this.toDownload.name + ", bandwidth: " + this.toDownload.bandwidth);
+    System.out.println("Handling representation: " + this.toDownload.id + ", bandwidth: " + this.toDownload.bandwidth);
     for (DownloadTarget target : this.toDownload.filesToDownload)
     {
       if (this.parent.canceled)
