@@ -3,6 +3,9 @@ package download.types;
 import java.util.ArrayList;
 import java.util.List;
 
+import download.compare.ComparisonResult;
+import download.compare.ListComparison;
+
 public class Period
 {
   public List<AdaptationSet> adaptationSets = new ArrayList<>();
@@ -39,7 +42,7 @@ public class Period
   public void compareToOldPeriod(Period oldInfo, ComparisonResult container)
   {
     ListComparison<AdaptationSet> changes = new ListComparison<>(oldInfo.adaptationSets, this.adaptationSets);
-    container.adaptationSetChangesInPeriod.put(this.periodId, changes);
+    container.adaptationSetChangesInPeriods.put(this.periodId, changes);
 
     for (AdaptationSet same : changes.sameItems)
     {

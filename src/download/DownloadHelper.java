@@ -11,9 +11,10 @@ import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 
+import download.compare.ComparisonResult;
 import download.types.DownloadTarget;
 import download.types.Representation;
-import ui.ProgressView;
+import ui.AbstractProgressView;
 import util.URLUtils;
 
 public class DownloadHelper
@@ -60,10 +61,15 @@ public class DownloadHelper
     }
   }
 
-  public static void downloadRepresentations(Representation[] toDownload, ProgressView currentUI)
+  public static void downloadRepresentations(Representation[] toDownload, AbstractProgressView currentUI)
   {
     downloaderThread = new ThreadedDownloader(toDownload, currentUI);
     downloaderThread.start();
+  }
+  
+  public static void addManifestUpdateToDownloadQueue(ComparisonResult updateDiff)
+  {
+    // TODO: wait for initial threads to finish and then start downloading the new parts
   }
 
   public static void cancelDownloading()
@@ -126,12 +132,12 @@ public class DownloadHelper
 class ThreadedDownloader extends Thread
 {
   private Representation[] toDownload;
-  public ProgressView currentUI;
+  public AbstractProgressView currentUI;
   public boolean canceled;
   public RepresentationDownloadThread[] startedDownloaders;
   protected int numberOfFinishedDownloaders = 0;
 
-  public ThreadedDownloader(Representation[] toDownload, ProgressView currentUI)
+  public ThreadedDownloader(Representation[] toDownload, AbstractProgressView currentUI)
   {
     this.toDownload = toDownload;
     this.currentUI = currentUI;

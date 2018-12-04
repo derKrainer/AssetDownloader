@@ -3,6 +3,9 @@ package download.types;
 import java.util.ArrayList;
 import java.util.List;
 
+import download.compare.ComparisonResult;
+import download.compare.ListComparison;
+
 public class AdaptationSet
 {
   public List<Representation> representations = new ArrayList<>();

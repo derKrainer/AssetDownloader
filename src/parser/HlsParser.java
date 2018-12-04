@@ -21,6 +21,9 @@ public class HlsParser implements IParser
   private int periodCounter = 1;
   private String baseDir;
   private final String baseDirWithTargetFolder;
+  
+  private String manifestLocation;
+  private String targetFolderName;
 
   public static final String PERIOD_ID_PREFIX = "period_";
 
@@ -28,9 +31,22 @@ public class HlsParser implements IParser
 
   public HlsParser(String folderName)
   {
+    this.targetFolderName = folderName;
     this.baseDir = new File(".").getAbsolutePath();
     this.baseDir = this.baseDir.substring(0, this.baseDir.length() - 1);
     this.baseDirWithTargetFolder = this.baseDir + folderName;
+  }
+  
+  @Override
+  public String getManifestLocation()
+  {
+    return this.manifestLocation;
+  }
+  
+  @Override
+  public String getTargetFolderName()
+  {
+    return this.targetFolderName;
   }
 
   /*
@@ -42,6 +58,7 @@ public class HlsParser implements IParser
   public ManifestDownloadnfo parseManifest(String manifestContent, String manifestUrl)
       throws MalformedURLException, IOException
   {
+    this.manifestLocation = manifestUrl;
 
     // TODO: update all the URLs in the manfiest to relative urls and save the
     // updated manifest(s) in the baseDir
@@ -99,6 +116,7 @@ public class HlsParser implements IParser
   public String getUpdatedManifest(Representation[] selectedRepresentations)
   {
     // TODO: filter out unwanted reps and rebuild the master playlist if available
+    // TODO: write manifest
     return null;
   }
 
@@ -282,5 +300,12 @@ public class HlsParser implements IParser
       }
     }
     return keyValuePairs;
+  }
+  
+  @Override
+  public int getLiveUpdateFrequency()
+  {
+    // TOOD: replace with #TARGET-DURATION or min(#EXT-INF)
+    return 3;
   }
 }

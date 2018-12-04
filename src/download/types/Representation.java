@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import download.compare.ComparisonResult;
+import download.compare.ListComparison;
+
 public class Representation implements Comparable<Representation>
 {
   public List<DownloadTarget> filesToDownload = new ArrayList<>();
@@ -66,7 +69,7 @@ public class Representation implements Comparable<Representation>
   public void compareToOldRepresentation(Representation oldRep, ComparisonResult container) 
   {
     ListComparison<DownloadTarget> changes = new ListComparison<>(oldRep.filesToDownload, this.filesToDownload);
-    container.downloadTargetChangesInRepresntation.put(this.id, changes);
+    container.downloadTargetChangesInRepresentations.put(this.id, changes);
   }
 
   public String generateId()

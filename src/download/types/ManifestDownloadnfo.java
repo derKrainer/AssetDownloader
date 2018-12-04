@@ -2,7 +2,9 @@ package download.types;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.OptionalDouble;
+
+import download.compare.ComparisonResult;
+import download.compare.ListComparison;
 
 public class ManifestDownloadnfo
 {

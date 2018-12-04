@@ -21,6 +21,8 @@ public class DashManifest extends DashComponent
 
   public Instant availabilityStartTime = null;
   public Instant downloadInstant = null;
+  
+  public double minimumUpdatePeriodInSeconds = -1;
 
   public double timeShiftBufferDepthInSec = -1;
 
@@ -88,6 +90,10 @@ public class DashManifest extends DashComponent
           this.isLive = false;
           System.err.println("Unknown MPD.type: " + streamType +  ". Treating stream as VOD");
         }
+      }
+      else if (attr.getNodeName().equals("minimumUpdatePeriod"))
+      {
+        this.minimumUpdatePeriodInSeconds = DashParser.parseDuration(attr.getNodeValue());
       }
       else
       {

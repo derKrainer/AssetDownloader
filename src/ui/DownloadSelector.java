@@ -58,7 +58,14 @@ public class DownloadSelector extends AbstractUIComponent
         Representation[] selectedRepresentations = new Representation[selection.size()];
         selection.toArray(selectedRepresentations);
         parser.getUpdatedManifest(selectedRepresentations);
-        new ProgressView(selectedRepresentations);
+        if (toDownload.isLive)
+        {
+          new LiveProgressView(selectedRepresentations, parser, toDownload);
+        }
+        else
+        {
+          new ProgressView(selectedRepresentations);
+        }
         destroy();
       }
     });
