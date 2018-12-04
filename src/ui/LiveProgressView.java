@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.JButton;
 import javax.swing.JProgressBar;
@@ -101,8 +102,14 @@ class ReloadThread extends Thread
         
         ComparisonResult updateDiff = nextInfo.compareToOldManifest(this.lastInfo);
         // write manifest
-        System.out.println(updateDiff);
+        Set<DownloadTarget> newTargets = updateDiff.getNewDownloadTargets();
+        for(DownloadTarget t : newTargets)
+        {
+          System.out.println("New target --> from: " + t.downloadURL + ", to: " + t.fileName);
+        }
         
+        
+        this.lastInfo = nextInfo;
       }
       catch (Exception e)
       {
