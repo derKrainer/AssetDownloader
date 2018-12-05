@@ -51,7 +51,7 @@ public class ManifestDownloadnfo
     for (Period stayingPeriod : result.periodChanges.sameItems)
     {
       Period newPeriod = this.getPeriodForId(stayingPeriod.periodId);
-      Period oldPeriod = this.getPeriodForId(stayingPeriod.periodId);
+      Period oldPeriod = oldInfo.getPeriodForId(stayingPeriod.periodId);
       newPeriod.compareToOldPeriod(oldPeriod, result);
     }
 
