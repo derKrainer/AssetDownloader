@@ -76,12 +76,10 @@ class ReloadThread extends Thread
 {
   private IParser parser;
   public boolean isStopped = false;
-  private ManifestDownloadnfo lastInfo;
 
   public ReloadThread(IParser manifestParser, ManifestDownloadnfo initialInfo)
   {
     this.parser = manifestParser;
-    this.lastInfo = initialInfo;
   }
 
   @Override
@@ -98,18 +96,23 @@ class ReloadThread extends Thread
         Constructor<? extends IParser> nextParser = this.parser.getClass().getConstructor(String.class);
         IParser newParser = nextParser.newInstance(parser.getManifestLocation());
         String updatedContent = DownloadHelper.getContent(parser.getManifestLocation());
-        ManifestDownloadnfo nextInfo = newParser.parseManifest(updatedContent, parser.getManifestLocation());
-        
-        ComparisonResult updateDiff = nextInfo.compareToOldManifest(this.lastInfo);
-        // write manifest
-        Set<DownloadTarget> newTargets = updateDiff.getNewDownloadTargets();
-        for(DownloadTarget t : newTargets)
+        if (parser.getManifestContent().equals(updatedContent))
         {
-          System.out.println("New target --> from: " + t.downloadURL + ", to: " + t.fileName);
+          System.out.println("No update happend in manifest");
         }
-        
-        
-        this.lastInfo = nextInfo;
+        else
+        {
+          ManifestDownloadnfo nextInfo = newParser.parseManifest(updatedContent, parser.getManifestLocation());
+          ComparisonResult updateDiff = nextInfo.compareToOldManifest(this.parser.parseManifest(this.parser.getManifestContent(), parser.getManifestLocation()));
+          // write manifest
+          Set<DownloadTarget> newTargets = updateDiff.getNewDownloadTargets();
+          for(DownloadTarget t : newTargets)
+          {
+            System.out.println("New target --> from: " + t.downloadURL + ", to: " + t.fileName);
+          }
+          
+          this.parser = newParser;
+        }
       }
       catch (Exception e)
       {

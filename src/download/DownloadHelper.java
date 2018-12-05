@@ -10,8 +10,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
-import download.compare.ComparisonResult;
 import download.types.DownloadTarget;
 import download.types.Representation;
 import ui.AbstractProgressView;
@@ -25,10 +27,11 @@ public class DownloadHelper
   {
     InputStreamReader reader = null;
     BufferedReader bufferdReader = null;
+    InputStream stream = null;
     try
     {
       URL url = new URL(urlString);
-      InputStream stream = url.openStream();
+      stream = url.openStream();
       reader = new InputStreamReader(stream);
       bufferdReader = new BufferedReader(reader);
       StringBuilder content = new StringBuilder();
@@ -39,12 +42,17 @@ public class DownloadHelper
         content.append(line).append("\n");
         line = bufferdReader.readLine();
       }
+      stream.close();
       return content.toString();
     }
     finally
     {
       try
       {
+        if (stream != null)
+        {
+          stream.close();
+        }
         if (reader != null)
         {
           reader.close();
@@ -67,9 +75,9 @@ public class DownloadHelper
     downloaderThread.start();
   }
   
-  public static void addManifestUpdateToDownloadQueue(ComparisonResult updateDiff)
+  public static void downloadUpdateDiff(DownloadTarget[] updatedTargets)
   {
-    // TODO: wait for initial threads to finish and then start downloading the new parts
+    
   }
 
   public static void cancelDownloading()
@@ -135,6 +143,7 @@ class ThreadedDownloader extends Thread
   public AbstractProgressView currentUI;
   public boolean canceled;
   public RepresentationDownloadThread[] startedDownloaders;
+  public UpdateLoaderThread updateLoader;
   protected int numberOfFinishedDownloaders = 0;
 
   public ThreadedDownloader(Representation[] toDownload, AbstractProgressView currentUI)
@@ -163,7 +172,20 @@ class ThreadedDownloader extends Thread
       idx++;
     }
   }
-
+  
+  public void downloadUpdateDiff(Collection<DownloadTarget> diff)
+  {
+    if (updateLoader == null)
+    {
+      this.updateLoader = new UpdateLoaderThread(diff, this);
+      this.updateLoader.start();
+    }
+    else
+    {
+      this.updateLoader.addTargets(diff);
+    }
+  }
+  
   public void done()
   {
     if (currentUI != null)
@@ -229,6 +251,69 @@ class RepresentationDownloadThread extends Thread
     if (parent.currentUI != null)
     {
       parent.onRepresentationDone();
+    }
+  }
+}
+
+class UpdateLoaderThread extends Thread
+{
+  private final ThreadedDownloader parent;
+  private List<DownloadTarget> toDownload;
+  
+  public UpdateLoaderThread(Collection<DownloadTarget> toDownload, ThreadedDownloader mainDownloader)
+  {
+    this.parent = mainDownloader;
+    this.toDownload = new ArrayList<>(toDownload);    
+  }
+  
+  public void addTargets(Collection<DownloadTarget> updatedTargets)
+  {
+    this.toDownload.addAll(updatedTargets);
+  }
+  
+  @Override
+  public void run()
+  {
+    super.run();
+    
+    while (true)
+    {
+      if (this.toDownload.size() == 0)
+      {
+        try
+        {
+          this.sleep(1000);
+        }
+        catch (InterruptedException e)
+        {
+          e.printStackTrace();
+        }
+        continue;
+      }
+      
+      DownloadTarget target = this.toDownload.remove(0);
+      if (this.parent.canceled)
+      {
+        this.parent.done();
+        return;
+      }
+
+      if (new File(target.fileName).exists())
+      {
+        if (parent.currentUI != null)
+        {
+          parent.currentUI.onFileHandled(target);
+        }
+        continue;
+      }
+
+      System.out.println("downloading: " + target.downloadURL + " to: " + target.fileName);
+      DownloadHelper.downloadUrlContentToFile(target.downloadURL, target.fileName);
+
+      if (parent.currentUI != null)
+      {
+        parent.currentUI.onFileHandled(target);
+      }
     }
   }
 }
