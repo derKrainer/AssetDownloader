@@ -17,5 +17,6 @@ public interface IParser
   int getLiveUpdateFrequency();
   
   String getManifestLocation();
+  String getManifestContent();
   String getTargetFolderName();
 }

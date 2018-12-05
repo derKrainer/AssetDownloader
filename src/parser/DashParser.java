@@ -1,6 +1,8 @@
 package parser;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,29 +18,20 @@ import parser.dash.DashRepresentation;
 import util.FileHelper;
 import util.XMLUtils;
 
-public class DashParser implements IParser
+public class DashParser extends AbstractParser
 {
   private Document manifestDocument;
-  private String targetFolder;
   private DashManifest dashManifest;
   public String baseUrl;
-  private String manifestLocation;
 
   public DashParser(String targetFolder)
   {
-    this.targetFolder = targetFolder;
-  }
-  
-  @Override
-  public String getTargetFolderName()
-  {
-    return this.targetFolder;
+    super(targetFolder);
   }
 
   @Override
-  public ManifestDownloadnfo parseManifest(String manifestContent, String manifestUrl)
+  public ManifestDownloadnfo internalParse(String manifestContent, String manifestUrl) throws MalformedURLException, IOException
   {
-    this.manifestLocation = manifestUrl;
     this.manifestDocument = XMLUtils.parseXml(manifestContent);
 
     this.dashManifest = this.parseMPDInformation();
@@ -49,12 +42,6 @@ public class DashParser implements IParser
     // System.out.println(dlInfo.toDebugString());
 
     return dlInfo;
-  }
-  
-  @Override
-  public String getManifestLocation()
-  {
-    return this.manifestLocation;
   }
 
   @Override

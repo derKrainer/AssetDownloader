@@ -14,7 +14,7 @@ import download.types.Period;
 import download.types.Representation;
 import util.FileHelper;
 
-public class HlsParser implements IParser
+public class HlsParser extends AbstractParser
 {
   private String baseURL;
   private ManifestDownloadnfo downloadInfo;
@@ -22,44 +22,27 @@ public class HlsParser implements IParser
   private String baseDir;
   private final String baseDirWithTargetFolder;
   
-  private String manifestLocation;
-  private String targetFolderName;
-
   public static final String PERIOD_ID_PREFIX = "period_";
 
   public static final String DISCONTINUITY_TAG = "#EXT-X-DISCONTINUITY";
 
   public HlsParser(String folderName)
   {
-    this.targetFolderName = folderName;
+    super(folderName);
     this.baseDir = new File(".").getAbsolutePath();
     this.baseDir = this.baseDir.substring(0, this.baseDir.length() - 1);
     this.baseDirWithTargetFolder = this.baseDir + folderName;
   }
   
-  @Override
-  public String getManifestLocation()
-  {
-    return this.manifestLocation;
-  }
-  
-  @Override
-  public String getTargetFolderName()
-  {
-    return this.targetFolderName;
-  }
-
   /*
    * (non-Javadoc)
    * 
    * @see parser.IParser#parseManifest(java.lang.String, java.lang.String)
    */
   @Override
-  public ManifestDownloadnfo parseManifest(String manifestContent, String manifestUrl)
+  public ManifestDownloadnfo internalParse(String manifestContent, String manifestUrl)
       throws MalformedURLException, IOException
   {
-    this.manifestLocation = manifestUrl;
-
     // TODO: update all the URLs in the manfiest to relative urls and save the
     // updated manifest(s) in the baseDir
 
