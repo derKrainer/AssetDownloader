@@ -75,9 +75,9 @@ public class DownloadHelper
     downloaderThread.start();
   }
   
-  public static void downloadUpdateDiff(DownloadTarget[] updatedTargets)
+  public static void downloadUpdateDiff(Collection<DownloadTarget> updatedTargets)
   {
-    
+    downloaderThread.downloadUpdateDiff(updatedTargets);
   }
 
   public static void cancelDownloading()
@@ -192,7 +192,6 @@ class ThreadedDownloader extends Thread
     {
       currentUI.onDone();
     }
-    DownloadHelper.downloaderThread = null;
   }
   
   protected void onRepresentationDone()

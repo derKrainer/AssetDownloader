@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -13,6 +14,7 @@ import javax.swing.JProgressBar;
 
 import download.DownloadHelper;
 import download.compare.ComparisonResult;
+import download.compare.ListComparison;
 import download.types.DownloadTarget;
 import download.types.ManifestDownloadnfo;
 import download.types.Representation;
@@ -94,7 +96,7 @@ class ReloadThread extends Thread
         
         // next parser
         Constructor<? extends IParser> nextParser = this.parser.getClass().getConstructor(String.class);
-        IParser newParser = nextParser.newInstance(parser.getManifestLocation());
+        IParser newParser = nextParser.newInstance(parser.getTargetFolderName());
         String updatedContent = DownloadHelper.getContent(parser.getManifestLocation());
         if (parser.getManifestContent().equals(updatedContent))
         {
@@ -104,13 +106,27 @@ class ReloadThread extends Thread
         {
           ManifestDownloadnfo nextInfo = newParser.parseManifest(updatedContent, parser.getManifestLocation());
           ComparisonResult updateDiff = nextInfo.compareToOldManifest(this.parser.parseManifest(this.parser.getManifestContent(), parser.getManifestLocation()));
-          // write manifest
+          // collect all representations which are still relevant and update the manifest with it
+          List<Representation> allRepresentationsForManifest = new ArrayList<>();
+          Collection<ListComparison<Representation>> repsInUpdatedManifest = updateDiff.representationChangesInAdaptationSets.values();
+          for (ListComparison<Representation> repInNewManifest : repsInUpdatedManifest)
+          {
+            allRepresentationsForManifest.addAll(repInNewManifest.sameItems);
+            allRepresentationsForManifest.addAll(repInNewManifest.newItems);
+          }
+          Representation[] newRepArray = new Representation[allRepresentationsForManifest.size()];
+          allRepresentationsForManifest.toArray(newRepArray);
+          newParser.getUpdatedManifest(newRepArray);
+          
+          // actually download the new files
           Set<DownloadTarget> newTargets = updateDiff.getNewDownloadTargets();
           for(DownloadTarget t : newTargets)
           {
             System.out.println("New target --> from: " + t.downloadURL + ", to: " + t.fileName);
           }
-          
+          DownloadHelper.downloadUpdateDiff(newTargets);
+
+          // update the parser so the next iteration will have differences
           this.parser = newParser;
         }
       }
