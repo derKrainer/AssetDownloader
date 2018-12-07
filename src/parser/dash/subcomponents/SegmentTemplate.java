@@ -1,5 +1,7 @@
 package parser.dash.subcomponents;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,6 +9,7 @@ import org.w3c.dom.Node;
 
 import download.types.DownloadTarget;
 import parser.dash.DashComponent;
+import parser.dash.DashPeriod;
 import parser.dash.DashRepresentation;
 import util.URLUtils;
 
@@ -93,7 +96,7 @@ public class SegmentTemplate extends DashComponent
     allFiles.add(new DownloadTarget(convertToDownloadUrl(initUrl, -1, rep, baseUrl),
         getTargetFileForUrl(this.replacePlaceholders(initUrl, -1, rep), rep, targetFolder, initUrl)));
 
-    int numberOfSegments = this.getNumberOfSegments(rep);
+    int numberOfSegments = this.getNumberOfAvailableSegments(rep);
     for (int i = this.startNumber; i < this.startNumber + numberOfSegments; i++)
     {
       String dlUrl = convertToDownloadUrl(this.mediaUrl, i, rep, baseUrl);
@@ -103,13 +106,36 @@ public class SegmentTemplate extends DashComponent
     return allFiles;
   }
 
-  protected int getNumberOfSegments(DashRepresentation rep)
+  protected int getNumberOfAvailableSegments(DashRepresentation rep)
   {
+    DashPeriod containingPeriod = rep.parent.parent;
     double segmentDuration = (double) this.duration / this.timescale;
-    double streamDuration = rep.parent.parent.getDuration();
+    if (containingPeriod.parent.isLive)
+    {
+      // |------------------------------------------------| now
+      // |---------|availabilityStartTIme -----------------
+      // ----------|------|periodStart --------------------
+      // -----------------| (segmentDuration*numSegments) |
+      // ---------------------------------------------------
+      // numSegments = toSeconds(now - periodStart) / segmentDurationInSec
+      Instant availabilityStartTime = containingPeriod.parent.availabilityStartTime;
+      Instant now = containingPeriod.parent.downloadInstant;
+      double periodStart = containingPeriod.start;
+      Instant firstAvailableSegmentTime = availabilityStartTime.plusSeconds((long) periodStart);
+      Duration streamDuration = Duration.between(firstAvailableSegmentTime, now);
+      long streamSeconds = streamDuration.getSeconds();
 
-    int numberOfSegments = (int) Math.ceil(streamDuration / segmentDuration);
-    return numberOfSegments;
+      double segmentsAvailable = streamSeconds / segmentDuration;
+      int availableSegments = (int)Math.ceil(segmentsAvailable * 1000) / 1000;
+      return availableSegments;
+    }
+    else
+    {
+      double streamDuration = containingPeriod.getDuration();
+
+      int numberOfSegments = (int) Math.ceil(streamDuration / segmentDuration);
+      return numberOfSegments;
+    }
   }
 
   protected String convertToDownloadUrl(String url, int index, DashRepresentation rep, String baseUrl)
