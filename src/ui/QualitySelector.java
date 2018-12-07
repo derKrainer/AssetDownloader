@@ -43,7 +43,15 @@ public class QualitySelector extends AbstractUIComponent
     JLabel repListLabel = new JLabel("Chose Representations to download: ");
     repListLabel.setBounds(5, 0, 590, 25);
     currentView.add(repListLabel);
-    JList<Representation> repList = new JList<Representation>(new RepresentationListModel(this.toDownload));
+    RepresentationListModel model = new RepresentationListModel(this.toDownload);
+    JList<Representation> repList = new JList<Representation>(model);
+    // select ALL THE INDICES!
+    int [] allIndices = new int[model.combinedReps.length];
+    for (int i = 0; i < allIndices.length; i++)
+    {
+      allIndices[i] = i;
+    }
+    repList.setSelectedIndices(allIndices);
     repList.setBounds(5, 30, 590, 400);
     currentView.add(repList);
 
@@ -79,7 +87,7 @@ class RepresentationListModel implements ListModel<Representation>
 {
 
   private ManifestDownloadnfo info;
-  private Representation[] combinedReps;
+  public Representation[] combinedReps;
 
   public RepresentationListModel(ManifestDownloadnfo info)
   {
