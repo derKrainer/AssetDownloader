@@ -21,13 +21,13 @@ import download.types.Period;
 import download.types.Representation;
 import parser.IParser;
 
-public class DownloadSelector extends AbstractUIComponent
+public class QualitySelector extends AbstractUIComponent
 {
   private ManifestDownloadnfo toDownload;
   private IParser parser;
   public JFrame frame;
 
-  public DownloadSelector(ManifestDownloadnfo info, IParser manifestParser)
+  public QualitySelector(ManifestDownloadnfo info, IParser manifestParser)
   {
     super("Select all Qualities you want to download", new Dimension(650, 550), false);
     this.toDownload = info;

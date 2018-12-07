@@ -8,7 +8,7 @@ import download.types.ManifestDownloadnfo;
 import parser.DashParser;
 import parser.HlsParser;
 import parser.IParser;
-import ui.DownloadSelector;
+import ui.QualitySelector;
 import ui.ManifestSelector;
 
 enum ManifestType
@@ -24,7 +24,7 @@ public class AssetDownloader
   private ManifestDownloadnfo toDownload;
   private String targetFolder;
   private IParser manifestParser;
-  public DownloadSelector currentSelector;
+  public QualitySelector currentSelector;
 
   public AssetDownloader(String manifestURL, String targetFolder)
   {
@@ -41,7 +41,7 @@ public class AssetDownloader
 
   public void openDownloadSelectorView()
   {
-    this.currentSelector = new DownloadSelector(this.toDownload, this.manifestParser);
+    this.currentSelector = new QualitySelector(this.toDownload, this.manifestParser);
   }
 
   private void getManifest() throws MalformedURLException, IOException
