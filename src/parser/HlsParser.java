@@ -40,7 +40,8 @@ public class HlsParser extends AbstractParser
    * @see parser.IParser#parseManifest(java.lang.String, java.lang.String)
    */
   @Override
-  public ManifestDownloadnfo internalParse(String manifestContent, String manifestUrl) throws MalformedURLException, IOException
+  public ManifestDownloadnfo internalParse(String manifestContent, String manifestUrl)
+      throws MalformedURLException, IOException
   {
     // TODO: update all the URLs in the manfiest to relative urls and save the
     // updated manifest(s) in the baseDir
@@ -107,7 +108,8 @@ public class HlsParser extends AbstractParser
     for (int periodIndex = 0; periodIndex < this.downloadInfo.periods.size(); periodIndex++)
     {
       Period period = this.downloadInfo.periods.get(periodIndex);
-      for (int adSetIndex = 0; adSetIndex < this.downloadInfo.periods.get(periodIndex).adaptationSets.size(); adSetIndex++)
+      for (int adSetIndex = 0; adSetIndex < this.downloadInfo.periods.get(periodIndex).adaptationSets
+          .size(); adSetIndex++)
       {
         AdaptationSet adSet = period.adaptationSets.get(adSetIndex);
         for (int repIndex = 0; repIndex < adSet.representations.size(); repIndex++)
@@ -166,7 +168,8 @@ public class HlsParser extends AbstractParser
         // split the manifest at the discontinuity tag so every representation contains
         // only its part of the manifest
         String manifestContent = currentRepresentation.manifestContent;
-        lastDiscontinuityTagIndex = manifestContent.indexOf(DISCONTINUITY_TAG, lastDiscontinuityTagIndex) + DISCONTINUITY_TAG.length();
+        lastDiscontinuityTagIndex = manifestContent.indexOf(DISCONTINUITY_TAG, lastDiscontinuityTagIndex)
+            + DISCONTINUITY_TAG.length();
         lastDiscontinuityTagIndex = Math.min(lastDiscontinuityTagIndex, manifestContent.length());
         String oldContent = manifestContent.substring(0, lastDiscontinuityTagIndex);
         currentRepresentation.manifestContent = oldContent;

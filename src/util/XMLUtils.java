@@ -43,7 +43,8 @@ public class XMLUtils
   {
     try
     {
-      return DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(new StringReader(xmlContent)));
+      return DocumentBuilderFactory.newInstance().newDocumentBuilder()
+          .parse(new InputSource(new StringReader(xmlContent)));
     }
     catch (SAXException e)
     {

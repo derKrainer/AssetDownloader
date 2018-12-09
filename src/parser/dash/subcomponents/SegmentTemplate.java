@@ -191,7 +191,8 @@ public class SegmentTemplate extends DashComponent
     this.initUrlNode.setNodeValue(targetFile);
   }
 
-  protected String adjustUrl(String url, String targetFolder, String manifestBaseUrl, DashRepresentation targetRepresentation)
+  protected String adjustUrl(String url, String targetFolder, String manifestBaseUrl,
+      DashRepresentation targetRepresentation)
   {
     StringBuffer sb = new StringBuffer();
 

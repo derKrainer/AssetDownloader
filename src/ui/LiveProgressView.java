@@ -105,11 +105,12 @@ class ReloadThread extends Thread
         else
         {
           ManifestDownloadnfo nextInfo = newParser.parseManifest(updatedContent, parser.getManifestLocation());
-          ComparisonResult updateDiff = nextInfo
-              .compareToOldManifest(this.parser.parseManifest(this.parser.getManifestContent(), parser.getManifestLocation()));
+          ComparisonResult updateDiff = nextInfo.compareToOldManifest(
+              this.parser.parseManifest(this.parser.getManifestContent(), parser.getManifestLocation()));
           // collect all representations which are still relevant and update the manifest with it
           List<Representation> allRepresentationsForManifest = new ArrayList<>();
-          Collection<ListComparison<Representation>> repsInUpdatedManifest = updateDiff.representationChangesInAdaptationSets.values();
+          Collection<ListComparison<Representation>> repsInUpdatedManifest = updateDiff.representationChangesInAdaptationSets
+              .values();
           for (ListComparison<Representation> repInNewManifest : repsInUpdatedManifest)
           {
             allRepresentationsForManifest.addAll(repInNewManifest.sameItems);

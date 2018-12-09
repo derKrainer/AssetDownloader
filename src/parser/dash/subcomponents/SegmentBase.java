@@ -44,7 +44,8 @@ public class SegmentBase extends DashComponent
       throw new RuntimeException("Missing base URL in SegmentBase");
     }
     String serverUrl = URLUtils.makeAbsoulte(baseUrl.baseUrl, manifestLocation);
-    String localPath = rep.generateDirectoryPath(targetFolder) + baseUrl.baseUrl.substring(baseUrl.baseUrl.lastIndexOf('/'));
+    String localPath = rep.generateDirectoryPath(targetFolder)
+        + baseUrl.baseUrl.substring(baseUrl.baseUrl.lastIndexOf('/'));
     singleFile.add(new DownloadTarget(serverUrl, localPath));
 
     return singleFile;

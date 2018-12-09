@@ -18,7 +18,8 @@ public abstract class AbstractParser implements IParser
   }
 
   @Override
-  public ManifestDownloadnfo parseManifest(String manifestContent, String manifestUrl) throws MalformedURLException, IOException
+  public ManifestDownloadnfo parseManifest(String manifestContent, String manifestUrl)
+      throws MalformedURLException, IOException
   {
     if (this.parsedManifest != null)
     {

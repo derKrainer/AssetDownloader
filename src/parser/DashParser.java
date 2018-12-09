@@ -30,7 +30,8 @@ public class DashParser extends AbstractParser
   }
 
   @Override
-  public ManifestDownloadnfo internalParse(String manifestContent, String manifestUrl) throws MalformedURLException, IOException
+  public ManifestDownloadnfo internalParse(String manifestContent, String manifestUrl)
+      throws MalformedURLException, IOException
   {
     this.manifestDocument = XMLUtils.parseXml(manifestContent);
 

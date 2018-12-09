@@ -151,7 +151,8 @@ public class DashRepresentation extends DashAdaptationSet
         possibleOtherBaseUrl = parent.getBaseUrl().baseUrl;
       }
       String serverUrl = URLUtils.makeAbsoulte(this.baseUrl.baseUrl, possibleOtherBaseUrl);
-      String localPath = this.generateDirectoryPath(targetFolder) + this.baseUrl.baseUrl.substring(this.baseUrl.baseUrl.lastIndexOf('/'));
+      String localPath = this.generateDirectoryPath(targetFolder)
+          + this.baseUrl.baseUrl.substring(this.baseUrl.baseUrl.lastIndexOf('/'));
       filesToDownload.add(new DownloadTarget(serverUrl, localPath));
     }
     else
