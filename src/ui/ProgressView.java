@@ -39,7 +39,7 @@ public class ProgressView extends AbstractProgressView
 
     DownloadHelper.downloadRepresentations(toDownload, this);
   }
-  
+
   @Override
   protected JProgressBar getProgressBar()
   {
@@ -56,8 +56,7 @@ public class ProgressView extends AbstractProgressView
 
     this.cancel = new JButton("Cancel");
     this.cancel.setBounds(30, 30, 300, 50);
-    this.cancel.addActionListener(new ActionListener()
-    {
+    this.cancel.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e)
       {
@@ -66,7 +65,6 @@ public class ProgressView extends AbstractProgressView
     });
     this.currentView.add(this.cancel);
   }
-  
 
   private void repaint()
   {
@@ -86,8 +84,7 @@ public class ProgressView extends AbstractProgressView
     this.currentView.add(again);
     again.setBounds(125, 100, 280, 50);
 
-    again.addActionListener(new ActionListener()
-    {
+    again.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e)
       {

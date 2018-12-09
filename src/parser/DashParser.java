@@ -97,7 +97,7 @@ public class DashParser extends AbstractParser
       targetFileName = this.targetFolder + Integer.toString(index) + ".mpd";
       index++;
     }
-    
+
     FileHelper.writeContentToFile(targetFileName, updatedManifest);
 
     return updatedManifest;
@@ -150,10 +150,10 @@ public class DashParser extends AbstractParser
     Duration d = Duration.parse(date);
     return d.toMillis() / 1000.0;
   }
-  
+
   @Override
   public int getLiveUpdateFrequency()
   {
-    return (int)this.dashManifest.minimumUpdatePeriodInSeconds * 1000;
+    return (int) this.dashManifest.minimumUpdatePeriodInSeconds * 1000;
   }
 }

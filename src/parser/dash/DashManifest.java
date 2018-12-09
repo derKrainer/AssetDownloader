@@ -21,7 +21,7 @@ public class DashManifest extends DashComponent
 
   public Instant availabilityStartTime = null;
   public Instant downloadInstant = null;
-  
+
   public double minimumUpdatePeriodInSeconds = -1;
 
   public double timeShiftBufferDepthInSec = -1;
@@ -71,13 +71,13 @@ public class DashManifest extends DashComponent
       }
       else if (attr.getNodeName().equals("availabilityStartTime"))
       {
-         this.availabilityStartTime = Instant.parse(attr.getNodeValue());
-         this.downloadInstant = Instant.now();
+        this.availabilityStartTime = Instant.parse(attr.getNodeValue());
+        this.downloadInstant = Instant.now();
       }
       else if (attr.getNodeName().equals("type"))
       {
         String streamType = attr.getNodeValue();
-        if (streamType.equals("dynamic") || streamType.equals("event")) 
+        if (streamType.equals("dynamic") || streamType.equals("event"))
         {
           this.isLive = true;
         }
@@ -88,7 +88,7 @@ public class DashManifest extends DashComponent
         else
         {
           this.isLive = false;
-          System.err.println("Unknown MPD.type: " + streamType +  ". Treating stream as VOD");
+          System.err.println("Unknown MPD.type: " + streamType + ". Treating stream as VOD");
         }
       }
       else if (attr.getNodeName().equals("minimumUpdatePeriod"))

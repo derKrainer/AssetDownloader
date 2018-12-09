@@ -46,7 +46,7 @@ public class QualitySelector extends AbstractUIComponent
     RepresentationListModel model = new RepresentationListModel(this.toDownload);
     JList<Representation> repList = new JList<Representation>(model);
     // select ALL THE INDICES!
-    int [] allIndices = new int[model.combinedReps.length];
+    int[] allIndices = new int[model.combinedReps.length];
     for (int i = 0; i < allIndices.length; i++)
     {
       allIndices[i] = i;
@@ -56,8 +56,7 @@ public class QualitySelector extends AbstractUIComponent
     currentView.add(repList);
 
     JButton dlButton = new JButton("Download");
-    dlButton.addActionListener(new ActionListener()
-    {
+    dlButton.addActionListener(new ActionListener() {
 
       @Override
       public void actionPerformed(ActionEvent e)

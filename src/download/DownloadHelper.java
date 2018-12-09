@@ -74,7 +74,7 @@ public class DownloadHelper
     downloaderThread = new ThreadedDownloader(toDownload, currentUI);
     downloaderThread.start();
   }
-  
+
   public static void downloadUpdateDiff(Collection<DownloadTarget> updatedTargets)
   {
     downloaderThread.downloadUpdateDiff(updatedTargets);
@@ -115,7 +115,8 @@ public class DownloadHelper
     catch (Exception e)
     {
       System.err.println("Could not open connection to " + url + ", reason: " + e.getMessage() + " --> skipping file.");
-    } finally
+    }
+    finally
     {
       try
       {
@@ -172,7 +173,7 @@ class ThreadedDownloader extends Thread
       idx++;
     }
   }
-  
+
   public void downloadUpdateDiff(Collection<DownloadTarget> diff)
   {
     if (updateLoader == null)
@@ -185,7 +186,7 @@ class ThreadedDownloader extends Thread
       this.updateLoader.addTargets(diff);
     }
   }
-  
+
   public void done()
   {
     if (currentUI != null)
@@ -193,7 +194,7 @@ class ThreadedDownloader extends Thread
       currentUI.onDone();
     }
   }
-  
+
   protected void onRepresentationDone()
   {
     this.numberOfFinishedDownloaders++;
@@ -208,18 +209,18 @@ class RepresentationDownloadThread extends Thread
 {
   private final Representation toDownload;
   private final ThreadedDownloader parent;
-  
+
   public RepresentationDownloadThread(Representation toDownload, ThreadedDownloader mainDownloader)
   {
     this.toDownload = toDownload;
     this.parent = mainDownloader;
   }
-  
+
   @Override
   public void run()
   {
     super.run();
-    
+
     System.out.println("Handling representation: " + this.toDownload.id + ", bandwidth: " + this.toDownload.bandwidth);
     for (DownloadTarget target : this.toDownload.filesToDownload)
     {
@@ -258,23 +259,23 @@ class UpdateLoaderThread extends Thread
 {
   private final ThreadedDownloader parent;
   private List<DownloadTarget> toDownload;
-  
+
   public UpdateLoaderThread(Collection<DownloadTarget> toDownload, ThreadedDownloader mainDownloader)
   {
     this.parent = mainDownloader;
-    this.toDownload = new ArrayList<>(toDownload);    
+    this.toDownload = new ArrayList<>(toDownload);
   }
-  
+
   public void addTargets(Collection<DownloadTarget> updatedTargets)
   {
     this.toDownload.addAll(updatedTargets);
   }
-  
+
   @Override
   public void run()
   {
     super.run();
-    
+
     while (true)
     {
       if (this.toDownload.size() == 0)
@@ -289,7 +290,7 @@ class UpdateLoaderThread extends Thread
         }
         continue;
       }
-      
+
       DownloadTarget target = this.toDownload.remove(0);
       if (this.parent.canceled)
       {

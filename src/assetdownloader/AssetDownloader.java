@@ -90,7 +90,8 @@ public class AssetDownloader
 
   private void parseManifest() throws MalformedURLException, IOException
   {
-    switch (this.manifestType) {
+    switch (this.manifestType)
+    {
     case HLS:
       this.manifestParser = new HlsParser(this.targetFolder);
       break;
@@ -107,7 +108,7 @@ public class AssetDownloader
 
   public static void main(String[] args)
   {
-//		String manifestUrl = "https://bitmovin-a.akamaihd.net/content/art-of-motion_drm/m3u8s/11331.m3u8";
+    // String manifestUrl = "https://bitmovin-a.akamaihd.net/content/art-of-motion_drm/m3u8s/11331.m3u8";
     // String manifestUrl =
     // "https://bitmovin-a.akamaihd.net/content/MI201109210084_1/mpds/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.mpd";
     if (args.length == 0)

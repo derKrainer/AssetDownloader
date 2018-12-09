@@ -67,6 +67,6 @@ public class Period
   @Override
   public boolean equals(Object other)
   {
-    return (other instanceof Period) && this.periodId.equals(((Period)other).periodId);
+    return (other instanceof Period) && this.periodId.equals(((Period) other).periodId);
   }
 }

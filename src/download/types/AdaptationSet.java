@@ -80,6 +80,6 @@ public class AdaptationSet
   @Override
   public boolean equals(Object other)
   {
-    return (other instanceof AdaptationSet) && this.generateId().equals(((AdaptationSet)other).generateId());
+    return (other instanceof AdaptationSet) && this.generateId().equals(((AdaptationSet) other).generateId());
   }
 }

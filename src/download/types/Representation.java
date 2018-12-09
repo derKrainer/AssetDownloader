@@ -66,7 +66,7 @@ public class Representation implements Comparable<Representation>
     return this.toString().compareTo(o.toString());
   }
 
-  public void compareToOldRepresentation(Representation oldRep, ComparisonResult container) 
+  public void compareToOldRepresentation(Representation oldRep, ComparisonResult container)
   {
     ListComparison<DownloadTarget> changes = new ListComparison<>(oldRep.filesToDownload, this.filesToDownload);
     container.downloadTargetChangesInRepresentations.put(this.id, changes);
@@ -80,6 +80,6 @@ public class Representation implements Comparable<Representation>
   @Override
   public boolean equals(Object other)
   {
-    return (other instanceof Representation) && this.generateId().equals(((Representation)other).generateId());
+    return (other instanceof Representation) && this.generateId().equals(((Representation) other).generateId());
   }
 }

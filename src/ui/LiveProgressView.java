@@ -93,7 +93,7 @@ class ReloadThread extends Thread
       try
       {
         this.sleep(parser.getLiveUpdateFrequency());
-        
+
         // next parser
         Constructor<? extends IParser> nextParser = this.parser.getClass().getConstructor(String.class);
         IParser newParser = nextParser.newInstance(parser.getTargetFolderName());
@@ -105,7 +105,8 @@ class ReloadThread extends Thread
         else
         {
           ManifestDownloadnfo nextInfo = newParser.parseManifest(updatedContent, parser.getManifestLocation());
-          ComparisonResult updateDiff = nextInfo.compareToOldManifest(this.parser.parseManifest(this.parser.getManifestContent(), parser.getManifestLocation()));
+          ComparisonResult updateDiff = nextInfo
+              .compareToOldManifest(this.parser.parseManifest(this.parser.getManifestContent(), parser.getManifestLocation()));
           // collect all representations which are still relevant and update the manifest with it
           List<Representation> allRepresentationsForManifest = new ArrayList<>();
           Collection<ListComparison<Representation>> repsInUpdatedManifest = updateDiff.representationChangesInAdaptationSets.values();
@@ -117,10 +118,10 @@ class ReloadThread extends Thread
           Representation[] newRepArray = new Representation[allRepresentationsForManifest.size()];
           allRepresentationsForManifest.toArray(newRepArray);
           newParser.getUpdatedManifest(newRepArray);
-          
+
           // actually download the new files
           Set<DownloadTarget> newTargets = updateDiff.getNewDownloadTargets();
-          for(DownloadTarget t : newTargets)
+          for (DownloadTarget t : newTargets)
           {
             System.out.println("New target --> from: " + t.downloadURL + ", to: " + t.fileName);
           }

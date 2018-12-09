@@ -14,22 +14,21 @@ public abstract class AbstractProgressView extends AbstractUIComponent
   {
     super(title, size, shouldInitComponents);
   }
-  
-  protected abstract JProgressBar getProgressBar(); 
-  
-  
+
+  protected abstract JProgressBar getProgressBar();
+
   public void onFileHandled(DownloadTarget doneTarget)
   {
     this.getProgressBar().setValue(this.getProgressBar().getValue() + 1);
   }
-  
+
   public void onRepresentationDone(Representation rep)
   {
 
   }
-  
+
   public void onDone()
   {
-    
+
   }
 }

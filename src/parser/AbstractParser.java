@@ -26,12 +26,13 @@ public abstract class AbstractParser implements IParser
     }
     this.manifestContent = manifestContent;
     this.manifestUrl = manifestUrl;
-    
+
     return internalParse(manifestContent, manifestUrl);
   }
-  
-  protected abstract ManifestDownloadnfo internalParse(String manifestContent, String manifestUrl) throws MalformedURLException, IOException;
-  
+
+  protected abstract ManifestDownloadnfo internalParse(String manifestContent, String manifestUrl)
+      throws MalformedURLException, IOException;
+
   @Override
   public String getManifestContent()
   {
