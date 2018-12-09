@@ -1,5 +1,8 @@
 package parser;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,20 +18,20 @@ import parser.dash.DashRepresentation;
 import util.FileHelper;
 import util.XMLUtils;
 
-public class DashParser implements IParser
+public class DashParser extends AbstractParser
 {
   private Document manifestDocument;
-  private String targetFolder;
   private DashManifest dashManifest;
   public String baseUrl;
 
   public DashParser(String targetFolder)
   {
-    this.targetFolder = targetFolder;
+    super(targetFolder);
   }
 
   @Override
-  public ManifestDownloadnfo parseManifest(String manifestContent, String manifestUrl)
+  public ManifestDownloadnfo internalParse(String manifestContent, String manifestUrl)
+      throws MalformedURLException, IOException
   {
     this.manifestDocument = XMLUtils.parseXml(manifestContent);
 
@@ -88,7 +91,15 @@ public class DashParser implements IParser
     // replace / add possible BaseURL
     String updatedManifest = XMLUtils.writeXmlToString(this.dashManifest.xmlContent);
     System.out.println(updatedManifest);
-    FileHelper.writeContentToFile(this.targetFolder + "manifest.mpd", updatedManifest);
+    String targetFileName = this.targetFolder + "manifest.mpd";
+    int index = 1;
+    while (new File(targetFileName).exists())
+    {
+      targetFileName = this.targetFolder + Integer.toString(index) + ".mpd";
+      index++;
+    }
+
+    FileHelper.writeContentToFile(targetFileName, updatedManifest);
 
     return updatedManifest;
   }
@@ -141,4 +152,9 @@ public class DashParser implements IParser
     return d.toMillis() / 1000.0;
   }
 
+  @Override
+  public int getLiveUpdateFrequency()
+  {
+    return (int) this.dashManifest.minimumUpdatePeriodInSeconds * 1000;
+  }
 }

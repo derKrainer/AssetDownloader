@@ -1,5 +1,6 @@
 package parser.dash;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +18,15 @@ public class DashManifest extends DashComponent
   public List<DashPeriod> periods = new ArrayList<>();
 
   public double duration = -1;
+
+  public Instant availabilityStartTime = null;
+  public Instant downloadInstant = null;
+
+  public double minimumUpdatePeriodInSeconds = -1;
+
+  public double timeShiftBufferDepthInSec = -1;
+
+  public boolean isLive = false;
 
   public DashManifest(Node xmlNode)
   {
@@ -55,6 +65,36 @@ public class DashManifest extends DashComponent
       {
         this.duration = DashParser.parseDuration(attr.getNodeValue());
       }
+      else if (attr.getNodeName().equals("timeShiftBufferDepth"))
+      {
+        this.timeShiftBufferDepthInSec = DashParser.parseDuration(attr.getNodeValue());
+      }
+      else if (attr.getNodeName().equals("availabilityStartTime"))
+      {
+        this.availabilityStartTime = Instant.parse(attr.getNodeValue());
+        this.downloadInstant = Instant.now();
+      }
+      else if (attr.getNodeName().equals("type"))
+      {
+        String streamType = attr.getNodeValue();
+        if (streamType.equals("dynamic") || streamType.equals("event"))
+        {
+          this.isLive = true;
+        }
+        else if (streamType.equals("static"))
+        {
+          this.isLive = false;
+        }
+        else
+        {
+          this.isLive = false;
+          System.err.println("Unknown MPD.type: " + streamType + ". Treating stream as VOD");
+        }
+      }
+      else if (attr.getNodeName().equals("minimumUpdatePeriod"))
+      {
+        this.minimumUpdatePeriodInSeconds = DashParser.parseDuration(attr.getNodeValue());
+      }
       else
       {
         System.out.println("Unhandled MPD attribute: " + attr.getNodeName());
@@ -86,6 +126,8 @@ public class DashManifest extends DashComponent
         }
       }
     }
+
+    retVal.isLive = this.isLive;
 
     return retVal;
   }

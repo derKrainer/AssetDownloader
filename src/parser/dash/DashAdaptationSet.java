@@ -71,7 +71,8 @@ public class DashAdaptationSet extends DashComponent
       {
         String stringContentType = att.getNodeValue();
 
-        switch (stringContentType) {
+        switch (stringContentType)
+        {
         case "video":
           this.dataType = ContentType.Video;
           break;

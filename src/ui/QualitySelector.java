@@ -21,13 +21,13 @@ import download.types.Period;
 import download.types.Representation;
 import parser.IParser;
 
-public class DownloadSelector extends AbstractUIComponent
+public class QualitySelector extends AbstractUIComponent
 {
   private ManifestDownloadnfo toDownload;
   private IParser parser;
   public JFrame frame;
 
-  public DownloadSelector(ManifestDownloadnfo info, IParser manifestParser)
+  public QualitySelector(ManifestDownloadnfo info, IParser manifestParser)
   {
     super("Select all Qualities you want to download", new Dimension(650, 550), false);
     this.toDownload = info;
@@ -43,13 +43,20 @@ public class DownloadSelector extends AbstractUIComponent
     JLabel repListLabel = new JLabel("Chose Representations to download: ");
     repListLabel.setBounds(5, 0, 590, 25);
     currentView.add(repListLabel);
-    JList<Representation> repList = new JList<Representation>(new RepresentationListModel(this.toDownload));
+    RepresentationListModel model = new RepresentationListModel(this.toDownload);
+    JList<Representation> repList = new JList<Representation>(model);
+    // select ALL THE INDICES!
+    int[] allIndices = new int[model.combinedReps.length];
+    for (int i = 0; i < allIndices.length; i++)
+    {
+      allIndices[i] = i;
+    }
+    repList.setSelectedIndices(allIndices);
     repList.setBounds(5, 30, 590, 400);
     currentView.add(repList);
 
     JButton dlButton = new JButton("Download");
-    dlButton.addActionListener(new ActionListener()
-    {
+    dlButton.addActionListener(new ActionListener() {
 
       @Override
       public void actionPerformed(ActionEvent e)
@@ -58,7 +65,14 @@ public class DownloadSelector extends AbstractUIComponent
         Representation[] selectedRepresentations = new Representation[selection.size()];
         selection.toArray(selectedRepresentations);
         parser.getUpdatedManifest(selectedRepresentations);
-        new ProgressView(selectedRepresentations);
+        if (toDownload.isLive)
+        {
+          new LiveProgressView(selectedRepresentations, parser, toDownload);
+        }
+        else
+        {
+          new ProgressView(selectedRepresentations);
+        }
         destroy();
       }
     });
@@ -72,7 +86,7 @@ class RepresentationListModel implements ListModel<Representation>
 {
 
   private ManifestDownloadnfo info;
-  private Representation[] combinedReps;
+  public Representation[] combinedReps;
 
   public RepresentationListModel(ManifestDownloadnfo info)
   {

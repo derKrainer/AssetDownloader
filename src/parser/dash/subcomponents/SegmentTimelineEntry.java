@@ -50,7 +50,8 @@ public class SegmentTimelineEntry extends DashComponent
   {
     for (Node attr : specialAttributesList)
     {
-      switch (attr.getNodeName()) {
+      switch (attr.getNodeName())
+      {
       case "D":
       case "d":
         this.duration = Long.parseLong(attr.getNodeValue());

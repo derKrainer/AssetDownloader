@@ -15,7 +15,7 @@ import download.types.DownloadTarget;
 import download.types.Representation;
 import parser.dash.FallbackCounters;
 
-public class ProgressView extends AbstractUIComponent
+public class ProgressView extends AbstractProgressView
 {
   private DownloadTarget[] downloadItems;
 
@@ -41,6 +41,12 @@ public class ProgressView extends AbstractUIComponent
   }
 
   @Override
+  protected JProgressBar getProgressBar()
+  {
+    return this.progress;
+  }
+
+  @Override
   protected void initComponents()
   {
     this.progress = new JProgressBar(0, this.downloadItems.length);
@@ -50,8 +56,7 @@ public class ProgressView extends AbstractUIComponent
 
     this.cancel = new JButton("Cancel");
     this.cancel.setBounds(30, 30, 300, 50);
-    this.cancel.addActionListener(new ActionListener()
-    {
+    this.cancel.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e)
       {
@@ -61,16 +66,12 @@ public class ProgressView extends AbstractUIComponent
     this.currentView.add(this.cancel);
   }
 
-  public void onFileHandled(DownloadTarget doneTarget)
-  {
-    this.progress.setValue(this.progress.getValue() + 1);
-  }
-
   private void repaint()
   {
     this.currentView.paint(this.currentView.getGraphics());
   }
 
+  @Override
   public void onDone()
   {
     // this.currentView.remove(this.progress);
@@ -83,8 +84,7 @@ public class ProgressView extends AbstractUIComponent
     this.currentView.add(again);
     again.setBounds(125, 100, 280, 50);
 
-    again.addActionListener(new ActionListener()
-    {
+    again.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e)
       {
@@ -95,10 +95,5 @@ public class ProgressView extends AbstractUIComponent
     });
 
     this.repaint();
-  }
-
-  public void onRepresentationDone(Representation rep)
-  {
-
   }
 }
