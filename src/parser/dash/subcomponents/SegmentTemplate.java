@@ -112,21 +112,29 @@ public class SegmentTemplate extends DashComponent
     double segmentDuration = (double) this.duration / this.timescale;
     if (containingPeriod.parent.isLive)
     {
-      // |------------------------------------------------| now
-      // |---------|availabilityStartTIme -----------------
-      // ----------|------|periodStart --------------------
-      // -----------------| (segmentDuration*numSegments) |
-      // ---------------------------------------------------
-      // numSegments = toSeconds(now - periodStart) / segmentDurationInSec
+      // according to my understanding the time until now is split in the following way:
+      // |###########################| - now (0 -> now)
+      // |#########| ----------------- - availabilityStartTime (0 -> startOfStream)
+      // ----------|#########|-------- - periodStart (startOfStream -> startOfAvailablity)
+      // --------------------|#######| - availableSegments (startOfAvailabilty -> now)
+      // -----------------------------------------------------
+      // numSegmentsAvailable = toSeconds(now - periodStart) / segmentDurationInSec
       Instant availabilityStartTime = containingPeriod.parent.availabilityStartTime;
       Instant now = containingPeriod.parent.downloadInstant;
-      double periodStart = containingPeriod.start;
-      Instant firstAvailableSegmentTime = availabilityStartTime.plusSeconds((long) periodStart);
-      Duration streamDuration = Duration.between(firstAvailableSegmentTime, now);
-      long streamSeconds = streamDuration.getSeconds();
+      Instant firstAvailableSegmentTime = availabilityStartTime.plusSeconds((long) containingPeriod.start);
+      // check if the period actually has an end time, if so use that, if not use now() as end
+      long availabilityDuration;
+      if (containingPeriod.duration > 0)
+      {
+        availabilityDuration = (long) containingPeriod.duration;
+      }
+      else
+      {
+        availabilityDuration = Duration.between(firstAvailableSegmentTime, now).getSeconds();
+      }
 
-      double segmentsAvailable = streamSeconds / segmentDuration;
-      int availableSegments = (int)Math.ceil(segmentsAvailable * 1000) / 1000;
+      double segmentsAvailable = availabilityDuration / segmentDuration;
+      int availableSegments = (int) Math.ceil(segmentsAvailable * 1000) / 1000;
       return availableSegments;
     }
     else
@@ -183,8 +191,7 @@ public class SegmentTemplate extends DashComponent
     this.initUrlNode.setNodeValue(targetFile);
   }
 
-  protected String adjustUrl(String url, String targetFolder, String manifestBaseUrl,
-      DashRepresentation targetRepresentation)
+  protected String adjustUrl(String url, String targetFolder, String manifestBaseUrl, DashRepresentation targetRepresentation)
   {
     StringBuffer sb = new StringBuffer();
 
