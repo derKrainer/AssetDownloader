@@ -5,19 +5,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import download.compare.ComparisonResult;
+import download.compare.ListComparison;
+
 public class Representation implements Comparable<Representation>
 {
   public List<DownloadTarget> filesToDownload = new ArrayList<>();
   public Map<String, String> attributes = new HashMap<>();
 
-  public final String name;
+  public final String id;
   public final int bandwidth;
   public String manifestContent = null;
   public AdaptationSet containingAdaptationSet = null;
 
   public Representation(String name, int bandwidth)
   {
-    this.name = name;
+    this.id = name;
     this.bandwidth = bandwidth;
   }
 
@@ -29,7 +32,7 @@ public class Representation implements Comparable<Representation>
       dlTargetString += "      " + target.toString() + "\n";
     }
 
-    return this.name + " @" + this.bandwidth + dlTargetString;
+    return this.id + " @" + this.bandwidth + dlTargetString;
   }
 
   @Override
@@ -40,7 +43,7 @@ public class Representation implements Comparable<Representation>
     {
       sb.append(this.containingAdaptationSet.toString()).append("; ");
     }
-    sb.append("Rep: ").append(this.name);
+    sb.append("Rep: ").append(this.id);
     sb.append(" @").append(this.bandwidth);
     return sb.toString();
   }
@@ -52,8 +55,8 @@ public class Representation implements Comparable<Representation>
     {
       sb.append(containingAdaptationSet.containingPeriod.periodId).append('_');
     }
-    sb.append(containingAdaptationSet.name).append('_');
-    sb.append(this.name);
+    sb.append(containingAdaptationSet.id).append('_');
+    sb.append(this.id);
     return sb.toString();
   }
 
@@ -61,5 +64,22 @@ public class Representation implements Comparable<Representation>
   public int compareTo(Representation o)
   {
     return this.toString().compareTo(o.toString());
+  }
+
+  public void compareToOldRepresentation(Representation oldRep, ComparisonResult container)
+  {
+    ListComparison<DownloadTarget> changes = new ListComparison<>(oldRep.filesToDownload, this.filesToDownload);
+    container.downloadTargetChangesInRepresentations.put(this.id, changes);
+  }
+
+  public String generateId()
+  {
+    return this.containingAdaptationSet.generateId() + '_' + this.id;
+  }
+
+  @Override
+  public boolean equals(Object other)
+  {
+    return (other instanceof Representation) && this.generateId().equals(((Representation) other).generateId());
   }
 }

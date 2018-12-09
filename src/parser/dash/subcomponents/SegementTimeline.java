@@ -86,7 +86,8 @@ public class SegementTimeline extends DashComponent
     for (int i = 0; i < numberOfSegments; i++)
     {
       String dlUrl = this.convertToDownloadUrl(parent.mediaUrl, i, rep, baseUrl);
-      allFiles.add(new DownloadTarget(dlUrl, parent.getTargetFileForUrl(dlUrl, rep, targetFolder, this.parent.mediaUrl)));
+      allFiles
+          .add(new DownloadTarget(dlUrl, parent.getTargetFileForUrl(dlUrl, rep, targetFolder, this.parent.mediaUrl)));
     }
 
     return allFiles;

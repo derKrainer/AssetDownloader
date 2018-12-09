@@ -13,4 +13,12 @@ public interface IParser
       throws MalformedURLException, IOException;
 
   String getUpdatedManifest(Representation[] selectedRepresentations);
+
+  int getLiveUpdateFrequency();
+
+  String getManifestLocation();
+
+  String getManifestContent();
+
+  String getTargetFolderName();
 }
