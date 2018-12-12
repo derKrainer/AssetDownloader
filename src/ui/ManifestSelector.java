@@ -34,7 +34,7 @@ public class ManifestSelector extends AbstractUIComponent
     wrapper.setLocation(5, 5);
 
     JLabel targetFolderLabel = new JLabel("Target Folder");
-    JTextField targetFolderInput = new JTextField("./download");
+    JTextField targetFolderInput = new JTextField("./downloaded");
     wrapper = wrapInputAndLabel(targetFolderLabel, targetFolderInput, textSize);
     currentView.add(wrapper);
     wrapper.setLocation(5, 40);
