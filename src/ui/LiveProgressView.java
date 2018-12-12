@@ -108,13 +108,11 @@ class ReloadThread extends Thread
           ComparisonResult updateDiff = nextInfo.compareToOldManifest(
               this.parser.parseManifest(this.parser.getManifestContent(), parser.getManifestLocation()));
           // collect all representations which are still relevant and update the manifest with it
-          List<Representation> allRepresentationsForManifest = new ArrayList<>();
-          Collection<ListComparison<Representation>> repsInUpdatedManifest = updateDiff.representationChangesInAdaptationSets
-              .values();
-          for (ListComparison<Representation> repInNewManifest : repsInUpdatedManifest)
+          Set<Representation> allRepresentationsForManifest = updateDiff.getSameAndNewRepresentations();
+          if (allRepresentationsForManifest.isEmpty())
           {
-            allRepresentationsForManifest.addAll(repInNewManifest.sameItems);
-            allRepresentationsForManifest.addAll(repInNewManifest.newItems);
+            System.err.println("No more representations found... something is fishy.");
+            continue;
           }
           Representation[] newRepArray = new Representation[allRepresentationsForManifest.size()];
           allRepresentationsForManifest.toArray(newRepArray);
