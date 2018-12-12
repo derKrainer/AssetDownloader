@@ -42,7 +42,7 @@ public class Period
   public void compareToOldPeriod(Period oldInfo, ComparisonResult container)
   {
     ListComparison<AdaptationSet> changes = new ListComparison<>(oldInfo.adaptationSets, this.adaptationSets);
-    container.adaptationSetChangesInPeriods.put(this.periodId, changes);
+    container.adaptationSetChangesInPeriod.put(this.periodId, changes);
 
     for (AdaptationSet same : changes.sameItems)
     {

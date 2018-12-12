@@ -69,7 +69,7 @@ public class Representation implements Comparable<Representation>
   public void compareToOldRepresentation(Representation oldRep, ComparisonResult container)
   {
     ListComparison<DownloadTarget> changes = new ListComparison<>(oldRep.filesToDownload, this.filesToDownload);
-    container.downloadTargetChangesInRepresentations.put(this.id, changes);
+    container.downloadTargetChangesInRepresntation.put(this.id, changes);
   }
 
   public String generateId()
