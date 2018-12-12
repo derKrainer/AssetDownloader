@@ -5,7 +5,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -14,7 +13,6 @@ import javax.swing.JProgressBar;
 
 import download.DownloadHelper;
 import download.compare.ComparisonResult;
-import download.compare.ListComparison;
 import download.types.DownloadTarget;
 import download.types.ManifestDownloadnfo;
 import download.types.Representation;
@@ -92,7 +90,7 @@ class ReloadThread extends Thread
     {
       try
       {
-        this.sleep(parser.getLiveUpdateFrequency());
+        Thread.sleep(parser.getLiveUpdateFrequency());
 
         // next parser
         Constructor<? extends IParser> nextParser = this.parser.getClass().getConstructor(String.class);
