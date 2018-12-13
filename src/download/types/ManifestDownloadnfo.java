@@ -10,13 +10,10 @@ public class ManifestDownloadnfo
 {
   public List<Period> periods = new ArrayList<>();
 
-  public final String baseURL;
-
   public boolean isLive = false;
 
-  public ManifestDownloadnfo(String baseUrl)
+  public ManifestDownloadnfo()
   {
-    this.baseURL = baseUrl;
   }
 
   @Override

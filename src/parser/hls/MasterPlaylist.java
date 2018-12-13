@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import download.types.DownloadTarget;
+import download.types.ManifestDownloadnfo;
 import parser.HlsParser;
 import util.URLUtils;
 
@@ -46,7 +47,6 @@ public class MasterPlaylist extends AbstractPlaylist
     StringBuffer updatedManifest = new StringBuffer();
     String[] allLines = this.getManifestLines();
     List<Map<String, String>> preceedingAttributes = new ArrayList<>();
-    List<String> preceedingLines = new ArrayList<>();
 
     for (int i = 0; i < allLines.length; i++)
     {
@@ -81,6 +81,7 @@ public class MasterPlaylist extends AbstractPlaylist
     }
     this.updatedMaster = updatedManifest.toString();
     
+    // wait until all children are done too
     while(this.areChildParsersRunning())
     {
       try
@@ -131,5 +132,23 @@ public class MasterPlaylist extends AbstractPlaylist
     {
       throw new RuntimeException("Invalid playlist url: " + mediaPlaylistLocation, ex);
     }
+  }
+  
+  @Override
+  public ManifestDownloadnfo toDownloadInfo(ManifestDownloadnfo previousResult)
+  {
+    ManifestDownloadnfo retVal = previousResult;
+    
+    if (retVal == null)
+    {
+      retVal = new ManifestDownloadnfo();
+    }
+    
+    for (MediaPlaylist childPlaylist : this.childLists)
+    {
+      retVal = childPlaylist.toDownloadInfo(retVal);
+    }
+    
+    return retVal;
   }
 }

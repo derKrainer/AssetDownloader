@@ -7,6 +7,7 @@ import java.util.Map;
 
 import download.DownloadHelper;
 import download.types.DownloadTarget;
+import download.types.ManifestDownloadnfo;
 import parser.HlsParser;
 
 public abstract class AbstractPlaylist
@@ -29,7 +30,9 @@ public abstract class AbstractPlaylist
   public abstract String getUpdatedManifest();
 
   public abstract List<DownloadTarget> getAllSegments();
-
+  
+  public abstract ManifestDownloadnfo toDownloadInfo(ManifestDownloadnfo previousResult);
+  
   public abstract void parse();
 
   public String getManifestContent()

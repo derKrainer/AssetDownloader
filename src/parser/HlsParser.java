@@ -1,6 +1,5 @@
 package parser;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
@@ -8,16 +7,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import download.DownloadHelper;
-import download.types.AdaptationSet;
-import download.types.DownloadTarget;
 import download.types.ManifestDownloadnfo;
-import download.types.Period;
 import download.types.Representation;
 import parser.hls.AbstractPlaylist;
 import parser.hls.MasterPlaylist;
 import parser.hls.MediaPlaylist;
-import util.FileHelper;
 
 public class HlsParser extends AbstractParser
 {

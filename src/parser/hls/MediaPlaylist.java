@@ -5,8 +5,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import download.types.AdaptationSet;
 import download.types.DownloadTarget;
+import download.types.ManifestDownloadnfo;
+import download.types.Period;
+import download.types.Representation;
 import parser.HlsParser;
+import parser.dash.FallbackCounters;
 import util.URLUtils;
 
 public class MediaPlaylist extends AbstractPlaylist
@@ -17,6 +22,8 @@ public class MediaPlaylist extends AbstractPlaylist
   private SegmentInfo lastLinesOfManifest;
 
   public String id;
+  public String groupID;
+  public int bandwidth = -1;
 
   public MediaPlaylist(String manfiestContent, List<Map<String, String>> attributes, HlsParser parser)
   {
@@ -38,12 +45,25 @@ public class MediaPlaylist extends AbstractPlaylist
     {
       if (attributeLine.get("GROUP-ID") != null)
       {
-        this.id = attributeLine.get("GROUP-ID");
+        this.groupID = attributeLine.get("GROUP-ID");
       }
       else if (attributeLine.get("BANDWIDTH") != null)
       {
-        this.id = attributeLine.get("BANDWIDTH");
+        this.bandwidth = Integer.parseInt(attributeLine.get("BANDWIDTH"));
       }
+      else if (attributeLine.get("ID") != null)
+      {
+        this.id = attributeLine.get("ID");
+      }
+    }
+    
+    if (this.id == null)
+    {
+      this.id = Integer.toString(FallbackCounters.RepresentationId);
+    }
+    if (this.bandwidth == -1)
+    {
+      this.bandwidth = FallbackCounters.Bandwidth;
     }
   }
 
@@ -123,4 +143,57 @@ public class MediaPlaylist extends AbstractPlaylist
     }
     this.lastLinesOfManifest = segmentInfo;
   }
+  
+  @Override
+  public ManifestDownloadnfo toDownloadInfo(ManifestDownloadnfo previousResult)
+  {
+    ManifestDownloadnfo retVal = previousResult;
+    if (retVal == null)
+    {
+      // create a new one and add basic structure
+      retVal = new ManifestDownloadnfo();
+      this.addDefaultPeriod(retVal, this.segentInfos.get(0).discontinuityNumber);
+    }
+    
+    List<SegmentInfo> allSegments = this.segentInfos;
+    for (SegmentInfo segInfo : allSegments)
+    {
+      this.addSegmentInfo(segInfo, retVal);
+    }
+    
+    
+    return retVal;
+  }
+  
+  private Representation addDefaultPeriod(ManifestDownloadnfo dlInfo, int discontinuityNumber)
+  {
+    String firstPeriodID = Integer.toString(discontinuityNumber);
+    Period firstPeriod = new Period(firstPeriodID); 
+    dlInfo.periods.add(firstPeriod);
+    
+    AdaptationSet defaultAdSet = new AdaptationSet(this.groupID == null ? "0" : this.groupID);
+    firstPeriod.addAdaptationSet(defaultAdSet);
+    
+    Representation rep = new Representation(this.id, this.bandwidth);
+    defaultAdSet.addRepresentation(rep);
+    
+    return rep;
+  }
+  
+  private void addSegmentInfo(SegmentInfo segInfo, ManifestDownloadnfo downloadInfo)
+  {
+    int discontinuityNumber = segInfo.discontinuityNumber;
+    Period p = downloadInfo.getPeriodForId(Integer.toString(discontinuityNumber));
+    if (p == null)
+    {
+      this.addDefaultPeriod(downloadInfo, discontinuityNumber);
+    }
+    
+    AdaptationSet containingSet = p.getAdaptationSetForID(this.groupID == null ? "0" : this.groupID);
+    
+    Representation rep = containingSet.getRepresentationForId(this.id);
+    
+    rep.filesToDownload.add(segInfo.toDownloadTarget());
+  }
+  
 }

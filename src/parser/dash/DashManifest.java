@@ -104,7 +104,7 @@ public class DashManifest extends DashComponent
 
   public ManifestDownloadnfo generateDownloadInfo(String baseUrl, String targetFolder)
   {
-    ManifestDownloadnfo retVal = new ManifestDownloadnfo(baseUrl);
+    ManifestDownloadnfo retVal = new ManifestDownloadnfo();
 
     for (DashPeriod p : this.periods)
     {
