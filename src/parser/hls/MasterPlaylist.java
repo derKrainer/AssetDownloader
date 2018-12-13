@@ -23,9 +23,9 @@ public class MasterPlaylist extends AbstractPlaylist
   }
 
   @Override
-  public List<DownloadTarget> getAllSegments() 
+  public List<DownloadTarget> getAllSegments()
   {
-    List<DownloadTarget> allTargets =  new ArrayList<>();
+    List<DownloadTarget> allTargets = new ArrayList<>();
 
     for (MediaPlaylist playlist : this.childLists)
     {
@@ -36,13 +36,13 @@ public class MasterPlaylist extends AbstractPlaylist
   }
 
   @Override
-  public String getUpdatedManifest() 
+  public String getUpdatedManifest()
   {
     return this.updatedMaster;
   }
 
   @Override
-  public void parse() 
+  public void parse()
   {
     StringBuffer updatedManifest = new StringBuffer();
     String[] allLines = this.getManifestLines();
@@ -80,15 +80,15 @@ public class MasterPlaylist extends AbstractPlaylist
       }
     }
     this.updatedMaster = updatedManifest.toString();
-    
+
     // wait until all children are done too
-    while(this.areChildParsersRunning())
+    while (this.areChildParsersRunning())
     {
       try
       {
         Thread.sleep(100);
       }
-      catch(Exception ex)
+      catch (Exception ex)
       {
         ex.printStackTrace();
       }
@@ -97,7 +97,7 @@ public class MasterPlaylist extends AbstractPlaylist
 
   private boolean areChildParsersRunning()
   {
-    for(Thread t : this.childParserThreads) 
+    for (Thread t : this.childParserThreads)
     {
       if (t.getState() != State.TERMINATED)
       {
@@ -114,10 +114,9 @@ public class MasterPlaylist extends AbstractPlaylist
     {
       URL mediaPlaylistUrl = new URL(mediaPlaylistLocation);
       MediaPlaylist newPlaylist = new MediaPlaylist(mediaPlaylistUrl, preceedingAttributes, this.parser);
-      Thread childParser = new Thread(new Runnable()
-      {
+      Thread childParser = new Thread(new Runnable() {
         @Override
-        public void run() 
+        public void run()
         {
           newPlaylist.parse();
         }
@@ -128,27 +127,27 @@ public class MasterPlaylist extends AbstractPlaylist
       this.childLists.add(newPlaylist);
       preceedingAttributes = new ArrayList<>();
     }
-    catch(Exception ex)
+    catch (Exception ex)
     {
       throw new RuntimeException("Invalid playlist url: " + mediaPlaylistLocation, ex);
     }
   }
-  
+
   @Override
   public ManifestDownloadnfo toDownloadInfo(ManifestDownloadnfo previousResult)
   {
     ManifestDownloadnfo retVal = previousResult;
-    
+
     if (retVal == null)
     {
       retVal = new ManifestDownloadnfo();
     }
-    
+
     for (MediaPlaylist childPlaylist : this.childLists)
     {
       retVal = childPlaylist.toDownloadInfo(retVal);
     }
-    
+
     return retVal;
   }
 }

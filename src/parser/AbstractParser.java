@@ -55,7 +55,7 @@ public abstract class AbstractParser implements IParser
   }
 
   @Override
-  public String getBaseUrl() 
+  public String getBaseUrl()
   {
     return this.baseUrl;
   }

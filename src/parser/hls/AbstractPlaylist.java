@@ -30,9 +30,9 @@ public abstract class AbstractPlaylist
   public abstract String getUpdatedManifest();
 
   public abstract List<DownloadTarget> getAllSegments();
-  
+
   public abstract ManifestDownloadnfo toDownloadInfo(ManifestDownloadnfo previousResult);
-  
+
   public abstract void parse();
 
   public String getManifestContent()
@@ -41,7 +41,7 @@ public abstract class AbstractPlaylist
     {
       return this.manifestContent;
     }
-    else  if (this.manifestUrl != null )
+    else if (this.manifestUrl != null)
     {
       try
       {

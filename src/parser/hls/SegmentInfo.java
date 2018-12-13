@@ -44,7 +44,7 @@ public class SegmentInfo
 
     return newContent.toString();
   }
-  
+
   /**
    * called when all information of this segmentInfo has been collected
    */

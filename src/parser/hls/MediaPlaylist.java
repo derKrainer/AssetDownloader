@@ -39,7 +39,7 @@ public class MediaPlaylist extends AbstractPlaylist
     this.init();
   }
 
-  private void init() 
+  private void init()
   {
     for (Map<String, String> attributeLine : this.attributes)
     {
@@ -56,7 +56,7 @@ public class MediaPlaylist extends AbstractPlaylist
         this.id = attributeLine.get("ID");
       }
     }
-    
+
     if (this.id == null)
     {
       this.id = Integer.toString(FallbackCounters.RepresentationId);
@@ -68,7 +68,8 @@ public class MediaPlaylist extends AbstractPlaylist
   }
 
   @Override
-  public List<DownloadTarget> getAllSegments() {
+  public List<DownloadTarget> getAllSegments()
+  {
     List<DownloadTarget> allTargets = new ArrayList<>(this.segentInfos.size());
 
     for (SegmentInfo info : this.segentInfos)
@@ -80,7 +81,8 @@ public class MediaPlaylist extends AbstractPlaylist
   }
 
   @Override
-  public String getUpdatedManifest() {
+  public String getUpdatedManifest()
+  {
     StringBuffer newManifest = new StringBuffer();
 
     for (SegmentInfo info : this.segentInfos)
@@ -116,7 +118,8 @@ public class MediaPlaylist extends AbstractPlaylist
 
       if (currentLine.startsWith("#EXT-X-DISCONTINUITY-SEQUENCE"))
       {
-        Map<String, String> attributes = segmentInfo.preceedingAttributes.get(segmentInfo.preceedingAttributes.size() -1);
+        Map<String, String> attributes = segmentInfo.preceedingAttributes
+            .get(segmentInfo.preceedingAttributes.size() - 1);
         discontinuityNumber = Integer.parseInt(attributes.get("#EXT-X-DISCONTINUITY-SEQUENCE"));
       }
       else if (currentLine.startsWith("#EXT-X-DISCONTINUITY"))
@@ -124,18 +127,17 @@ public class MediaPlaylist extends AbstractPlaylist
         discontinuityNumber++;
       }
 
-      
       if (currentLine.startsWith("#EXTINF"))
       {
         // next line must be a url
         String urlLine = lines[++i];
-        segmentInfo.segmentUrl = URLUtils.makeAbsoulte(urlLine, this.parser.getBaseUrl());        
+        segmentInfo.segmentUrl = URLUtils.makeAbsoulte(urlLine, this.parser.getBaseUrl());
 
         segmentInfo.finish(discontinuityNumber);
         this.segentInfos.add(segmentInfo);
         segmentInfo = new SegmentInfo();
       }
-      
+
       if (currentLine.startsWith("#EXT-X-ENDLIST"))
       {
         this.isLive = false;
@@ -143,7 +145,7 @@ public class MediaPlaylist extends AbstractPlaylist
     }
     this.lastLinesOfManifest = segmentInfo;
   }
-  
+
   @Override
   public ManifestDownloadnfo toDownloadInfo(ManifestDownloadnfo previousResult)
   {
@@ -154,32 +156,31 @@ public class MediaPlaylist extends AbstractPlaylist
       retVal = new ManifestDownloadnfo();
       this.addDefaultPeriod(retVal, this.segentInfos.get(0).discontinuityNumber);
     }
-    
+
     List<SegmentInfo> allSegments = this.segentInfos;
     for (SegmentInfo segInfo : allSegments)
     {
       this.addSegmentInfo(segInfo, retVal);
     }
-    
-    
+
     return retVal;
   }
-  
+
   private Representation addDefaultPeriod(ManifestDownloadnfo dlInfo, int discontinuityNumber)
   {
     String firstPeriodID = Integer.toString(discontinuityNumber);
-    Period firstPeriod = new Period(firstPeriodID); 
+    Period firstPeriod = new Period(firstPeriodID);
     dlInfo.periods.add(firstPeriod);
-    
+
     AdaptationSet defaultAdSet = new AdaptationSet(this.groupID == null ? "0" : this.groupID);
     firstPeriod.addAdaptationSet(defaultAdSet);
-    
+
     Representation rep = new Representation(this.id, this.bandwidth);
     defaultAdSet.addRepresentation(rep);
-    
+
     return rep;
   }
-  
+
   private void addSegmentInfo(SegmentInfo segInfo, ManifestDownloadnfo downloadInfo)
   {
     int discontinuityNumber = segInfo.discontinuityNumber;
@@ -188,12 +189,12 @@ public class MediaPlaylist extends AbstractPlaylist
     {
       this.addDefaultPeriod(downloadInfo, discontinuityNumber);
     }
-    
+
     AdaptationSet containingSet = p.getAdaptationSetForID(this.groupID == null ? "0" : this.groupID);
-    
+
     Representation rep = containingSet.getRepresentationForId(this.id);
-    
+
     rep.filesToDownload.add(segInfo.toDownloadTarget());
   }
-  
+
 }

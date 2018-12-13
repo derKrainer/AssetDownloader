@@ -13,7 +13,7 @@ import download.types.Representation;
 /**
  * Information about how a manifest changed between an update
  */
-public class ComparisonResult 
+public class ComparisonResult
 {
   public ListComparison<Period> periodChanges = null;
 
@@ -34,7 +34,7 @@ public class ComparisonResult
     return newTargets;
   }
 
-  public Set<DownloadTarget> getNewDownloadTargets() 
+  public Set<DownloadTarget> getNewDownloadTargets()
   {
     Set<DownloadTarget> newTargets = new HashSet<>();
     for (ListComparison<DownloadTarget> changedTargets : downloadTargetChangesInRepresntation.values())

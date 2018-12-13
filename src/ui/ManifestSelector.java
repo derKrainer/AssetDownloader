@@ -40,8 +40,7 @@ public class ManifestSelector extends AbstractUIComponent
     wrapper.setLocation(5, 40);
 
     JButton processButton = new JButton("Process Manifest");
-    processButton.addActionListener(new ActionListener()
-    {
+    processButton.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e)
       {
