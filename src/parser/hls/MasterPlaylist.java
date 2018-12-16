@@ -1,6 +1,5 @@
 package parser.hls;
 
-import java.io.File;
 import java.lang.Thread.State;
 import java.net.URL;
 import java.util.ArrayList;
@@ -10,7 +9,6 @@ import java.util.Map;
 import download.types.DownloadTarget;
 import download.types.ManifestDownloadnfo;
 import parser.HlsParser;
-import parser.dash.FallbackCounters;
 import util.FileHelper;
 import util.URLUtils;
 

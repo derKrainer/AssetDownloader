@@ -113,7 +113,7 @@ public class MediaPlaylist extends AbstractPlaylist
     String[] lines = this.getManifestLines();
     int discontinuityNumber = 0;
 
-    SegmentInfo segmentInfo = new SegmentInfo();
+    SegmentInfo segmentInfo = new SegmentInfo(this);
     for (int i = 0; i < lines.length; i++)
     {
       String currentLine = lines[i];
@@ -144,7 +144,7 @@ public class MediaPlaylist extends AbstractPlaylist
 
         segmentInfo.finish(discontinuityNumber);
         this.segentInfos.add(segmentInfo);
-        segmentInfo = new SegmentInfo();
+        segmentInfo = new SegmentInfo(this);
       }
 
       if (currentLine.startsWith("#EXT-X-ENDLIST"))
@@ -194,14 +194,22 @@ public class MediaPlaylist extends AbstractPlaylist
   {
     int discontinuityNumber = segInfo.discontinuityNumber;
     Period p = downloadInfo.getPeriodForId(Integer.toString(discontinuityNumber));
+    Representation rep;
     if (p == null)
     {
-      this.addDefaultPeriod(downloadInfo, discontinuityNumber);
+      rep = this.addDefaultPeriod(downloadInfo, discontinuityNumber);
     }
-
-    AdaptationSet containingSet = p.getAdaptationSetForID(this.groupID == null ? "0" : this.groupID);
-
-    Representation rep = containingSet.getRepresentationForId(this.id);
+    else
+    {
+      AdaptationSet containingSet = p.getAdaptationSetForID(this.groupID == null ? "0" : this.groupID);
+      rep = containingSet.getRepresentationForId(this.id);
+      
+      if (rep == null)
+      {
+        rep = new Representation(segInfo.parent.id, segInfo.parent.bandwidth);
+        containingSet.addRepresentation(rep);
+      }
+    }
 
     rep.filesToDownload.add(segInfo.toDownloadTarget());
   }

@@ -36,6 +36,7 @@ public class HlsParser extends AbstractParser
       throws MalformedURLException, IOException
   {
     MasterPlaylist master = new MasterPlaylist(manifestContent, this);
+    master.parse();
     if (master.childLists.isEmpty())
     {
       // single variant playlist
@@ -50,9 +51,7 @@ public class HlsParser extends AbstractParser
       this.masterPlaylist = master;
     }
 
-    masterPlaylist.getAllSegments();
-
-    return null;
+    return masterPlaylist.toDownloadInfo(null);
   }
 
   @Override

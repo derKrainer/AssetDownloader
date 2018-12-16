@@ -42,6 +42,8 @@ public class LiveProgressView extends AbstractProgressView
     this.manifestUpdater = new ReloadThread(manifestParser, initalDownloadInfo);
     manifestUpdater.start();
     DownloadHelper.downloadRepresentations(toDownload, this);
+    
+    manifestParser.writeUpdatedManfiest(toDownload, 0);
   }
 
   @Override

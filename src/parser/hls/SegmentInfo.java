@@ -16,6 +16,11 @@ public class SegmentInfo
   public String segmentUrl;
 
   public int discontinuityNumber;
+  
+  public SegmentInfo(MediaPlaylist parent)
+  {
+    this.parent = parent;
+  }
 
   public DownloadTarget toDownloadTarget()
   {

@@ -22,11 +22,13 @@ public abstract class AbstractPlaylist
   public AbstractPlaylist(String manifestContent, HlsParser parser)
   {
     this.manifestContent = manifestContent;
+    this.parser = parser;
   }
 
   public AbstractPlaylist(URL manifestUrl, HlsParser parser)
   {
     this.manifestUrl = manifestUrl;
+    this.parser = parser;
   }
 
   public abstract String getUpdatedManifest();
