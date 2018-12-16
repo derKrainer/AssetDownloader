@@ -85,6 +85,8 @@ class ReloadThread extends Thread
   @Override
   public void run()
   {
+    // 0th update is the initial one
+    int numberOfUpdates = 1;
     super.run();
     while (!this.isStopped)
     {
@@ -114,7 +116,7 @@ class ReloadThread extends Thread
           }
           Representation[] newRepArray = new Representation[allRepresentationsForManifest.size()];
           allRepresentationsForManifest.toArray(newRepArray);
-          newParser.getUpdatedManifest(newRepArray);
+          newParser.writeUpdatedManfiest(newRepArray, numberOfUpdates++);
 
           // actually download the new files
           Set<DownloadTarget> newTargets = updateDiff.getNewDownloadTargets();

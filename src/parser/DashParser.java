@@ -90,7 +90,15 @@ public class DashParser extends AbstractParser
 
     // replace / add possible BaseURL
     String updatedManifest = XMLUtils.writeXmlToString(this.dashManifest.xmlContent);
-    System.out.println(updatedManifest);
+
+    return updatedManifest;
+  }
+
+  @Override
+  public void writeUpdatedManfiest(Representation[] selectedRepresentations, int numberDOfUpdates) 
+  {
+    String updatedManifest = this.getUpdatedManifest(selectedRepresentations);
+
     String targetFileName = this.targetFolder + "manifest.mpd";
     int index = 1;
     while (new File(targetFileName).exists())
@@ -99,9 +107,9 @@ public class DashParser extends AbstractParser
       index++;
     }
 
-    FileHelper.writeContentToFile(targetFileName, updatedManifest);
+    System.out.println("Writing: " + updatedManifest + "\nto: " + targetFileName);
 
-    return updatedManifest;
+    FileHelper.writeContentToFile(targetFileName, updatedManifest);
   }
 
   private void removeUnwantedRepresentations(List<DashRepresentation> toRemove)

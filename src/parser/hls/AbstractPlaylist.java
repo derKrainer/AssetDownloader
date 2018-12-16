@@ -1,5 +1,6 @@
 package parser.hls;
 
+import java.io.File;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
@@ -9,6 +10,7 @@ import download.DownloadHelper;
 import download.types.DownloadTarget;
 import download.types.ManifestDownloadnfo;
 import parser.HlsParser;
+import parser.dash.FallbackCounters;
 
 public abstract class AbstractPlaylist
 {
@@ -28,6 +30,8 @@ public abstract class AbstractPlaylist
   }
 
   public abstract String getUpdatedManifest();
+
+  public abstract void writeUpdatedManifest(int numUpdate);
 
   public abstract List<DownloadTarget> getAllSegments();
 
@@ -56,6 +60,25 @@ public abstract class AbstractPlaylist
     else
     {
       throw new RuntimeException("Playlist without URL or content cannot be processed");
+    }
+  }
+
+  
+  protected String getFileNameForUpdatedManifest(String playListName, int numUpdate)
+  {
+    if (numUpdate == 0)
+    {
+      return this.parser.getTargetFolderName() + playListName + ".m3u8";
+    }
+    else
+    {
+      String fileName = this.parser.getTargetFolderName() + playListName + "_" + numUpdate + ".m3u8";
+      while (new File(fileName).exists())
+      {
+        FallbackCounters.manifestFilePrefix = "_" + FallbackCounters.manifestFilePrefix;
+        fileName = this.parser.getTargetFolderName() + FallbackCounters.manifestFilePrefix;
+      }
+      return fileName;
     }
   }
 

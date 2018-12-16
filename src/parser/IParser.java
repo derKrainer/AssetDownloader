@@ -23,4 +23,6 @@ public interface IParser
   String getManifestContent();
 
   String getTargetFolderName();
+
+  void writeUpdatedManfiest(Representation[] selectedRepresentations, int numberOfUpdates);
 }

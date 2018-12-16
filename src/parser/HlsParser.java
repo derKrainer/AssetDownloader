@@ -58,7 +58,14 @@ public class HlsParser extends AbstractParser
   @Override
   public String getUpdatedManifest(Representation[] selectedRepresentations)
   {
+    // TODO: actually filter out unwanted reps
     return this.masterPlaylist.getUpdatedManifest();
+  }
+
+  @Override
+  public void writeUpdatedManfiest(Representation[] selectedRepresentations, int numberOfUpdates) 
+  {
+    this.masterPlaylist.writeUpdatedManifest(numberOfUpdates);  
   }
 
   @Override

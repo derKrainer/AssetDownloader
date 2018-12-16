@@ -12,6 +12,7 @@ import download.types.Period;
 import download.types.Representation;
 import parser.HlsParser;
 import parser.dash.FallbackCounters;
+import util.FileHelper;
 import util.URLUtils;
 
 public class MediaPlaylist extends AbstractPlaylist
@@ -59,11 +60,11 @@ public class MediaPlaylist extends AbstractPlaylist
 
     if (this.id == null)
     {
-      this.id = Integer.toString(FallbackCounters.RepresentationId);
+      this.id = Integer.toString(FallbackCounters.RepresentationId++);
     }
     if (this.bandwidth == -1)
     {
-      this.bandwidth = FallbackCounters.Bandwidth;
+      this.bandwidth = FallbackCounters.Bandwidth++;
     }
   }
 
@@ -96,6 +97,14 @@ public class MediaPlaylist extends AbstractPlaylist
     }
 
     return newManifest.toString();
+  }
+
+
+  @Override
+  public void writeUpdatedManifest(int numUpdate) 
+  {
+    String fileName = this.getFileNameForUpdatedManifest(this.id + '@' + this.bandwidth, numUpdate);
+    FileHelper.writeContentToFile(fileName, this.getUpdatedManifest());
   }
 
   @Override
