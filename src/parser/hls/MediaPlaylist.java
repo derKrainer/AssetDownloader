@@ -163,6 +163,7 @@ public class MediaPlaylist extends AbstractPlaylist
     {
       // create a new one and add basic structure
       retVal = new ManifestDownloadnfo();
+      retVal.isLive = this.isLive;
       this.addDefaultPeriod(retVal, this.segentInfos.get(0).discontinuityNumber);
     }
 

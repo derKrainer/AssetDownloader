@@ -151,11 +151,6 @@ public class MasterPlaylist extends AbstractPlaylist
   {
     ManifestDownloadnfo retVal = previousResult;
 
-    if (retVal == null)
-    {
-      retVal = new ManifestDownloadnfo();
-    }
-
     for (MediaPlaylist childPlaylist : this.childLists)
     {
       retVal = childPlaylist.toDownloadInfo(retVal);
