@@ -2,13 +2,12 @@ package parser.hls;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import download.types.DownloadTarget;
 
 public class SegmentInfo
 {
-  public List<Map<String, String>> preceedingAttributes = new ArrayList<>();
+  public List<AttributeLine> preceedingAttributes = new ArrayList<>();
   public List<String> preceedingLines = new ArrayList<>();
 
   public MediaPlaylist parent;

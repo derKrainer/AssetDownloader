@@ -4,7 +4,6 @@ import java.lang.Thread.State;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import download.types.DownloadTarget;
 import download.types.ManifestDownloadnfo;
@@ -59,7 +58,7 @@ public class MasterPlaylist extends AbstractPlaylist
   {
     StringBuffer updatedManifest = new StringBuffer();
     String[] allLines = this.getManifestLines();
-    List<Map<String, String>> preceedingAttributes = new ArrayList<>();
+    List<AttributeLine> preceedingAttributes = new ArrayList<>();
 
     for (int i = 0; i < allLines.length; i++)
     {
@@ -80,7 +79,7 @@ public class MasterPlaylist extends AbstractPlaylist
       }
       else if (currentLine.startsWith("#EXT-X-MEDIA") || currentLine.startsWith("#EXT-X-I-FRAME-STREAM-INF"))
       {
-        Map<String, String> attributes = preceedingAttributes.get(preceedingAttributes.size() - 1);
+        AttributeLine attributes = preceedingAttributes.get(preceedingAttributes.size() - 1);
         String mediaPlaylistLocation = attributes.get("URI");
         String updatedLocation = URLUtils.makeUrlRelative(mediaPlaylistLocation, this.parser.getBaseUrl());
         String updatedEntry = currentLine.replace(mediaPlaylistLocation, updatedLocation);
@@ -120,7 +119,7 @@ public class MasterPlaylist extends AbstractPlaylist
     return false;
   }
 
-  private void addMediaPlaylist(String manifestUrl, List<Map<String, String>> preceedingAttributes)
+  private void addMediaPlaylist(String manifestUrl, List<AttributeLine> preceedingAttributes)
   {
     String mediaPlaylistLocation = URLUtils.makeAbsoulte(manifestUrl, this.parser.getBaseUrl());
     try
@@ -157,5 +156,15 @@ public class MasterPlaylist extends AbstractPlaylist
     }
 
     return retVal;
+  }
+  
+  @Override
+  public double getTargetDuration()
+  {
+    if (this.childLists.isEmpty())
+    {
+      return 0;
+    }
+    return this.childLists.get(0).getTargetDuration();
   }
 }

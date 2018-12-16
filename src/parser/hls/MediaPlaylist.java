@@ -3,7 +3,6 @@ package parser.hls;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import download.types.AdaptationSet;
 import download.types.DownloadTarget;
@@ -17,7 +16,7 @@ import util.URLUtils;
 
 public class MediaPlaylist extends AbstractPlaylist
 {
-  public List<Map<String, String>> attributes;
+  public List<AttributeLine> attributes;
 
   public List<SegmentInfo> segentInfos = new ArrayList<>();
   private SegmentInfo lastLinesOfManifest;
@@ -26,14 +25,14 @@ public class MediaPlaylist extends AbstractPlaylist
   public String groupID;
   public int bandwidth = -1;
 
-  public MediaPlaylist(String manfiestContent, List<Map<String, String>> attributes, HlsParser parser)
+  public MediaPlaylist(String manfiestContent, List<AttributeLine> attributes, HlsParser parser)
   {
     super(manfiestContent, parser);
     this.attributes = attributes;
     this.init();
   }
 
-  public MediaPlaylist(URL manfiestLocation, List<Map<String, String>> attributes, HlsParser parser)
+  public MediaPlaylist(URL manfiestLocation, List<AttributeLine> attributes, HlsParser parser)
   {
     super(manfiestLocation, parser);
     this.attributes = attributes;
@@ -42,7 +41,7 @@ public class MediaPlaylist extends AbstractPlaylist
 
   private void init()
   {
-    for (Map<String, String> attributeLine : this.attributes)
+    for (AttributeLine attributeLine : this.attributes)
     {
       if (attributeLine.get("GROUP-ID") != null)
       {
@@ -99,9 +98,8 @@ public class MediaPlaylist extends AbstractPlaylist
     return newManifest.toString();
   }
 
-
   @Override
-  public void writeUpdatedManifest(int numUpdate) 
+  public void writeUpdatedManifest(int numUpdate)
   {
     String fileName = this.getFileNameForUpdatedManifest(this.id + '@' + this.bandwidth, numUpdate);
     FileHelper.writeContentToFile(fileName, this.getUpdatedManifest());
@@ -127,8 +125,7 @@ public class MediaPlaylist extends AbstractPlaylist
 
       if (currentLine.startsWith("#EXT-X-DISCONTINUITY-SEQUENCE"))
       {
-        Map<String, String> attributes = segmentInfo.preceedingAttributes
-            .get(segmentInfo.preceedingAttributes.size() - 1);
+        AttributeLine attributes = segmentInfo.preceedingAttributes.get(segmentInfo.preceedingAttributes.size() - 1);
         discontinuityNumber = Integer.parseInt(attributes.get("#EXT-X-DISCONTINUITY-SEQUENCE"));
       }
       else if (currentLine.startsWith("#EXT-X-DISCONTINUITY"))
@@ -204,7 +201,7 @@ public class MediaPlaylist extends AbstractPlaylist
     {
       AdaptationSet containingSet = p.getAdaptationSetForID(this.groupID == null ? "0" : this.groupID);
       rep = containingSet.getRepresentationForId(this.id);
-      
+
       if (rep == null)
       {
         rep = new Representation(segInfo.parent.id, segInfo.parent.bandwidth);
@@ -214,5 +211,17 @@ public class MediaPlaylist extends AbstractPlaylist
 
     rep.filesToDownload.add(segInfo.toDownloadTarget());
   }
-
+  
+  @Override
+  public double getTargetDuration()
+  {
+    for (AttributeLine attr : this.segentInfos.get(0).preceedingAttributes)
+    {
+      if ("#EXT-X-TARGETDURATION".equals(attr.attributeName))
+      {
+        return Double.parseDouble(attr.get(""));
+      }
+    }
+    return 0;
+  }
 }

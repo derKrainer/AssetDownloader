@@ -3,13 +3,12 @@ package parser;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import download.types.ManifestDownloadnfo;
 import download.types.Representation;
 import parser.hls.AbstractPlaylist;
+import parser.hls.AttributeLine;
 import parser.hls.MasterPlaylist;
 import parser.hls.MediaPlaylist;
 
@@ -40,10 +39,9 @@ public class HlsParser extends AbstractParser
     if (master.childLists.isEmpty())
     {
       // single variant playlist
-      Map<String, String> defaultAttributes = new HashMap<>();
-      defaultAttributes.put("GROUP-ID", "default");
-      List<Map<String, String>> attributesList = new ArrayList<>();
-      attributesList.add(defaultAttributes);
+      List<AttributeLine> attributesList = new ArrayList<>();
+      AttributeLine defaultLine = new AttributeLine("DEFAULT-INFO: GROUP-ID=default");
+      attributesList.add(defaultLine);
       this.masterPlaylist = new MediaPlaylist(manifestContent, attributesList, this);
     }
     else
@@ -70,7 +68,6 @@ public class HlsParser extends AbstractParser
   @Override
   public int getLiveUpdateFrequency()
   {
-    // TOOD: replace with #TARGET-DURATION or min(#EXT-INF)
-    return 3;
+    return ((int)(this.masterPlaylist.getTargetDuration() * 1000)) / 1000;
   }
 }

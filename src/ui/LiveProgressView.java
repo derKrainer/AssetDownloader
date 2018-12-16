@@ -16,7 +16,9 @@ import download.compare.ComparisonResult;
 import download.types.DownloadTarget;
 import download.types.ManifestDownloadnfo;
 import download.types.Representation;
+import parser.DashParser;
 import parser.IParser;
+import parser.dash.FallbackCounters;
 
 public class LiveProgressView extends AbstractProgressView
 {
@@ -100,12 +102,14 @@ class ReloadThread extends Thread
         Constructor<? extends IParser> nextParser = this.parser.getClass().getConstructor(String.class);
         IParser newParser = nextParser.newInstance(parser.getTargetFolderName());
         String updatedContent = DownloadHelper.getContent(parser.getManifestLocation());
-        if (parser.getManifestContent().equals(updatedContent))
+        // hls master manifests don't updated (only the media playlists), skip manifest updated check in that case
+        if (parser instanceof DashParser && parser.getManifestContent().equals(updatedContent))
         {
           System.out.println("No update happend in manifest");
         }
         else
         {
+          FallbackCounters.reset();
           ManifestDownloadnfo nextInfo = newParser.parseManifest(updatedContent, parser.getManifestLocation());
           ComparisonResult updateDiff = nextInfo.compareToOldManifest(
               this.parser.parseManifest(this.parser.getManifestContent(), parser.getManifestLocation()));

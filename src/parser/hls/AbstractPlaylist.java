@@ -2,9 +2,7 @@ package parser.hls;
 
 import java.io.File;
 import java.net.URL;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import download.DownloadHelper;
 import download.types.DownloadTarget;
@@ -40,6 +38,8 @@ public abstract class AbstractPlaylist
   public abstract ManifestDownloadnfo toDownloadInfo(ManifestDownloadnfo previousResult);
 
   public abstract void parse();
+  
+  public abstract double getTargetDuration();
 
   public String getManifestContent()
   {
@@ -74,11 +74,11 @@ public abstract class AbstractPlaylist
     }
     else
     {
-      String fileName = this.parser.getTargetFolderName() + playListName + "_" + numUpdate + ".m3u8";
+      String fileName = this.parser.getTargetFolderName() + FallbackCounters.manifestFilePrefix + playListName + "_" + numUpdate + ".m3u8";
       while (new File(fileName).exists())
       {
         FallbackCounters.manifestFilePrefix = "_" + FallbackCounters.manifestFilePrefix;
-        fileName = this.parser.getTargetFolderName() + FallbackCounters.manifestFilePrefix;
+        fileName = this.parser.getTargetFolderName() + FallbackCounters.manifestFilePrefix + playListName + "_" + numUpdate + ".m3u8";
       }
       return fileName;
     }
@@ -89,37 +89,8 @@ public abstract class AbstractPlaylist
     return this.getManifestContent().split("\n");
   }
 
-  protected Map<String, String> parseKeyValuePairs(String hlsLine)
+  protected AttributeLine parseKeyValuePairs(String hlsLine)
   {
-    String attributeStr = hlsLine.substring(hlsLine.indexOf(":") + 1);
-    String[] attributePairs = attributeStr.split(",");
-
-    Map<String, String> keyValuePairs = new HashMap<>();
-    for (String pair : attributePairs)
-    {
-      String[] keyValue = pair.split("=");
-      if (keyValue.length >= 2)
-      {
-        // if there are = in the value, reduce them again to a single value
-        if (keyValue.length > 2)
-        {
-          for (int i = 2; i < keyValue.length; i++)
-          {
-            keyValue[1] += '=' + keyValue[i];
-          }
-        }
-
-        // ensure upper string for further checks and remoe "" around the value
-        int start = 0, end = keyValue[1].length();
-        if (keyValue[1].charAt(0) == '"')
-        {
-          start++;
-          end--;
-        }
-
-        keyValuePairs.put(keyValue[0].toUpperCase(), keyValue[1].substring(start, end));
-      }
-    }
-    return keyValuePairs;
+    return new AttributeLine(hlsLine);
   }
 }

@@ -30,7 +30,8 @@ public abstract class AbstractParser implements IParser
     this.manifestUrl = manifestUrl;
     this.baseUrl = manifestUrl.substring(0, manifestUrl.lastIndexOf('/') + 1);
 
-    return internalParse(manifestContent, manifestUrl);
+    this.parsedManifest = internalParse(manifestContent, manifestUrl);
+    return this.parsedManifest;
   }
 
   protected abstract ManifestDownloadnfo internalParse(String manifestContent, String manifestUrl)
