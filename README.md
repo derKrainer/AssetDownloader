@@ -2,13 +2,12 @@
 Lets you download video assets in their original form while updating the URLs to they can be hosted in your test system
 
 ## Currently supports
-- Basic HLS VOD manifest downloading
+- HLS VOD manifest downloading
+- HLS live support
 - DASH VOD support
 - DASH Live support (need some testing & verification)
 
 ## TODO
-- HLS Master playlist rewriting
-- HLS Live Streams
 - HLS Backup Streams
 
 ## Usage
