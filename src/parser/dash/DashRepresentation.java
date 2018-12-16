@@ -6,6 +6,7 @@ import java.util.List;
 import org.w3c.dom.Node;
 
 import download.types.DownloadTarget;
+import parser.FallbackCounters;
 import parser.dash.subcomponents.BaseUrl;
 import parser.dash.subcomponents.SegmentBase;
 import parser.dash.subcomponents.SegmentList;

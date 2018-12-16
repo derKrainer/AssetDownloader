@@ -9,8 +9,8 @@ import download.types.DownloadTarget;
 import download.types.ManifestDownloadnfo;
 import download.types.Period;
 import download.types.Representation;
+import parser.FallbackCounters;
 import parser.HlsParser;
-import parser.dash.FallbackCounters;
 import util.FileHelper;
 import util.URLUtils;
 

@@ -13,8 +13,8 @@ import javax.swing.JProgressBar;
 import download.DownloadHelper;
 import download.types.DownloadTarget;
 import download.types.Representation;
+import parser.FallbackCounters;
 import parser.IParser;
-import parser.dash.FallbackCounters;
 
 public class ProgressView extends AbstractProgressView
 {

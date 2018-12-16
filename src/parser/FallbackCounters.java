@@ -1,4 +1,4 @@
-package parser.dash;
+package parser;
 
 public class FallbackCounters
 {

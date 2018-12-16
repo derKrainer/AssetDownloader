@@ -6,6 +6,7 @@ import java.util.List;
 import org.w3c.dom.Node;
 
 import parser.DashParser;
+import parser.FallbackCounters;
 
 public class DashPeriod extends DashComponent
 {

@@ -17,8 +17,8 @@ import download.types.DownloadTarget;
 import download.types.ManifestDownloadnfo;
 import download.types.Representation;
 import parser.DashParser;
+import parser.FallbackCounters;
 import parser.IParser;
-import parser.dash.FallbackCounters;
 
 public class LiveProgressView extends AbstractProgressView
 {

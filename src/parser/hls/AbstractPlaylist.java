@@ -7,8 +7,8 @@ import java.util.List;
 import download.DownloadHelper;
 import download.types.DownloadTarget;
 import download.types.ManifestDownloadnfo;
+import parser.FallbackCounters;
 import parser.HlsParser;
-import parser.dash.FallbackCounters;
 
 public abstract class AbstractPlaylist
 {
