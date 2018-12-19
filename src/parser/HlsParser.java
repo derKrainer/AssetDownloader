@@ -43,6 +43,7 @@ public class HlsParser extends AbstractParser
       AttributeLine defaultLine = new AttributeLine("DEFAULT-INFO: GROUP-ID=default");
       attributesList.add(defaultLine);
       this.masterPlaylist = new MediaPlaylist(manifestContent, attributesList, this);
+      this.masterPlaylist.parse();
     }
     else
     {
