@@ -77,7 +77,8 @@ public class MasterPlaylist extends AbstractPlaylist
         updatedManifest.append(updatedLocation).append('\n');
         this.addMediaPlaylist(mediaPlaylistLocation, preceedingAttributes);
       }
-      else if (currentLine.startsWith("#EXT-X-MEDIA") || currentLine.startsWith("#EXT-X-I-FRAME-STREAM-INF"))
+      else if ((currentLine.startsWith("#EXT-X-MEDIA") && !currentLine.startsWith("#EXT-X-MEDIA-SEQUENCE")) 
+            || currentLine.startsWith("#EXT-X-I-FRAME-STREAM-INF"))
       {
         AttributeLine attributes = preceedingAttributes.get(preceedingAttributes.size() - 1);
         String mediaPlaylistLocation = attributes.get("URI");
