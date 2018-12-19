@@ -58,7 +58,6 @@ public class DashManifest extends DashComponent
   @Override
   protected void parseAttributes(List<Node> specialAttributesList)
   {
-    // TODO: live attributes
     for (Node attr : specialAttributesList)
     {
       if (attr.getNodeName().equals("mediaPresentationDuration"))
