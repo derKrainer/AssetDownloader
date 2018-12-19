@@ -57,18 +57,18 @@ public class HlsParser extends AbstractParser
   public String getUpdatedManifest(Representation[] selectedRepresentations)
   {
     // TODO: actually filter out unwanted reps
-    return this.masterPlaylist.getUpdatedManifest();
+    return this.masterPlaylist.getUpdatedManifest(selectedRepresentations);
   }
 
   @Override
   public void writeUpdatedManfiest(Representation[] selectedRepresentations, int numberOfUpdates) 
   {
-    this.masterPlaylist.writeUpdatedManifest(numberOfUpdates);  
+    this.masterPlaylist.writeUpdatedManifest(selectedRepresentations, numberOfUpdates);  
   }
 
   @Override
   public int getLiveUpdateFrequency()
   {
-    return ((int)(this.masterPlaylist.getTargetDuration() * 1000)) / 1000;
+    return ((int)(this.masterPlaylist.getTargetDuration() * 1000));
   }
 }

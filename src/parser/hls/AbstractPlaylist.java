@@ -7,6 +7,7 @@ import java.util.List;
 import download.DownloadHelper;
 import download.types.DownloadTarget;
 import download.types.ManifestDownloadnfo;
+import download.types.Representation;
 import parser.FallbackCounters;
 import parser.HlsParser;
 
@@ -29,9 +30,9 @@ public abstract class AbstractPlaylist
     this.parser = parser;
   }
 
-  public abstract String getUpdatedManifest();
+  public abstract String getUpdatedManifest(Representation[] selectedRepresentations);
 
-  public abstract void writeUpdatedManifest(int numUpdate);
+  public abstract void writeUpdatedManifest(Representation[] selectedRepresentations, int numUpdate);
 
   public abstract List<DownloadTarget> getAllSegments();
 

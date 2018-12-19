@@ -81,7 +81,7 @@ public class MediaPlaylist extends AbstractPlaylist
   }
 
   @Override
-  public String getUpdatedManifest()
+  public String getUpdatedManifest(Representation[] selectedRepresentations)
   {
     StringBuffer newManifest = new StringBuffer();
 
@@ -99,10 +99,10 @@ public class MediaPlaylist extends AbstractPlaylist
   }
 
   @Override
-  public void writeUpdatedManifest(int numUpdate)
+  public void writeUpdatedManifest(Representation[] selectedRepresentations, int numUpdate)
   {
     String fileName = this.getFileNameForUpdatedManifest(this.id + '@' + this.bandwidth, numUpdate);
-    FileHelper.writeContentToFile(fileName, this.getUpdatedManifest());
+    FileHelper.writeContentToFile(fileName, this.getUpdatedManifest(selectedRepresentations));
   }
 
   @Override

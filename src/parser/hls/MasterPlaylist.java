@@ -7,6 +7,7 @@ import java.util.List;
 
 import download.types.DownloadTarget;
 import download.types.ManifestDownloadnfo;
+import download.types.Representation;
 import parser.HlsParser;
 import util.FileHelper;
 import util.URLUtils;
@@ -36,20 +37,21 @@ public class MasterPlaylist extends AbstractPlaylist
   }
 
   @Override
-  public String getUpdatedManifest()
+  public String getUpdatedManifest(Representation[] selectedReps)
   {
+    // TODO: actually really rebuild the manifest
     return this.updatedMaster;
   }
 
   @Override
-  public void writeUpdatedManifest(int numUpdate) 
+  public void writeUpdatedManifest(Representation[] selectedReps, int numUpdate) 
   {
     String targetFile = this.getFileNameForUpdatedManifest("master", numUpdate);
-    FileHelper.writeContentToFile(targetFile, this.getUpdatedManifest());
+    FileHelper.writeContentToFile(targetFile, this.getUpdatedManifest(selectedReps));
 
     for (MediaPlaylist child : this.childLists)
     {
-      child.writeUpdatedManifest(numUpdate);
+      child.writeUpdatedManifest(selectedReps, numUpdate);
     }
   }
 
