@@ -53,6 +53,8 @@ public class MasterPlaylist extends AbstractPlaylist
     }
   }
 
+  private static int numberOfParses = 0;
+
   @Override
   public void parse()
   {
@@ -73,19 +75,20 @@ public class MasterPlaylist extends AbstractPlaylist
       {
         String mediaPlaylistLocation = allLines[++i];
         mediaPlaylistLocation = URLUtils.makeAbsoulte(mediaPlaylistLocation, this.parser.getBaseUrl());
-        String updatedLocation = URLUtils.makeUrlRelative(mediaPlaylistLocation, this.parser.getBaseUrl());
-        updatedManifest.append(updatedLocation).append('\n');
-        this.addMediaPlaylist(mediaPlaylistLocation, preceedingAttributes);
+        // String updatedLocation = URLUtils.makeUrlRelative(mediaPlaylistLocation, this.parser.getBaseUrl());
+        // updatedManifest.append(updatedLocation).append('\n');
+        MediaPlaylist newList = this.addMediaPlaylist(mediaPlaylistLocation, preceedingAttributes);
+        updatedManifest.append(currentLine).append('\n');
+        updatedManifest.append(newList.getUpdatedPlaylistName(numberOfParses)).append('\n');
       }
       else if ((currentLine.startsWith("#EXT-X-MEDIA") && !currentLine.startsWith("#EXT-X-MEDIA-SEQUENCE")) 
             || currentLine.startsWith("#EXT-X-I-FRAME-STREAM-INF"))
       {
         AttributeLine attributes = preceedingAttributes.get(preceedingAttributes.size() - 1);
         String mediaPlaylistLocation = attributes.get("URI");
-        String updatedLocation = URLUtils.makeUrlRelative(mediaPlaylistLocation, this.parser.getBaseUrl());
-        String updatedEntry = currentLine.replace(mediaPlaylistLocation, updatedLocation);
+        MediaPlaylist newList = this.addMediaPlaylist(mediaPlaylistLocation, preceedingAttributes);
+        String updatedEntry = currentLine.replace(mediaPlaylistLocation, newList.getUpdatedPlaylistName(numberOfParses));
         updatedManifest.append(updatedEntry).append('\n');
-        this.addMediaPlaylist(mediaPlaylistLocation, preceedingAttributes);
       }
       else
       {
@@ -106,6 +109,7 @@ public class MasterPlaylist extends AbstractPlaylist
         ex.printStackTrace();
       }
     }
+    numberOfParses++;
   }
 
   private boolean areChildParsersRunning()
@@ -120,7 +124,7 @@ public class MasterPlaylist extends AbstractPlaylist
     return false;
   }
 
-  private void addMediaPlaylist(String manifestUrl, List<AttributeLine> preceedingAttributes)
+  private MediaPlaylist addMediaPlaylist(String manifestUrl, List<AttributeLine> preceedingAttributes)
   {
     String mediaPlaylistLocation = URLUtils.makeAbsoulte(manifestUrl, this.parser.getBaseUrl());
     try
@@ -139,6 +143,8 @@ public class MasterPlaylist extends AbstractPlaylist
 
       this.childLists.add(newPlaylist);
       preceedingAttributes = new ArrayList<>();
+
+      return newPlaylist;
     }
     catch (Exception ex)
     {

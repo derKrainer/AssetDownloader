@@ -156,6 +156,12 @@ public class MediaPlaylist extends AbstractPlaylist
   public ManifestDownloadnfo toDownloadInfo(ManifestDownloadnfo previousResult)
   {
     ManifestDownloadnfo retVal = previousResult;
+    if (this.segentInfos.isEmpty())
+    {
+      System.err.println("Empty playlist encountered, skipping." + this.getManifestContent());
+      return retVal;
+    }
+
     if (retVal == null)
     {
       // create a new one and add basic structure
@@ -223,5 +229,12 @@ public class MediaPlaylist extends AbstractPlaylist
       }
     }
     return 0;
+  }
+
+  public String getUpdatedPlaylistName(int numUpdate)
+  {
+    String absoluteFile = this.getFileNameForUpdatedManifest(this.id + '@' + this.bandwidth, numUpdate);
+    String relative = absoluteFile.substring(this.parser.targetFolder.length());
+    return relative;
   }
 }
