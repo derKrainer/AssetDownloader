@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import download.types.AdaptationSet;
 import download.types.DownloadTarget;
@@ -30,7 +31,21 @@ public class DashManifest extends DashComponent
 
   public DashManifest(Node xmlNode)
   {
-    super(xmlNode.getFirstChild());
+    super(findMpdNode(xmlNode));
+  }
+
+  private static Node findMpdNode(Node xmlDocument)
+  {
+    NodeList allChildren = xmlDocument.getChildNodes();
+    for(int i = 0; i < allChildren.getLength(); i++) 
+    {
+      if (allChildren.item(i).getNodeName().equals("MPD")) 
+      {
+        return allChildren.item(i);
+      }
+    }
+    System.err.println("No MPD node found in xml document!");
+    return null;
   }
 
   @Override

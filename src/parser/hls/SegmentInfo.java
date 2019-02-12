@@ -23,14 +23,16 @@ public class SegmentInfo
 
   public DownloadTarget toDownloadTarget()
   {
-    return new DownloadTarget(this.segmentUrl, this.getTargetFileName());
+    return new DownloadTarget(this.segmentUrl, this.getTargetFileName(false));
   }
 
-  public String getTargetFileName()
+  public String getTargetFileName(boolean manfiestEntry)
   {
     StringBuffer sb = new StringBuffer();
-    sb.append(this.parent.parser.getTargetFolderName()).append('/');
-    sb.append(this.parent.id).append('/');
+    if (!manfiestEntry) {
+      sb.append(this.parent.parser.getTargetFolderName()).append('/');
+    }
+    sb.append(this.parent.id);
     sb.append(this.segmentUrl.substring(this.segmentUrl.lastIndexOf('/')));
     return sb.toString();
   }
@@ -44,7 +46,7 @@ public class SegmentInfo
       newContent.append(line).append('\n');
     }
 
-    newContent.append(this.getTargetFileName()).append('\n');
+    newContent.append(this.getTargetFileName(true)).append('\n');
 
     return newContent.toString();
   }
