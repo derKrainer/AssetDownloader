@@ -39,6 +39,7 @@ public class MasterPlaylist extends AbstractPlaylist
   @Override
   public String getUpdatedManifest(Representation[] selectedReps)
   {
+    String newManifestContent = this.updatedMaster;
     List<MediaPlaylist> remainingPlaylists = new ArrayList<>();
     List<MediaPlaylist> deletedPlaylists = new ArrayList<>();
     for (Representation rep : selectedReps) {
@@ -51,24 +52,24 @@ public class MasterPlaylist extends AbstractPlaylist
       if (remainingPlaylists.indexOf(media) == -1) {
         deletedPlaylists.add(media);
 
-        int positionInManifest = this.updatedMaster.indexOf(media.masterPlaylistString);
+        int positionInManifest = newManifestContent.indexOf(media.masterPlaylistString);
         if (positionInManifest >= 0) {
-          String preDelete = this.updatedMaster.substring(0, positionInManifest);
-          String postDelete = this.updatedMaster.substring(positionInManifest + 1 + media.masterPlaylistString.length());
-          this.updatedMaster = preDelete + postDelete;
+          String preDelete = newManifestContent.substring(0, positionInManifest);
+          String postDelete = newManifestContent.substring(positionInManifest + 1 + media.masterPlaylistString.length());
+          newManifestContent = preDelete + postDelete;
         } else {
           System.err.println("Could not find String " + media.masterPlaylistString + " in master, skipping it");
         }
       }
     }
 
-    System.out.println(this.updatedMaster);
-    return this.updatedMaster;
+    System.out.println(newManifestContent);
+    return newManifestContent;
   }
 
   private MediaPlaylist findMediaPlaylistForRepresentation(Representation rep) {
     for(MediaPlaylist media : this.childLists) {
-      if (media.id == rep.id) {
+      if (media.id.equals(rep.id)) {
         return media;
       }
     }
