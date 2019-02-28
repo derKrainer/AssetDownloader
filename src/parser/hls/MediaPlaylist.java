@@ -21,6 +21,8 @@ public class MediaPlaylist extends AbstractPlaylist
   public List<SegmentInfo> segentInfos = new ArrayList<>();
   private SegmentInfo lastLinesOfManifest;
 
+  public String masterPlaylistString = null;
+
   public String id;
   public String groupID;
   public int bandwidth = -1;

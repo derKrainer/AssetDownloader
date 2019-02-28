@@ -39,8 +39,40 @@ public class MasterPlaylist extends AbstractPlaylist
   @Override
   public String getUpdatedManifest(Representation[] selectedReps)
   {
-    // TODO: actually really rebuild the manifest
+    List<MediaPlaylist> remainingPlaylists = new ArrayList<>();
+    List<MediaPlaylist> deletedPlaylists = new ArrayList<>();
+    for (Representation rep : selectedReps) {
+      MediaPlaylist media = this.findMediaPlaylistForRepresentation(rep);
+      remainingPlaylists.add(media);
+    }
+
+    // remove all deleted media playlists from the updated manifest
+    for (MediaPlaylist media : this.childLists) {
+      if (remainingPlaylists.indexOf(media) == -1) {
+        deletedPlaylists.add(media);
+
+        int positionInManifest = this.updatedMaster.indexOf(media.masterPlaylistString);
+        if (positionInManifest >= 0) {
+          String preDelete = this.updatedMaster.substring(0, positionInManifest);
+          String postDelete = this.updatedMaster.substring(positionInManifest + 1 + media.masterPlaylistString.length());
+          this.updatedMaster = preDelete + postDelete;
+        } else {
+          System.err.println("Could not find String " + media.masterPlaylistString + " in master, skipping it");
+        }
+      }
+    }
+
+    System.out.println(this.updatedMaster);
     return this.updatedMaster;
+  }
+
+  private MediaPlaylist findMediaPlaylistForRepresentation(Representation rep) {
+    for(MediaPlaylist media : this.childLists) {
+      if (media.id == rep.id) {
+        return media;
+      }
+    }
+    throw new RuntimeException("Unable to find matching MediaPlaylist for Representation");
   }
 
   @Override
@@ -81,6 +113,9 @@ public class MasterPlaylist extends AbstractPlaylist
         // updatedManifest.append(updatedLocation).append('\n');
         MediaPlaylist newList = this.addMediaPlaylist(mediaPlaylistLocation, preceedingAttributes);
         updatedManifest.append(currentLine).append('\n');
+        String updatedMediaPlaylistLocation = newList.getUpdatedPlaylistName(numberOfParses);
+        String masterPlaylistContent = currentLine + '\n' + updatedMediaPlaylistLocation;
+        newList.masterPlaylistString = masterPlaylistContent;
         updatedManifest.append(newList.getUpdatedPlaylistName(numberOfParses)).append('\n');
       }
       else if ((currentLine.startsWith("#EXT-X-MEDIA") && !currentLine.startsWith("#EXT-X-MEDIA-SEQUENCE")) 
@@ -88,8 +123,10 @@ public class MasterPlaylist extends AbstractPlaylist
       {
         AttributeLine attributes = preceedingAttributes.get(preceedingAttributes.size() - 1);
         String mediaPlaylistLocation = attributes.get("URI");
+        
         MediaPlaylist newList = this.addMediaPlaylist(mediaPlaylistLocation, preceedingAttributes);
         String updatedEntry = currentLine.replace(mediaPlaylistLocation, newList.getUpdatedPlaylistName(numberOfParses));
+        newList.masterPlaylistString = updatedEntry;
         updatedManifest.append(updatedEntry).append('\n');
       }
       else
