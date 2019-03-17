@@ -3,13 +3,9 @@ Lets you download video assets in their original form while updating the URLs to
 
 ## Currently supports
 - HLS VOD manifest downloading
-- HLS live support
-- DASH VOD support
-- DASH Live support (need some testing & verification)
-
-## Issues
-- the media playlist urls are wrong
-- the master playlist does not have the updated media urls
+- HLS live
+- DASH VOD
+- DASH Live (need some testing & verification)
 
 ## TODO
 - HLS Backup Streams
