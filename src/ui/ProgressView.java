@@ -39,7 +39,7 @@ public class ProgressView extends AbstractProgressView
     this.repaint();
 
     DownloadHelper.downloadRepresentations(toDownload, this);
-    
+
     manifestParser.writeUpdatedManfiest(toDownload, 0);
   }
 

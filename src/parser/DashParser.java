@@ -95,7 +95,7 @@ public class DashParser extends AbstractParser
   }
 
   @Override
-  public void writeUpdatedManfiest(Representation[] selectedRepresentations, int numberDOfUpdates) 
+  public void writeUpdatedManfiest(Representation[] selectedRepresentations, int numberDOfUpdates)
   {
     String updatedManifest = this.getUpdatedManifest(selectedRepresentations);
 

@@ -15,11 +15,11 @@ public class AttributeLine
       this.attributeName = line;
       return;
     }
-    
+
     this.attributeName = line.substring(0, line.indexOf(":")).toUpperCase();
     String attributeStr = line.substring(line.indexOf(":") + 1);
     String[] attributePairs = attributeStr.split(",");
-    
+
     if (attributePairs.length == 1)
     {
       // if only one attribute pair exists it's in the form of
@@ -55,7 +55,7 @@ public class AttributeLine
       }
     }
   }
-  
+
   public String get(String attributeName)
   {
     return this.keyValuePairs.get(attributeName);

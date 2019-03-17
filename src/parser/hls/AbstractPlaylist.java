@@ -39,7 +39,7 @@ public abstract class AbstractPlaylist
   public abstract ManifestDownloadnfo toDownloadInfo(ManifestDownloadnfo previousResult);
 
   public abstract void parse();
-  
+
   public abstract double getTargetDuration();
 
   public String getManifestContent()
@@ -66,7 +66,6 @@ public abstract class AbstractPlaylist
     }
   }
 
-  
   protected String getFileNameForUpdatedManifest(String playListName, int numUpdate)
   {
     if (numUpdate == 0)
@@ -75,11 +74,13 @@ public abstract class AbstractPlaylist
     }
     else
     {
-      String fileName = this.parser.getTargetFolderName() + FallbackCounters.manifestFilePrefix + playListName + "_" + numUpdate + ".m3u8";
+      String fileName = this.parser.getTargetFolderName() + FallbackCounters.manifestFilePrefix + playListName + "_"
+          + numUpdate + ".m3u8";
       while (new File(fileName).exists())
       {
         FallbackCounters.manifestFilePrefix = "_" + FallbackCounters.manifestFilePrefix;
-        fileName = this.parser.getTargetFolderName() + FallbackCounters.manifestFilePrefix + playListName + "_" + numUpdate + ".m3u8";
+        fileName = this.parser.getTargetFolderName() + FallbackCounters.manifestFilePrefix + playListName + "_"
+            + numUpdate + ".m3u8";
       }
       return fileName;
     }

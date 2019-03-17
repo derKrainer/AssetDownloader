@@ -15,7 +15,7 @@ public class SegmentInfo
   public String segmentUrl;
 
   public int discontinuityNumber;
-  
+
   public SegmentInfo(MediaPlaylist parent)
   {
     this.parent = parent;
@@ -29,7 +29,8 @@ public class SegmentInfo
   public String getTargetFileName(boolean manfiestEntry)
   {
     StringBuffer sb = new StringBuffer();
-    if (!manfiestEntry) {
+    if (!manfiestEntry)
+    {
       sb.append(this.parent.parser.getTargetFolderName()).append('/');
     }
     sb.append(this.parent.id);

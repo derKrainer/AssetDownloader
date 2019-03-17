@@ -61,14 +61,14 @@ public class HlsParser extends AbstractParser
   }
 
   @Override
-  public void writeUpdatedManfiest(Representation[] selectedRepresentations, int numberOfUpdates) 
+  public void writeUpdatedManfiest(Representation[] selectedRepresentations, int numberOfUpdates)
   {
-    this.masterPlaylist.writeUpdatedManifest(selectedRepresentations, numberOfUpdates);  
+    this.masterPlaylist.writeUpdatedManifest(selectedRepresentations, numberOfUpdates);
   }
 
   @Override
   public int getLiveUpdateFrequency()
   {
-    return ((int)(this.masterPlaylist.getTargetDuration() * 1000));
+    return ((int) (this.masterPlaylist.getTargetDuration() * 1000));
   }
 }

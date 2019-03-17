@@ -219,7 +219,7 @@ public class MediaPlaylist extends AbstractPlaylist
 
     rep.filesToDownload.add(segInfo.toDownloadTarget());
   }
-  
+
   @Override
   public double getTargetDuration()
   {
