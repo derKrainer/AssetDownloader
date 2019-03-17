@@ -1,4 +1,4 @@
-package parser.dash;
+package parser;
 
 public class FallbackCounters
 {
@@ -9,6 +9,8 @@ public class FallbackCounters
   public static int RepresentationId = 0;
 
   public static int Bandwidth = 1;
+
+  public static String manifestFilePrefix = "";
 
   public static void reset()
   {

@@ -13,7 +13,8 @@ import javax.swing.JProgressBar;
 import download.DownloadHelper;
 import download.types.DownloadTarget;
 import download.types.Representation;
-import parser.dash.FallbackCounters;
+import parser.FallbackCounters;
+import parser.IParser;
 
 public class ProgressView extends AbstractProgressView
 {
@@ -22,7 +23,7 @@ public class ProgressView extends AbstractProgressView
   private JProgressBar progress;
   private JButton cancel;
 
-  public ProgressView(Representation[] toDownload)
+  public ProgressView(Representation[] toDownload, IParser manifestParser)
   {
     super("Downloading", new Dimension(500, 300), false);
     List<DownloadTarget> allItems = new ArrayList<>();
@@ -38,6 +39,8 @@ public class ProgressView extends AbstractProgressView
     this.repaint();
 
     DownloadHelper.downloadRepresentations(toDownload, this);
+
+    manifestParser.writeUpdatedManfiest(toDownload, 0);
   }
 
   @Override

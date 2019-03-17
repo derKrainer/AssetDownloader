@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ListComparison<T>
-{    
+{
   public List<T> newItems = new ArrayList<>();
   public List<T> oldItems = new ArrayList<>();
   public List<T> sameItems = new ArrayList<>();
@@ -22,7 +22,7 @@ public class ListComparison<T>
       {
         sameItems.add(item);
       }
-      else 
+      else
       {
         oldItems.add(item);
       }
@@ -30,7 +30,7 @@ public class ListComparison<T>
 
     for (T item : newList)
     {
-      if (!sameItems.contains(item)) 
+      if (!sameItems.contains(item))
       {
         newItems.add(item);
       }

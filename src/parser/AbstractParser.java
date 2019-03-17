@@ -9,6 +9,7 @@ public abstract class AbstractParser implements IParser
 {
   public String manifestContent;
   public String manifestUrl;
+  public String baseUrl;
   public String targetFolder;
   public ManifestDownloadnfo parsedManifest;
 
@@ -27,8 +28,10 @@ public abstract class AbstractParser implements IParser
     }
     this.manifestContent = manifestContent;
     this.manifestUrl = manifestUrl;
+    this.baseUrl = manifestUrl.substring(0, manifestUrl.lastIndexOf('/') + 1);
 
-    return internalParse(manifestContent, manifestUrl);
+    this.parsedManifest = internalParse(manifestContent, manifestUrl);
+    return this.parsedManifest;
   }
 
   protected abstract ManifestDownloadnfo internalParse(String manifestContent, String manifestUrl)
@@ -50,6 +53,12 @@ public abstract class AbstractParser implements IParser
   public String getTargetFolderName()
   {
     return this.targetFolder;
+  }
+
+  @Override
+  public String getBaseUrl()
+  {
+    return this.baseUrl;
   }
 
 }

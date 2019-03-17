@@ -16,6 +16,8 @@ import download.compare.ComparisonResult;
 import download.types.DownloadTarget;
 import download.types.ManifestDownloadnfo;
 import download.types.Representation;
+import parser.DashParser;
+import parser.FallbackCounters;
 import parser.IParser;
 
 public class LiveProgressView extends AbstractProgressView
@@ -42,6 +44,8 @@ public class LiveProgressView extends AbstractProgressView
     this.manifestUpdater = new ReloadThread(manifestParser, initalDownloadInfo);
     manifestUpdater.start();
     DownloadHelper.downloadRepresentations(toDownload, this);
+
+    manifestParser.writeUpdatedManfiest(toDownload, 0);
   }
 
   @Override
@@ -85,6 +89,8 @@ class ReloadThread extends Thread
   @Override
   public void run()
   {
+    // 0th update is the initial one
+    int numberOfUpdates = 1;
     super.run();
     while (!this.isStopped)
     {
@@ -96,12 +102,14 @@ class ReloadThread extends Thread
         Constructor<? extends IParser> nextParser = this.parser.getClass().getConstructor(String.class);
         IParser newParser = nextParser.newInstance(parser.getTargetFolderName());
         String updatedContent = DownloadHelper.getContent(parser.getManifestLocation());
-        if (parser.getManifestContent().equals(updatedContent))
+        // hls master manifests don't updated (only the media playlists), skip manifest updated check in that case
+        if (parser instanceof DashParser && parser.getManifestContent().equals(updatedContent))
         {
           System.out.println("No update happend in manifest");
         }
         else
         {
+          FallbackCounters.reset();
           ManifestDownloadnfo nextInfo = newParser.parseManifest(updatedContent, parser.getManifestLocation());
           ComparisonResult updateDiff = nextInfo.compareToOldManifest(
               this.parser.parseManifest(this.parser.getManifestContent(), parser.getManifestLocation()));
@@ -114,7 +122,7 @@ class ReloadThread extends Thread
           }
           Representation[] newRepArray = new Representation[allRepresentationsForManifest.size()];
           allRepresentationsForManifest.toArray(newRepArray);
-          newParser.getUpdatedManifest(newRepArray);
+          newParser.writeUpdatedManfiest(newRepArray, numberOfUpdates++);
 
           // actually download the new files
           Set<DownloadTarget> newTargets = updateDiff.getNewDownloadTargets();

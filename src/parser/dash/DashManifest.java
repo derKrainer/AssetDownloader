@@ -37,9 +37,9 @@ public class DashManifest extends DashComponent
   private static Node findMpdNode(Node xmlDocument)
   {
     NodeList allChildren = xmlDocument.getChildNodes();
-    for(int i = 0; i < allChildren.getLength(); i++) 
+    for (int i = 0; i < allChildren.getLength(); i++)
     {
-      if (allChildren.item(i).getNodeName().equals("MPD")) 
+      if (allChildren.item(i).getNodeName().equals("MPD"))
       {
         return allChildren.item(i);
       }
@@ -73,7 +73,6 @@ public class DashManifest extends DashComponent
   @Override
   protected void parseAttributes(List<Node> specialAttributesList)
   {
-    // TODO: live attributes
     for (Node attr : specialAttributesList)
     {
       if (attr.getNodeName().equals("mediaPresentationDuration"))
@@ -119,7 +118,7 @@ public class DashManifest extends DashComponent
 
   public ManifestDownloadnfo generateDownloadInfo(String baseUrl, String targetFolder)
   {
-    ManifestDownloadnfo retVal = new ManifestDownloadnfo(baseUrl);
+    ManifestDownloadnfo retVal = new ManifestDownloadnfo();
 
     for (DashPeriod p : this.periods)
     {

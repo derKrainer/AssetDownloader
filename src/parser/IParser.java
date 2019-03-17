@@ -18,7 +18,11 @@ public interface IParser
 
   String getManifestLocation();
 
+  String getBaseUrl();
+
   String getManifestContent();
 
   String getTargetFolderName();
+
+  void writeUpdatedManfiest(Representation[] selectedRepresentations, int numberOfUpdates);
 }

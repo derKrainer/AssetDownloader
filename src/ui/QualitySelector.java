@@ -71,7 +71,7 @@ public class QualitySelector extends AbstractUIComponent
         }
         else
         {
-          new ProgressView(selectedRepresentations);
+          new ProgressView(selectedRepresentations, parser);
         }
         destroy();
       }

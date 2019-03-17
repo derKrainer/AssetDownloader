@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.w3c.dom.Node;
 
+import parser.FallbackCounters;
 import parser.dash.subcomponents.BaseUrl;
 import parser.dash.subcomponents.SegmentTemplate;
 
