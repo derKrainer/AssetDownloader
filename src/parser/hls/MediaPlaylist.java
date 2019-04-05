@@ -128,7 +128,7 @@ public class MediaPlaylist extends AbstractPlaylist
       if (currentLine.startsWith("#EXT-X-DISCONTINUITY-SEQUENCE"))
       {
         AttributeLine attributes = segmentInfo.preceedingAttributes.get(segmentInfo.preceedingAttributes.size() - 1);
-        discontinuityNumber = Integer.parseInt(attributes.get("#EXT-X-DISCONTINUITY-SEQUENCE"));
+        discontinuityNumber = Integer.parseInt(attributes.get(""));
       }
       else if (currentLine.startsWith("#EXT-X-DISCONTINUITY"))
       {
