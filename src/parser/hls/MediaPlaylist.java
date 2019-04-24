@@ -208,6 +208,11 @@ public class MediaPlaylist extends AbstractPlaylist
     else
     {
       AdaptationSet containingSet = p.getAdaptationSetForID(this.groupID == null ? "0" : this.groupID);
+      if (containingSet == null) {
+        containingSet = new AdaptationSet(this.groupID == null ? "0" : this.groupID);
+        p.addAdaptationSet(containingSet);
+      }
+
       rep = containingSet.getRepresentationForId(this.id);
 
       if (rep == null)
