@@ -3,6 +3,7 @@ package parser.hls;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import download.types.AdaptationSet;
 import download.types.DownloadTarget;
@@ -144,6 +145,25 @@ public class MediaPlaylist extends AbstractPlaylist
         segmentInfo.finish(discontinuityNumber);
         this.segentInfos.add(segmentInfo);
         segmentInfo = new SegmentInfo(this);
+      }
+      else if (currentLine.startsWith("#EXT-X-MAP"))
+      {
+        // FMP4 init segments
+        AttributeLine parsed = segmentInfo.preceedingAttributes.get(segmentInfo.preceedingAttributes.size() - 1);
+        String initUrl = parsed.keyValuePairs.get("URI");
+        if(parsed.keyValuePairs.get("URI") != null)
+        {
+          InitSegmentInfo initSegmentInfo = new InitSegmentInfo(this, segmentInfo, currentLine);
+          initSegmentInfo.originalInitUrl = initUrl;
+          initSegmentInfo.segmentUrl = URLUtils.makeAbsoulte(initUrl, this.parser.getBaseUrl());
+          initSegmentInfo.finish(discontinuityNumber);
+          this.segentInfos.add(initSegmentInfo);
+          segmentInfo = new SegmentInfo(this);
+        }
+        else
+        {
+          System.err.println("Unable to process #EXT-X-MAP tag, no URL found.");
+        }
       }
 
       if (currentLine.startsWith("#EXT-X-ENDLIST"))

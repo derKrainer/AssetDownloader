@@ -20,7 +20,7 @@ public class AttributeLine
     String attributeStr = line.substring(line.indexOf(":") + 1);
     String[] attributePairs = attributeStr.split(",");
 
-    if (attributePairs.length == 1)
+    if (attributePairs.length == 1 && !attributeStr.contains("="))
     {
       // if only one attribute pair exists it's in the form of
       // #EXT-X-VERSION:3
