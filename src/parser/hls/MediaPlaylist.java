@@ -3,7 +3,6 @@ package parser.hls;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import download.types.AdaptationSet;
 import download.types.DownloadTarget;
@@ -28,9 +27,9 @@ public class MediaPlaylist extends AbstractPlaylist
   public String groupID;
   public int bandwidth = -1;
 
-  public MediaPlaylist(String manfiestContent, List<AttributeLine> attributes, HlsParser parser)
+  public MediaPlaylist(String manfiestContent, String manifestUrl, List<AttributeLine> attributes, HlsParser parser)
   {
-    super(manfiestContent, parser);
+    super(manfiestContent, manifestUrl, parser);
     this.attributes = attributes;
     this.init();
   }
@@ -140,7 +139,7 @@ public class MediaPlaylist extends AbstractPlaylist
       {
         // next line must be a url
         String urlLine = lines[++i];
-        segmentInfo.segmentUrl = URLUtils.makeAbsoulte(urlLine, this.parser.getBaseUrl());
+        segmentInfo.segmentUrl = URLUtils.makeAbsoulte(urlLine, this.baseUrl);
 
         segmentInfo.finish(discontinuityNumber);
         this.segentInfos.add(segmentInfo);
@@ -155,7 +154,7 @@ public class MediaPlaylist extends AbstractPlaylist
         {
           InitSegmentInfo initSegmentInfo = new InitSegmentInfo(this, segmentInfo, currentLine);
           initSegmentInfo.originalInitUrl = initUrl;
-          initSegmentInfo.segmentUrl = URLUtils.makeAbsoulte(initUrl, this.parser.getBaseUrl());
+          initSegmentInfo.segmentUrl = URLUtils.makeAbsoulte(initUrl, this.baseUrl);
           initSegmentInfo.finish(discontinuityNumber);
           this.segentInfos.add(initSegmentInfo);
           segmentInfo = new SegmentInfo(this);

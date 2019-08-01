@@ -92,4 +92,10 @@ public class URLUtils
 
     return newUrl.toString();
   }
+
+  public static String toBaseUrl(String url, String parentUrl) {
+    String absoluteUrl = makeAbsoulte(url, parentUrl);
+
+    return absoluteUrl.substring(0, absoluteUrl.lastIndexOf('/'));
+  }
 }

@@ -10,6 +10,7 @@ import download.types.ManifestDownloadnfo;
 import download.types.Representation;
 import parser.FallbackCounters;
 import parser.HlsParser;
+import util.URLUtils;
 
 public abstract class AbstractPlaylist
 {
@@ -17,17 +18,23 @@ public abstract class AbstractPlaylist
   private URL manifestUrl;
   public HlsParser parser;
   public boolean isLive = true;
+  /**
+   * Different Playlists may have different base urls
+   */
+  public String baseUrl;
 
-  public AbstractPlaylist(String manifestContent, HlsParser parser)
+  public AbstractPlaylist(String manifestContent, String manifestUrl, HlsParser parser)
   {
     this.manifestContent = manifestContent;
     this.parser = parser;
+    this.baseUrl = URLUtils.toBaseUrl(manifestUrl, parser.baseUrl);
   }
 
   public AbstractPlaylist(URL manifestUrl, HlsParser parser)
   {
     this.manifestUrl = manifestUrl;
     this.parser = parser;
+    this.baseUrl = URLUtils.toBaseUrl(manifestUrl.toString(), parser.baseUrl);
   }
 
   public abstract String getUpdatedManifest(Representation[] selectedRepresentations);

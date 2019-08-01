@@ -18,9 +18,9 @@ public class MasterPlaylist extends AbstractPlaylist
   private String updatedMaster;
   private List<Thread> childParserThreads = new ArrayList<>();
 
-  public MasterPlaylist(String manifestContent, HlsParser parser)
+  public MasterPlaylist(String manifestContent, String manifestUrl, HlsParser parser)
   {
-    super(manifestContent, parser);
+    super(manifestContent, manifestUrl, parser);
   }
 
   @Override

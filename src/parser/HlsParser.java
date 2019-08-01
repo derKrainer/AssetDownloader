@@ -34,7 +34,7 @@ public class HlsParser extends AbstractParser
   public ManifestDownloadnfo internalParse(String manifestContent, String manifestUrl)
       throws MalformedURLException, IOException
   {
-    MasterPlaylist master = new MasterPlaylist(manifestContent, this);
+    MasterPlaylist master = new MasterPlaylist(manifestContent, manifestUrl, this);
     master.parse();
     if (master.childLists.isEmpty())
     {
@@ -42,7 +42,7 @@ public class HlsParser extends AbstractParser
       List<AttributeLine> attributesList = new ArrayList<>();
       AttributeLine defaultLine = new AttributeLine("DEFAULT-INFO: GROUP-ID=default");
       attributesList.add(defaultLine);
-      this.masterPlaylist = new MediaPlaylist(manifestContent, attributesList, this);
+      this.masterPlaylist = new MediaPlaylist(manifestContent, manifestUrl, attributesList, this);
       this.masterPlaylist.parse();
     }
     else
