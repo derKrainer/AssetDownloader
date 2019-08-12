@@ -135,6 +135,11 @@ public class MasterPlaylist extends AbstractPlaylist
         AttributeLine attributes = preceedingAttributes.get(preceedingAttributes.size() - 1);
         String mediaPlaylistLocation = attributes.get("URI");
 
+        // caption streams may not include URIs
+        if (mediaPlaylistLocation == null) {
+          continue;
+        }
+
         MediaPlaylist newList = this.addMediaPlaylist(mediaPlaylistLocation, preceedingAttributes);
         String updatedEntry = currentLine.replace(mediaPlaylistLocation,
             newList.getUpdatedPlaylistName(numberOfParses));
