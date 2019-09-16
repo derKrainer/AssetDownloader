@@ -20,8 +20,8 @@ public class SegmentTemplate extends DashComponent
   public String initUrl;
   public Node initUrlNode;
   public int startNumber;
-  public int duration;
-  public int timescale;
+  public double duration;
+  public int timescale = 1;
   public SegementTimeline segmentTimeline;
 
   public SegmentTemplate(Node xmlNode)
@@ -67,7 +67,7 @@ public class SegmentTemplate extends DashComponent
       }
       else if (attr.getNodeName().equals("duration"))
       {
-        this.duration = Integer.parseInt(attr.getNodeValue());
+        this.duration = Double.parseDouble(attr.getNodeValue());
       }
       else if (attr.getNodeName().equals("timescale"))
       {
@@ -93,8 +93,10 @@ public class SegmentTemplate extends DashComponent
     }
 
     List<DownloadTarget> allFiles = new ArrayList<>();
-    allFiles.add(new DownloadTarget(convertToDownloadUrl(initUrl, -1, rep, baseUrl),
-        getTargetFileForUrl(this.replacePlaceholders(initUrl, -1, rep), rep, targetFolder, initUrl)));
+    if (this.initUrl != null) {
+      allFiles.add(new DownloadTarget(convertToDownloadUrl(initUrl, -1, rep, baseUrl),
+          getTargetFileForUrl(this.replacePlaceholders(initUrl, -1, rep), rep, targetFolder, initUrl)));
+    }
 
     int numberOfSegments = this.getNumberOfAvailableSegments(rep);
     for (int i = this.startNumber; i < this.startNumber + numberOfSegments; i++)
@@ -187,8 +189,10 @@ public class SegmentTemplate extends DashComponent
     String targetFile = adjustUrl(this.mediaUrl, targetFolder, manifestBaseUrl, targetRepresentation);
     this.mediaUrlNode.setNodeValue(targetFile);
 
-    targetFile = adjustUrl(this.initUrl, targetFolder, manifestBaseUrl, targetRepresentation);
-    this.initUrlNode.setNodeValue(targetFile);
+    if (this.initUrl != null) {
+      targetFile = adjustUrl(this.initUrl, targetFolder, manifestBaseUrl, targetRepresentation);
+      this.initUrlNode.setNodeValue(targetFile);
+    }
   }
 
   protected String adjustUrl(String url, String targetFolder, String manifestBaseUrl,
